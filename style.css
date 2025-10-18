@@ -1,0 +1,19 @@
+:root{
+    --bg:#0b1221; --card:#0f1724; --accent:#06b6d4; --muted:#9aa6b2; --glass: rgba(255,255,255,0.03);
+}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+body{background:linear-gradient(180deg,var(--bg),#07101b);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:18px}
+.app{width:100%;max-width:1100px;background:var(--card);border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6);display:grid;grid-template-columns:720px 1fr;gap:12px}
+.video-wrap{position:relative;border-radius:10px;overflow:hidden;background:#000}
+video, canvas{width:100%;height:100%;display:block}
+.controls{display:flex;flex-direction:column;justify-content:space-around;padding:10px;gap:12px}
+.panel{background:var(--glass);padding:10px;border-radius:8px}
+#lightMode{all:unset;}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}
+button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:inherit;padding:8px 10px;border-radius:8px;cursor:pointer}
+button.active{background:linear-gradient(90deg,var(--accent),#6ee7b7);color:#042027;border:none}
+.decoded{white-space:pre-wrap;font-size:14px;min-height:120px;overflow:auto;color:#dff6fb;padding:6px}
+.small{font-size:13px;color:var(--muted)}
+.roi{outline:2px dashed rgba(255,255,255,0.08);}
+footer{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;margin-top:6px}
+@media (max-width:980px){.app{grid-template-columns:1fr;}}
