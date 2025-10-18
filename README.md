@@ -29,7 +29,7 @@ Simply blink in Morse code patterns:
 ```
 MorsEye/
 │
-├── app.py              # Flask backend with eye tracking logic
+├── app.py              # Backend with eye tracking logic
 ├── index.html          # Main web interface
 ├── style.css           # Styling for the web interface
 ├── script.js           # Frontend JavaScript logic
