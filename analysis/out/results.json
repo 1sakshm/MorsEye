@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T23:38:24+00:00",
+  "generated_at": "2026-10-24T23:46:20+00:00",
   "analysis_version": "2.0.0",
   "timing": {
     "rejectMs": 200,
@@ -657,6 +657,13 @@
   },
   "session": {
     "status": "exploratory, one session, no confidence intervals",
+    "winks": {
+      "n": 31,
+      "other_eye_above_0_5": 31,
+      "other_eye_above_0_3_at_peak": 31,
+      "winking_eye_peak_median": 0.74229,
+      "other_eye_at_peak_median": 0.65951
+    },
     "unit": "P01-s1",
     "file": "P01_A_2026-10-24.jsonl",
     "setup": {

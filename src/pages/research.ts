@@ -18,6 +18,7 @@ import {
 } from 'd3';
 import { DEFAULT_TIMING } from '../segment/segmenter';
 import { chartMessage, dataTable, figureParts, freshSvg, jitter, responsive } from '../site/charts';
+import { caseValues, fillSlots, loadCase } from '../site/case';
 import { fmtCI, fmtNum, loadResults, pct } from '../site/data';
 import { unitWord, whoSentence } from '../site/results';
 import type { CI, DetectorResult, DurationSet, KShotPoint, SiteResults } from '../site/results';
@@ -1032,4 +1033,9 @@ loadResults().then((r) => {
   kshotChart(r, labelOf);
   textEntryChart(r);
   fpsChart(r);
+});
+
+// Findings and the abstract: every number comes from public/results/case.json.
+void loadCase().then((c) => {
+  if (c) fillSlots(document, caseValues(c));
 });

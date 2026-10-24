@@ -87,44 +87,55 @@
       <section class="section results" aria-labelledby="results-title">
         <div class="wrap">
           <p class="eyebrow" id="results-status">
-            One session recorded · public-data results pending
+            Results · a public-video check and one exploratory session
           </p>
-          <h2 id="results-title">What the study measures</h2>
+          <h2 id="results-title">What the data show</h2>
           <p class="lede" id="results-lede">
-            “It works on my face” is not a result, so the claim is tested. MorsEye was planned as a
-            preregistered case study of the author over many sessions, plus other people’s natural
-            blinks from a public video dataset. Data collection stopped after one session, which has
-            no labelled closure times, so the detection tests on the author’s own data were not run.
-            The remaining results come from the public videos and will appear here once analysed.
+            “It works on my face” is not a result, so the claim was put to a test. The planned
+            multi-session study stopped after one session without labelled closure times, so its
+            main tests were not run. What remains: other people’s natural blinks in a public video
+            dataset (a secondary, not blind analysis), and one recorded session of the author
+            (exploratory).
           </p>
           <div class="grid-3 result-cards" id="result-cards">
-            <article class="card result-card" data-result="f1">
-              <h3>Telling deliberate blinks apart</h3>
-              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
-              <p data-slot="text">
-                Event-level F1 for deliberate closures, with the fixed EAR threshold of 0.21 versus
-                a threshold calibrated from a few of the user’s own closures.
+            <article class="card result-card">
+              <h3>Natural blinks ignored</h3>
+              <p class="result-value">
+                <span data-case="D3before">–</span> → <span data-case="D3after">–</span> per min
+              </p>
+              <p>
+                False triggers per minute on <span data-case="pubBlinks">–</span> natural blinks of
+                <span data-case="pubPeople">–</span> people (Eyeblink8), with the blendshape
+                detector, before and after the <span data-case="reject">–</span> ms reject window.
               </p>
             </article>
-            <article class="card result-card" data-result="ftpm">
-              <h3>False triggers while reading</h3>
-              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
-              <p data-slot="text">
-                Natural blinks typed as symbols, per minute of reading, before and after adding a
-                minimum-duration reject window.
+            <article class="card result-card">
+              <h3>Same window, other signal</h3>
+              <p class="result-value">
+                <span data-case="D1before">–</span> → <span data-case="D1after">–</span> per min
+              </p>
+              <p>
+                The same reject window barely helps the classic eye-aspect-ratio detector: it
+                measures the same blinks as longer, so few fall under the window.
               </p>
             </article>
-            <article class="card result-card" data-result="cpm">
-              <h3>Typing speed and accuracy</h3>
-              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
-              <p data-slot="text">
-                Characters per minute and error rate for novices after three short practice blocks
-                of standard phrases.
+            <article class="card result-card">
+              <h3>Short closures ran long</h3>
+              <p class="result-value"><span data-case="sShortMedian">–</span> ms</p>
+              <p>
+                Median length of the author’s cued short closures in one session, as measured by the
+                camera: above the <span data-case="dotMax">–</span> ms dot limit, so
+                <span data-case="sShortDash">–</span> of <span data-case="sShortN">–</span> would
+                have been typed as dashes.
               </p>
             </article>
           </div>
-          <p class="muted" id="results-note" hidden></p>
-          <p class="results-more"><a href="/research/">Study design and interactive results</a></p>
+          <p class="muted" id="results-note">
+            Every number here is generated from the data by the analysis scripts. The public-video
+            figures are means over <span data-case="pubVideos">–</span> videos; the session figures
+            come from one session and are exploratory.
+          </p>
+          <p class="results-more"><a href="/research/">Study design, results and the paper</a></p>
         </div>
       </section>
 

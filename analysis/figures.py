@@ -118,8 +118,8 @@ class Writer:
         if site_dir:
             site_dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, fig: Figure, name: str) -> None:
-        if self.synthetic:
+    def save(self, fig: Figure, name: str, data: bool = True) -> None:
+        if self.synthetic and data:
             _watermark(fig)
         fig.savefig(self.paper_dir / f"{name}.pdf", bbox_inches="tight")
         fig.savefig(self.paper_dir / f"{name}.png", dpi=220, bbox_inches="tight")
@@ -160,7 +160,7 @@ def f1_pipeline(w: Writer) -> None:
         if i < len(steps) - 1:
             ax.add_patch(FancyArrowPatch((x + 0.9, 0.54), (x + 0.99, 0.54), arrowstyle="-|>", mutation_scale=6, color=C["muted"], lw=0.8))
     ax.text(3.5, -0.02, "everything runs in the browser; no camera frame leaves the device", ha="center", va="bottom", fontsize=6, color=C["muted"], style="italic")
-    w.save(fig, "F1_pipeline")
+    w.save(fig, "F1_pipeline", data=False)  # a diagram: never watermarked
 
 
 def f2_trace(w: Writer, a: StudyA, window_s: float = 24.0) -> None:

@@ -191,8 +191,29 @@ def session_summary(s: Session, cue_types: list[dict[str, Any]], timing: Timing)
         cue_response[d] = {"n": n, "correct": correct, "accuracy": correct / n if n else float("nan"), "confusion": conf}
         durations[d] = {t: [round(v, 1) for v in vs] for t, vs in durs.items()}
 
+    # Winks: did the *other* eye's blink score also cross 0.5? D5 needs it to stay below 0.3 throughout.
+    f = s.frames
+    other_max = []
+    for x in responses:
+        if x["response"] not in ("wink-L", "wink-R") or x["cue"].get("block") not in ("deliberate", "mixed"):
+            continue
+        w0, w1 = _window(x["cue"])
+        m = (f.t >= w0) & (f.t < w1) & f.face
+        if m.any():
+            wink, other = (f.blinkL, f.blinkR) if x["response"] == "wink-L" else (f.blinkR, f.blinkL)
+            i = int(np.argmax(wink[m]))  # the frame where the winking eye is most closed
+            other_max.append((float(wink[m][i]), float(other[m][i]), float(other[m].max())))
+    winks = {
+        "n": len(other_max),
+        "other_eye_above_0_5": sum(1 for _, _, o in other_max if o > 0.5),
+        "other_eye_above_0_3_at_peak": sum(1 for _, o, _ in other_max if o >= 0.3),
+        "winking_eye_peak_median": float(np.median([w for w, _, _ in other_max])) if other_max else float("nan"),
+        "other_eye_at_peak_median": float(np.median([o for _, o, _ in other_max])) if other_max else float("nan"),
+    }
+
     return {
         "status": "exploratory, one session, no confidence intervals",
+        "winks": winks,
         "unit": s.unit_id,
         "file": s.path.name,
         "setup": s.header.get("setup", {}),

@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
-from .figures import COL, WIDE, C, Writer, _style  # noqa: E402
+from .figures import COL, WIDE, C, Writer, _style, f1_pipeline  # noqa: E402
 
 TYPES = ("short", "long")
 
@@ -53,7 +53,7 @@ def write_site(res: dict[str, Any], site_dir: Path) -> Path:
             "face_frac": ses["face_frac"],
             "responses": ses["responses"],
             "reading": {d: {k: x[k] for k in ("n_closures", "ftpm_no_reject", "ftpm")} for d, x in ses["reading"].items()},
-            "cue_response": {d: {k: x[k] for k in ("n", "correct", "accuracy")} for d, x in ses["cue_response"].items()},
+            "cue_response": {d: {k: x[k] for k in ("n", "correct", "accuracy", "confusion")} for d, x in ses["cue_response"].items()},
             "duration_pct": ses["duration_pct"],
         }
     site_dir.mkdir(parents=True, exist_ok=True)
@@ -184,14 +184,31 @@ def numbers(res: dict[str, Any]) -> str:
         put("sFace", _pct(ses["face_frac"], 1))
         put("sMissing", _pct(ses["missing_frac"], 2))
         put("sMinutes", _f(ses["minutes"], 1))
+        put("sDistance", str(ses["setup"].get("distance_cm", "")))
+        put("sCamera", str(ses["setup"].get("camera_model", "")))
         put("sCues", str(ses["responses"]["n_cues"]))
         put("sMatch", str(ses["responses"]["n_match"]))
         put("sCalib", str(ses["calibration"]["n_closures"]))
+        wk = ses["winks"]
+        put("sWinks", str(wk["n"]))
+        put("sWinksOtherAbove", str(wk["other_eye_above_0_5"]))
+        put("sWinksOtherAtPeak", str(wk["other_eye_above_0_3_at_peak"]))
+        put("sWinkPeak", _f(wk["winking_eye_peak_median"], 2))
+        put("sWinkOtherPeak", _f(wk["other_eye_at_peak_median"], 2))
+        n_bl = sum(sum(v.values()) for v in ses["cue_response"]["D4"]["confusion"].values())
+        put("sBothEyeCues", str(n_bl))
+        for d in ("D1", "D2", "D3", "D4"):
+            cf = ses["cue_response"][d]["confusion"]
+            put(f"s-{d}-short-n", str(sum(cf["short"].values())))
+            put(f"s-{d}-long-n", str(sum(cf["long"].values())))
         for d, r in ses["reading"].items():
             put(f"s-{d}-reading-before", _f(r["ftpm_no_reject"]))
             put(f"s-{d}-reading-after", _f(r["ftpm"]))
             put(f"s-{d}-reading-n", str(r["n_closures"]))
             put(f"s-{d}-reading-rejected", str(r["bands"]["reject"]))
+            if r["closed_ms"]:
+                put(f"s-{d}-reading-median", _f(r["closed_ms"]["median"], 0))
+                put(f"s-{d}-reading-p95", _f(r["closed_ms"]["p95"], 0))
         for d, c in ses["cue_response"].items():
             put(f"s-{d}-correct", f"{c['correct']}/{c['n']}")
             for t in ("short", "long"):
@@ -299,6 +316,7 @@ def c3_fps(w: Writer, ses: dict[str, Any]) -> None:
 def write_figures(res: dict[str, Any], paper_dir: Path, site_dir: Path) -> list[str]:
     _style()
     w = Writer(paper_dir, site_dir, synthetic=False)
+    f1_pipeline(w)  # a diagram, not data: drawn without the synthetic watermark
     if res["public"]:
         c1_public(w, res["public"])
     if res["public"] or res["session"]:

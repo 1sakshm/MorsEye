@@ -15,16 +15,26 @@ into Morse code: a short closure is a dot, a longer one a dash, and a very long 
 filtered out by a minimum-duration band, and a 20-second calibration fits the detector to your eyes. After setup it
 needs no keyboard or mouse: delete, pause and (optionally) space and speech are all eye gestures.
 
-**Status:** research prototype. Data collection stopped after one detection session (25 Oct 2026); results
-from the public-video analysis will be reported here from `analysis/out/summary.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
+**Status:** research prototype. Data collection stopped after one detection session (25 Oct 2026); the results
+below come from `analysis/out/results.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
 
 ## Key results
 
-Pending. The study was preregistered as a single-person case study (the author, over many sessions) plus a check
-on a public blink-video dataset ([`docs/preregistration.md`](docs/preregistration.md)). Data collection stopped
-after one session, which has cue-response types but no closure times, so the detection tests on the author's data
-and the typing study were not run (see the Deviations section). This section will hold the public-video result:
-false triggers per minute on other people's natural blinks, with and without the reject window.
+The study was preregistered as a single-person case study (the author, over many sessions) plus a check on a
+public blink-video dataset ([`docs/preregistration.md`](docs/preregistration.md)). Data collection stopped after
+one session, which has cue-response types but no closure times, so the detection tests on the author's data and the
+typing study were not run (see the Deviations section). What remains (copied from `analysis/out/results.json`):
+
+- **Other people's natural blinks** (Eyeblink8, 408 blinks of 4 people in 8 videos; secondary,
+  not blind): a 200 ms reject window cut false triggers per minute from 10.5 [7.5, 13.2] to
+  4.1 [2.7, 5.7] with the blendshape detector (D3), but only from 11.8 [9.2, 14.2] to 10.2 [7.5, 12.9] with
+  the EAR detector (D1). Means over videos, 95% bootstrap CIs.
+- **One session of the author** (exploratory): cued short closures, as measured by the calibrated blendshape
+  detector, had a median of 684 ms, so 13 of 17 would have been dashes under the
+  600 ms dot limit; the wink detector found none of the 31 winks, because the other eye's blink
+  score rose too.
+
+The draft paper: [morseye.pages.dev/paper/morseye-draft.pdf](https://morseye.pages.dev/paper/morseye-draft.pdf) (source in `paper/`).
 
 ## How it works
 
@@ -91,8 +101,9 @@ numpy wheels):
 ```sh
 python -m venv .venv && .venv/Scripts/activate    # or source .venv/bin/activate
 pip install -r requirements.txt
-python -m analysis.run --data data/public         # regenerates every number, table and figure
-python -m analysis.run --synthetic                # the same pipeline on clearly-marked synthetic data
+python -m analysis.public_blinks --dataset <unpacked eyeblink8/>   # Eyeblink8 (features in data/external/)
+python -m analysis.case_study --data data/raw     # the reported results: results.json, case.json, C1-C3, tables
+python -m analysis.run --synthetic                # the planned multi-session pipeline, on marked synthetic data
 pytest analysis/tests
 ```
 

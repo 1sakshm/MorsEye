@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-24T23:38:24+00:00",
+ "generated_at": "2026-10-24T23:46:20+00:00",
  "timing": {
   "rejectMs": 200,
   "dotMaxMs": 600,
@@ -251,27 +251,117 @@
    "D1": {
     "n": 33,
     "correct": 13,
-    "accuracy": 0.3939393939393939
+    "accuracy": 0.3939393939393939,
+    "confusion": {
+     "short": {
+      "none": 1,
+      "reject": 0,
+      "dot": 1,
+      "dash": 13,
+      "hold": 1,
+      "backspace": 1
+     },
+     "long": {
+      "none": 2,
+      "reject": 0,
+      "dot": 0,
+      "dash": 12,
+      "hold": 0,
+      "backspace": 2
+     }
+    }
    },
    "D2": {
     "n": 33,
     "correct": 15,
-    "accuracy": 0.45454545454545453
+    "accuracy": 0.45454545454545453,
+    "confusion": {
+     "short": {
+      "none": 1,
+      "reject": 0,
+      "dot": 3,
+      "dash": 13,
+      "hold": 0,
+      "backspace": 0
+     },
+     "long": {
+      "none": 2,
+      "reject": 0,
+      "dot": 1,
+      "dash": 12,
+      "hold": 0,
+      "backspace": 1
+     }
+    }
    },
    "D3": {
     "n": 33,
     "correct": 18,
-    "accuracy": 0.5454545454545454
+    "accuracy": 0.5454545454545454,
+    "confusion": {
+     "short": {
+      "none": 1,
+      "reject": 0,
+      "dot": 4,
+      "dash": 12,
+      "hold": 0,
+      "backspace": 0
+     },
+     "long": {
+      "none": 0,
+      "reject": 0,
+      "dot": 1,
+      "dash": 14,
+      "hold": 0,
+      "backspace": 1
+     }
+    }
    },
    "D4": {
     "n": 33,
     "correct": 17,
-    "accuracy": 0.5151515151515151
+    "accuracy": 0.5151515151515151,
+    "confusion": {
+     "short": {
+      "none": 1,
+      "reject": 0,
+      "dot": 2,
+      "dash": 13,
+      "hold": 1,
+      "backspace": 0
+     },
+     "long": {
+      "none": 0,
+      "reject": 0,
+      "dot": 0,
+      "dash": 15,
+      "hold": 0,
+      "backspace": 1
+     }
+    }
    },
    "D5": {
     "n": 31,
     "correct": 0,
-    "accuracy": 0.0
+    "accuracy": 0.0,
+    "confusion": {
+     "wink-L": {
+      "none": 16,
+      "reject": 0,
+      "dot": 0,
+      "dash": 0,
+      "hold": 0,
+      "backspace": 0
+     },
+     "wink-R": {
+      "none": 15,
+      "reject": 0,
+      "dot": 0,
+      "dash": 0,
+      "hold": 0,
+      "backspace": 0
+     }
+    }
    }
   },
   "duration_pct": {

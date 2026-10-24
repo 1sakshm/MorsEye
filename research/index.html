@@ -20,24 +20,25 @@
       <header class="page-intro">
         <div class="wrap">
           <p class="eyebrow">Research</p>
-          <h1>Telling deliberate from spontaneous blinks on a webcam</h1>
+          <h1>Deliberate or spontaneous? Blinks on a webcam</h1>
           <p class="lede">
-            Few-shot calibration for blink-based Morse text entry: a preregistered single-person
-            case study, a check on public blink videos, a features-only dataset and an open-source
-            browser system.
+            A duration reject window for blink-based Morse typing, checked on other people’s natural
+            blinks in public videos and in one recorded session of the author. The preregistered
+            study it was designed around was not completed, and this page says why.
           </p>
           <div class="notice notice--synthetic" id="synthetic-banner" role="note" hidden>
             <p>
-              <strong>Synthetic demo data.</strong> The charts below are drawn from data generated
-              to test the analysis pipeline. They are <strong>not study results</strong>. Real
-              results will replace them after Study A has been labelled and analysed.
+              <strong>Synthetic demo data below.</strong> The interactive charts under “Planned
+              analysis” are drawn from data generated to test the analysis pipeline. They are
+              <strong>not study results</strong>. The real results are under “Findings”.
             </p>
           </div>
           <nav class="toc" aria-label="On this page">
             <ul>
               <li><a href="#questions">Questions</a></li>
               <li><a href="#design">Study design</a></li>
-              <li><a href="#results">Results</a></li>
+              <li><a href="#findings">Findings</a></li>
+              <li><a href="#results">Planned analysis</a></li>
               <li><a href="#limits">Limitations</a></li>
               <li><a href="#paper">Paper</a></li>
             </ul>
@@ -255,9 +256,116 @@
         </div>
       </section>
 
+      <section class="section" id="findings" aria-labelledby="findings-title">
+        <div class="wrap">
+          <p class="eyebrow">Generated from the data by the analysis scripts</p>
+          <h2 id="findings-title">Findings</h2>
+          <p class="lede">
+            Two sources remain: other people’s natural blinks in a public video dataset (a secondary
+            analysis, not blind, because the analysis had looked at these videos before the plan was
+            written), and one session of the author (exploratory: one session, no confidence
+            intervals).
+          </p>
+
+          <figure class="chart">
+            <figcaption>
+              <h3>The reject window on other people’s blinks</h3>
+              <p>
+                Eyeblink8: <span data-case="pubVideos">–</span> videos of
+                <span data-case="pubPeople">–</span> people,
+                <span data-case="pubMinutes">–</span> minutes,
+                <span data-case="pubBlinks">–</span> annotated natural blinks (median
+                <span data-case="pubBlinkMedian">–</span> ms;
+                <span data-case="pubBelowReject">–</span> shorter than
+                <span data-case="reject">–</span> ms). Every blink is spontaneous, so every closure
+                the segmenter does not reject is a false trigger.
+              </p>
+            </figcaption>
+            <img
+              class="chart-img"
+              src="/results/figures/C1_public_false_triggers.png"
+              width="760"
+              height="480"
+              loading="lazy"
+              alt="False triggers per minute in each Eyeblink8 video, without and with the reject window. For the blendshape detector D3 every line drops steeply; for the EAR detector D1 the lines drop only a little."
+            />
+            <p>
+              Blendshape detector (D3): <span data-case="D3beforeCI">–</span> →
+              <span data-case="D3afterCI">–</span> false triggers per minute (ratio
+              <span data-case="D3ratio">–</span>). EAR detector (D1):
+              <span data-case="D1beforeCI">–</span> → <span data-case="D1afterCI">–</span> (ratio
+              <span data-case="D1ratio">–</span>). Means over videos with 95% bootstrap intervals.
+              D1 measures the same blinks as longer: only
+              <span data-case="D1belowReject">–</span> of its detected blinks fall under the window,
+              against <span data-case="D3belowReject">–</span>
+              for D3. A reject window has to be chosen for the signal it is applied to.
+            </p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>
+              <h3>Durations against the timing bands</h3>
+              <p>
+                Other people’s natural blinks (annotated) and the author’s short and long responses
+                in session 1, as measured by the calibrated blendshape detector (not hand-labelled).
+              </p>
+            </figcaption>
+            <img
+              class="chart-img"
+              src="/results/figures/C2_durations.png"
+              width="900"
+              height="520"
+              loading="lazy"
+              alt="Histogram of closure durations. Natural blinks cluster between 200 and 350 ms. The author's short responses cluster between 600 and 900 ms, mostly past the 600 ms dot limit; long responses spread from 700 to 1400 ms."
+            />
+            <p>
+              The author’s short closures had a median of <span data-case="sShortMedian">–</span> ms
+              and the long ones <span data-case="sLongMedian">–</span> ms. With the default
+              <span data-case="dotMax">–</span> ms dot limit,
+              <span data-case="sShortDash">–</span> of <span data-case="sShortN">–</span> short
+              responses would have been typed as dashes. The two kinds were separated, but around a
+              much later boundary: timing needs calibrating per person, like the threshold.
+            </p>
+          </figure>
+
+          <figure class="chart">
+            <figcaption>
+              <h3>Session 1: the camera and the winks</h3>
+              <p>
+                Measured frame rate through the session (median <span data-case="sFps">–</span> fps;
+                <span data-case="sFpsMixed">–</span> fps in the last block).
+              </p>
+            </figcaption>
+            <img
+              class="chart-img"
+              src="/results/figures/C3_session_fps.png"
+              width="720"
+              height="340"
+              loading="lazy"
+              alt="Frame rate over the 10-minute session: about 16.5 fps, dropping to about 10 fps late in the first reading block and through the whole last block."
+            />
+            <ul>
+              <li>
+                <span data-case="sMatch">–</span> of <span data-case="sCues">–</span> responses were
+                the cued type (checked by the author).
+              </li>
+              <li>
+                While reading with no cues, the reject window cut the blendshape detector’s false
+                triggers from <span data-case="sD3readBefore">–</span> to
+                <span data-case="sD3readAfter">–</span> per minute.
+              </li>
+              <li>
+                The wink detector found <span data-case="sD5correct">–</span> winks: in every wink,
+                the other eye’s blink score also rose, so the winks looked like both eyes closing.
+              </li>
+            </ul>
+          </figure>
+        </div>
+      </section>
+
       <section class="section" id="results" aria-labelledby="results-title">
         <div class="wrap">
-          <h2 id="results-title">Results</h2>
+          <h2 id="results-title">Planned analysis (synthetic preview)</h2>
           <p class="lede" id="results-status">Loading results…</p>
 
           <figure class="chart" id="fig-durations" aria-labelledby="fig-durations-title">
@@ -416,26 +524,26 @@
           </p>
           <ul class="limits-list">
             <li>
-              <strong>One participant.</strong> Intervals describe variation across one person’s
-              sessions, not across people; tests have low power.
+              <strong>The planned study was not completed.</strong> Data collection stopped after
+              one session without labelled closure times; none of the confirmatory tests was run,
+              and the typing study was not run.
             </li>
             <li>
-              <strong>Participant, labeller and designer are the same person.</strong> He knows the
-              hypotheses and labels his own data, which risks bias; self-agreement κ and the public
-              data address this only in part.
+              <strong>One session of one person.</strong> The session results are exploratory, with
+              durations measured by the detectors, not labelled by hand.
             </li>
             <li>
-              <strong>Small public check.</strong> Eyeblink8 has only four people, and its analysis
-              is not blind.
+              <strong>Participant, checker and designer are the same person</strong>, who knew the
+              hypotheses.
             </li>
-            <li><strong>One device.</strong> One laptop camera.</li>
             <li>
-              <strong>Cued closures.</strong> Deliberate blinks are made on cue, not from a natural
+              <strong>Small public check.</strong> Eyeblink8 has only four people in eight videos,
+              and its analysis is not blind.
+            </li>
+            <li><strong>One camera, below 30 fps.</strong> The session camera ran at 10–16 fps.</li>
+            <li>
+              <strong>Cued closures.</strong> Deliberate blinks were made on cue, not from a natural
               intent to write.
-            </li>
-            <li>
-              <strong>Lab task.</strong> The reading task is an in-the-lab stand-in for everyday
-              use.
             </li>
           </ul>
         </div>
@@ -445,18 +553,28 @@
         <div class="wrap paper-grid">
           <div>
             <h2 id="paper-title">Paper</h2>
-            <p class="muted">Short paper (ACM format, 4–6 pages) · in preparation</p>
+            <p class="muted">Short paper (ACM format, 4 pages) · draft under review</p>
             <h3>Abstract</h3>
-            <p class="abstract-placeholder">
-              In preparation. The abstract will be added when the paper draft exists; every number
-              in it will be generated from the logged data by the analysis scripts.
+            <p>
+              Blink-based text entry uses the eyelid as a key, but the eyelid also closes on its
+              own. MorsEye types Morse code from eye closures on a laptop webcam, ignoring closures
+              shorter than a reject window. The preregistered single-person study stopped after one
+              session without labelled closure times, so its confirmatory tests were not run. On
+              <span data-case="pubBlinks">–</span> natural blinks of
+              <span data-case="pubPeople">–</span> people in a public dataset (secondary, not
+              blind), a <span data-case="reject">–</span> ms reject window cut false triggers from
+              <span data-case="D3before">–</span> to <span data-case="D3after">–</span> per minute
+              with a blendshape detector, but only from <span data-case="D1before">–</span> to
+              <span data-case="D1after">–</span> with the eye aspect ratio. In one exploratory
+              session, the author’s cued short closures mostly lasted longer than the
+              <span data-case="dotMax">–</span> ms dot limit.
             </p>
             <p>
               <a class="btn btn--small" href="/paper/morseye-draft.pdf">Read the draft (PDF)</a>
             </p>
             <p class="muted">
-              A working draft: it shows the paper’s planned structure, figures and tables. The text
-              is still being written, and every figure and table currently uses synthetic test data.
+              Every section of the draft was written by an AI agent and is being reviewed by the
+              author; every number is generated from the data by the analysis scripts.
             </p>
             <p>
               Data: <a href="/data/">features-only dataset and datasheet</a> · Code:
@@ -467,11 +585,11 @@
             <h3 id="bibtex-title">Cite (draft)</h3>
             <pre class="bibtex" id="bibtex" aria-labelledby="bibtex-title" tabindex="0">
 @misc{sharma2026morseye,
-  title  = {Telling Deliberate from Spontaneous Blinks on a Webcam:
-            Few-Shot Calibration for Blink-Based Morse Text Entry},
+  title  = {Deliberate or Spontaneous? A Duration Reject Window for Webcam
+            Blink Typing, Checked on Public Blink Videos and One Recorded Session},
   author = {Sharma, Saksham},
   year   = {2026},
-  note   = {DRAFT entry: paper in preparation, details will change},
+  note   = {Draft under review; details may change},
   url    = {https://github.com/1sakshm/MorsEye}
 }</pre
             >

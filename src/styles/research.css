@@ -77,6 +77,16 @@
 .chart figcaption h3 {
   font-size: var(--step-2);
 }
+/* Static figures from the analysis (white PNGs, also used in the paper). */
+.chart-img {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: var(--radius);
+}
 .chart-meta {
   font-size: var(--step--1);
   color: var(--muted);
