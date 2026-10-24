@@ -23,7 +23,7 @@ from typing import Any, Iterable
 
 import numpy as np
 
-from .config import MAX_MISSING_FRAC
+from .config import MAX_MISSING_FRAC, UNIT
 from .replay import FrameArrays
 
 LOG_SCHEMA = "morseye-log/1"
@@ -123,6 +123,13 @@ class Session:
     @property
     def participant(self) -> str:
         return str(self.header["participant"])
+
+    @property
+    def unit_id(self) -> str:
+        """The unit of analysis (config.UNIT): the participant, or one session (P01-s2) in a single-person study."""
+        if UNIT == "session":
+            return f"{self.participant}-s{int(self.header.get('session') or 1)}"
+        return self.participant
 
     @property
     def study(self) -> str:
@@ -357,9 +364,13 @@ def read_labels(path: str | Path) -> list[Label]:
 
 def _label_candidates(log: Path, header: dict[str, Any]) -> tuple[list[Path], list[Path]]:
     pid, study = header["participant"], header["study"]
+    session = int(header.get("session") or 1)
     d = log.parent
-    first = [d / f"{log.stem}_labels.csv", d / f"{pid}_{study}_labels.csv"]
-    second = [d / f"{log.stem}_labels_relabel.csv", d / f"{pid}_{study}_labels_relabel.csv"]
+    # The labelling tool names files after the log without its date: P07_A, or P07_A_s2 for session 2.
+    # A session-2+ log never falls back to P07_A_labels.csv, which belongs to session 1.
+    short = f"{pid}_{study}" if session <= 1 else f"{pid}_{study}_s{session}"
+    first = [d / f"{log.stem}_labels.csv", d / f"{short}_labels.csv"]
+    second = [d / f"{log.stem}_labels_relabel.csv", d / f"{short}_labels_relabel.csv"]
     return first, second
 
 

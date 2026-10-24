@@ -22,8 +22,9 @@
           <p class="eyebrow">Research</p>
           <h1>Telling deliberate from spontaneous blinks on a webcam</h1>
           <p class="lede">
-            Few-shot calibration for blink-based Morse text entry: a small preregistered study with
-            adult volunteers, a features-only dataset and an open-source browser system.
+            Few-shot calibration for blink-based Morse text entry: a preregistered single-person
+            case study, a check on public blink videos, a features-only dataset and an open-source
+            browser system.
           </p>
           <div class="notice notice--synthetic" id="synthetic-banner" role="note" hidden>
             <p>
@@ -92,10 +93,10 @@
             <div>
               <h3>Study A: blink detection benchmark</h3>
               <p>
-                At least 8 adult volunteers (aiming for 10–12), each in a session of about 12
-                minutes on a laptop webcam 50–70 cm away, in normal room light. Age range, glasses,
-                lighting, camera model and the <em>measured</em> frame rate are recorded. Data files
-                hold participant IDs only, never names.
+                One participant, the author, in 6–8 sessions of about 12 minutes on at least four
+                days, on a laptop webcam 50–70 cm away, in normal, bright and dim light. Lighting,
+                glasses and the <em>measured</em> frame rate are recorded for each session. Results
+                describe this one person, not people in general.
               </p>
               <div class="table-scroll">
                 <table>
@@ -140,9 +141,9 @@
               </div>
               <p>
                 <strong>Ground truth.</strong> Every closure’s onset, offset and type is labelled by
-                hand by the experimenter, using cues only as hints. Two participants are re-labelled
-                a week later to report self-agreement (Cohen’s κ for type, mean onset difference in
-                ms). Labelling time is reported.
+                hand by the author, using cues only as hints. Two sessions are re-labelled a week
+                later to report self-agreement (Cohen’s κ for type, mean onset difference in ms).
+                Labelling time is reported.
               </p>
             </div>
             <div>
@@ -196,6 +197,14 @@
                 Calibrated threshold: <code>open − 0.5 · (open − closed)</code>, from the median
                 open level and the median of k closures’ deepest points.
               </p>
+              <h3>Other people’s natural blinks</h3>
+              <p>
+                The fixed detectors (D1, D3) also run on Eyeblink8, a public set of 8 videos of 4
+                people with 408 hand-marked natural blinks, to see how often ordinary blinks would
+                be typed as symbols. This check is not blind: it was partly looked at before the
+                preregistration was written. A larger dataset (Researcher’s Night) has been
+                requested for a blind test.
+              </p>
             </div>
           </div>
 
@@ -211,15 +220,15 @@
                 <li>Duration error (detected minus labelled), compared with the frame interval.</li>
                 <li>Short/long classification accuracy and confusion matrix.</li>
                 <li>
-                  Per-participant metrics, summarised as the mean with a 95% bootstrap interval over
-                  participants (10,000 resamples). Paired detector comparisons use Wilcoxon
-                  signed-rank tests with Holm correction. With about ten people, statistical power
-                  is low.
+                  Per-session metrics, summarised as the mean with a 95% bootstrap interval over
+                  sessions (10,000 resamples). Paired detector comparisons use Wilcoxon signed-rank
+                  tests with Holm correction. With 6–8 sessions, only large, consistent differences
+                  can be detected.
                 </li>
                 <li>
-                  Few-shot calibration: for each participant and each k, 20 random draws of k
-                  calibration closures; each fitted threshold is evaluated on that participant’s
-                  other blocks.
+                  Few-shot calibration: for each session and each k, 20 random draws of k
+                  calibration closures; each fitted threshold is evaluated on that session’s other
+                  blocks.
                 </li>
               </ul>
             </div>
@@ -227,8 +236,9 @@
               <h3>Study B: text entry</h3>
               <p>
                 The best detector from Study A, with thresholds fixed in advance from the Study A
-                distributions. Fifteen short phrases from the MacKenzie and Soukoreff (2003) set, in
-                three blocks of five, with a Morse reference card on screen.
+                distributions. One session a day for five days: fifteen short phrases from the
+                MacKenzie and Soukoreff (2003) set, in three blocks of five, with a Morse reference
+                card on screen.
               </p>
               <ul>
                 <li>Entry rate in characters per minute (WPM = CPM / 5).</li>
@@ -260,7 +270,7 @@
             <p class="synthetic-badge" data-part="synthetic" hidden></p>
             <div class="chart-controls">
               <label class="field">
-                <span>Participants</span>
+                <span>Show</span>
                 <select id="dur-participant"></select>
               </label>
               <label class="field field--num">
@@ -399,21 +409,24 @@
         <div class="wrap">
           <h2 id="limits-title">Limitations and threats to validity</h2>
           <p class="lede" id="limits-lede">
-            Participants are able-bodied adult volunteers. The system has not been tested with
-            people with motor impairments, and no clinical claim is made.
+            The participant is one able-bodied adult, the author. The system has not been tested
+            with people with motor impairments, and no clinical claim is made.
           </p>
           <ul class="limits-list">
             <li>
-              <strong>Small N.</strong> About ten participants; confidence intervals are wide and
-              tests have low power.
+              <strong>One participant.</strong> Intervals describe variation across one person’s
+              sessions, not across people; tests have low power.
             </li>
             <li>
-              <strong>Experimenter is the labeller.</strong> The same person runs the sessions and
-              labels the data, which risks labeller bias; self-agreement κ addresses this only in
-              part.
+              <strong>Participant, labeller and designer are the same person.</strong> He knows the
+              hypotheses and labels his own data, which risks bias; self-agreement κ and the public
+              data address this only in part.
             </li>
-            <li><strong>Convenience sample.</strong> Mostly friends and classmates.</li>
-            <li><strong>Few devices.</strong> One or two camera models.</li>
+            <li>
+              <strong>Small public check.</strong> Eyeblink8 has only four people, and its analysis
+              is not blind.
+            </li>
+            <li><strong>One device.</strong> One laptop camera.</li>
             <li>
               <strong>Cued closures.</strong> Deliberate blinks are made on cue, not from a natural
               intent to write.
@@ -436,7 +449,13 @@
               In preparation. The abstract will be added when the paper draft exists; every number
               in it will be generated from the logged data by the analysis scripts.
             </p>
-            <p>PDF: not yet available.</p>
+            <p>
+              <a class="btn btn--small" href="/paper/morseye-draft.pdf">Read the draft (PDF)</a>
+            </p>
+            <p class="muted">
+              A working draft: it shows the paper’s planned structure, figures and tables. The text
+              is still being written, and every figure and table currently uses synthetic test data.
+            </p>
             <p>
               Data: <a href="/data/">features-only dataset and datasheet</a> · Code:
               <a href="https://github.com/1sakshm/MorsEye">github.com/1sakshm/MorsEye</a>

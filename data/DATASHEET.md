@@ -1,7 +1,8 @@
 # Datasheet: MorsEye blink-closure features
 
 Structure follows Gebru et al., *Datasheets for Datasets* (2021). Fields marked **[HUMAN]** are filled in
-by Saksham from the session logs and his notebook once data collection is complete. Numbers should be
+once data collection is complete, from the session logs and Saksham's notebook (the AI agent may fill them from
+those sources; Saksham checks them). Numbers should be
 copied from `analysis/out/summary.json` (for example `study_a.n_participants`,
 `study_a.n_labels_total`, `study_a.participants[].fps`) so they match the paper.
 
@@ -43,7 +44,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   more than 5% missing frames were excluded by `analysis/load.py`. [HUMAN] List any excluded sessions and why.
 - **Recommended splits?** None. Analyses are per participant; calibration uses the calibration block only.
 - **Errors, noise or redundancies?** Label timing is limited by the video frame rate (about one frame,
-  33 ms at 30 fps). Feature values depend on MediaPipe version `@mediapipe/tasks-vision` [HUMAN: version]
+  33 ms at 30 fps). Feature values depend on MediaPipe version `@mediapipe/tasks-vision` 0.10.21
   and model `face_landmarker.task` (float16, v1).
 - **Is the dataset self-contained?** Yes.
 - **Confidential or sensitive data?** No raw images or video. Eye-landmark and blink timing data are

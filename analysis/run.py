@@ -146,7 +146,8 @@ def build_summary(ds: Dataset, a: StudyA, b: StudyB | None, synthetic: bool, dat
                 "alpha": config.ALPHA,
                 "n_boot": config.N_BOOT,
                 "boot_seed": config.BOOT_SEED,
-                "ci_method": config.CI_METHOD,
+                "unit": config.UNIT,
+                "ci_method": config.ci_method(),
                 "wilcoxon_alternative": config.WILCOXON_ALTERNATIVE,
                 "headline": config.HEADLINE,
                 "primary_detector": config.PRIMARY_DETECTOR,
@@ -218,6 +219,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--site", default=str(ROOT / "public" / "results"))
     ap.add_argument("--paper", default=str(ROOT / "paper"))
     ap.add_argument("--no-figures", action="store_true")
+    ap.add_argument("--unit", choices=("participant", "session"), help="unit of analysis (default: config.UNIT; participant for --synthetic)")
     ap.add_argument("--keep-synthetic", action="store_true", help="do not delete the synthetic data folder")
     args = ap.parse_args(argv)
 
@@ -227,6 +229,14 @@ def main(argv: list[str] | None = None) -> int:
         if not valid_timing(timing):
             print(f"invalid timing in {args.timing}", file=sys.stderr)
             return 2
+
+    # The synthetic generator simulates distinct people, so its unit is the participant.
+    unit = args.unit or ("participant" if args.synthetic else config.UNIT)
+    config.UNIT = unit
+    from . import load as _load
+
+    _load.UNIT = unit
+    print(f"Unit of analysis: {unit}")
 
     tmp: str | None = None
     if args.synthetic:

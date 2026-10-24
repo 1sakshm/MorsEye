@@ -1,5 +1,5 @@
 import { select, type Selection } from 'd3';
-import type { SiteResults } from './results';
+import { unitWord, type SiteResults } from './results';
 import { RESULTS_URL, SYNTHETIC_NOTE } from './data';
 
 /**
@@ -109,7 +109,7 @@ export function figureParts(
     const isCsv = /\.csv$/i.test(href);
     meta.replaceChildren();
     meta.append(
-      `N = ${r.n_participants} participant${r.n_participants === 1 ? '' : 's'}.` +
+      `N = ${r.n_participants} ${unitWord(r, r.n_participants)}.` +
         (opts.intervals === false ? '' : ` Intervals: ${r.ci_method}.`) +
         (opts.extraMeta ? ` ${opts.extraMeta}` : '') +
         ' ',

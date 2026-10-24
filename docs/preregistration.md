@@ -1,78 +1,189 @@
-# Preregistration: MorsEye Study A and Study B
+# Preregistration: MorsEye single-person case study and public-data check
 
-> **Status: NOT YET COMMITTED.** [HUMAN] Saksham writes the final wording of every section below and commits this
-> file **before the first participant** (PRD §3.3). The commit date is the evidence. After that, never edit the
-> sections above "Deviations"; add dated entries under "Deviations" instead.
->
-> The quoted "PRD reference" blocks are the planning notes from `PRD.md`, kept here only so nothing is forgotten.
-> Delete each one once you have written the section in your own words.
+> **Status: approved by Saksham on 24 Oct 2026, and committed before the first recorded session** (the commit date
+> is the evidence). Drafted by the AI agent (Claude Code) at Saksham's request (PRD §2, as changed on that date).
+> Once committed, the sections above "Deviations" are never edited; changes go under "Deviations" with a date.
 
 - **Author:** Saksham Sharma
-- **Date committed:** [HUMAN]
-- **Planned data collection:** [HUMAN] (PRD: 29 Oct – 4 Nov 2026 for Study A)
+- **Drafted by:** Claude Code (AI agent), 24 Oct 2026. Disclosed in `AI_USE.md`.
+- **Approved by:** Saksham Sharma, 24 Oct 2026.
+- **Date committed:** the date of the commit that adds this line.
+- **Planned data collection:** detection sessions 28 Oct – 4 Nov 2026; typing sessions on 5 days between
+  5 and 12 Nov 2026.
+
+## 0. Why this design
+
+The original plan (PRD §3.5) needed about 10 volunteers. This study instead has **one participant, the author**,
+recorded many times, plus a **public video dataset** of other people's natural blinks. This answers the same
+questions for one person, and the natural-blink question for several people, but it **cannot** say how well the
+system works for people in general. Everything below is stated with that limit.
+
+What the author's double role means: he is participant, experimenter, labeller and designer, and he knows the
+hypotheses. His deliberate closures follow cues, so knowing the hypotheses matters less for them; his natural
+blinking while reading may change because he knows it is measured. The public data partly address this, because
+those people did not know about MorsEye.
 
 ## 1. Research questions
 
-[HUMAN]
-
-> PRD reference (§3.2): RQ1 detection of deliberate vs spontaneous blinks on a ~30 fps webcam, and the effect of
-> k-shot calibration (k = 0, 1, 3, 5, 10). RQ2 duration distributions and the thresholds they imply; frame-rate
-> limits on timing. RQ3 novice entry and error rates across three practice blocks.
+- **RQ1 (detection).** For one person on a consumer laptop webcam (about 30 fps), how accurately do
+  landmark-based detectors find deliberate eye closures while ignoring spontaneous blinks, and how much does
+  calibration from k example closures (k = 0, 1, 3, 5, 10) improve this, across repeated sessions and lighting?
+- **RQ2 (timing).** What are the durations of this person's spontaneous blinks and deliberate short and long
+  closures, what reject, dot and dash thresholds do they imply, and how do natural blinks of **other people**
+  (public data) fall relative to those thresholds?
+- **RQ3 (text entry).** What entry and error rates does a novice reach over five days of short practice?
 
 ## 2. Hypotheses
 
-[HUMAN] One numbered, testable statement each, with its direction.
+Confirmatory, on the author's sessions (section 3, part A):
 
-> PRD reference (§3.3): H1 calibrated (k ≥ 3) > fixed EAR 0.21 on event F1. H2 blendshape ≥ EAR. H3 a minimum-duration
-> reject window halves false characters per minute while reading, vs the v1 app. H4 (exploratory) wink mode has fewer
-> false triggers at higher effort. H5 entry rate rises and error rate falls from block 1 to block 3.
+- **H1.** A calibrated detector has a higher event-level F1 for deliberate closures than the fixed EAR threshold of
+  0.21 (D1). Tested for D2 (EAR, calibrated) and D4 (blendshape, calibrated) at k = 3, 5 and 10, each against D1.
+- **H2.** Blendshape scores detect deliberate closures at least as well as EAR. Non-inferiority with a margin of
+  **0.05 F1**: supported for a pair if the lower bound of the 95% CI of the paired difference (blendshape minus EAR)
+  is above −0.05. Pairs: D3 vs D1 (fixed) and D4 vs D2 (calibrated on the full calibration block).
+- **H3a.** A minimum-duration reject window at least halves false triggers per minute while reading, compared with
+  the v1 app (D1 with no reject window). Supported if the mean with the reject window is at most half the mean
+  without it **and** the paired test is significant after Holm correction. Tested for D1 and for D4 (k = 5).
+
+Confirmatory, on public data (section 3, part C), **only if the Researcher's Night dataset is received before
+any of it is analysed**:
+
+- **H3b.** On other people's natural blinks, the reject window at least halves false triggers per minute, for D1
+  and for D3 (the fixed detectors; the public data contain no deliberate closures to calibrate from). Same
+  criterion as H3a, with the video as the unit.
+
+Secondary, not blind (section 3, part C): the same H3b measures on **Eyeblink8**, which the AI agent partly looked
+at before this document was written (see `docs/public-data.md`). Reported, but not counted as a test of H3b.
+
+Descriptive (no test, because five days is too few for one): **H5.** Entry rate rises and the uncorrected error
+rate falls from day 1 to day 5.
+
+Exploratory: **H4.** Wink mode (D5) produces fewer false triggers per minute than D2 and D4 while reading.
 
 ## 3. Design
 
-[HUMAN] Within-subject; blocks; what is manipulated (detector is an *offline* factor: all detectors are run on the same
-recordings); counterbalancing (the app supports a seeded order of blocks 3–5; say whether you use it).
+**Part A — detection sessions (author only, code P01).** At least 6 and up to 8 Study A sessions (session numbers
+1, 2, …), each about 12 minutes, on at least 4 different days, in Study Mode with the usual protocol: a
+calibration block (10 cued short closures, 10 cued long closures, 15 s eyes open), a spontaneous block (3 min of
+reading), a deliberate block (40 randomised cues SHORT / LONG / WINK-L / WINK-R, 2–4 s apart) and a mixed block
+(3 min of reading with corner cues). "Counterbalance the order of blocks 3–5" is ticked for every session.
 
-## 4. Participants and stopping rule
+Lighting is varied on purpose and recorded in each session's setup notes: about half the sessions in normal room
+light, the rest split between bright and dim light. Same laptop and camera, about 50–70 cm away. If the author
+wears glasses, about half the sessions are with them and half without.
 
-[HUMAN] Inclusion (adults 18+, able-bodied volunteers), exclusion (e.g. > 5% missing frames, withdrawn consent),
-target N and the rule for stopping (date or count, whichever first). State that the power is low.
+The detector is an **offline** factor: all five detectors (D1–D5) are run afterwards on the same recordings.
+
+**Part B — typing over five days (author only, code P01).** One Study B session a day on 5 different days, each
+about 20 minutes: the 15 MacKenzie & Soukoreff (2003) phrases in 3 blocks of 5, phrase order shuffled per session,
+the Morse card on screen, raw NASA-TLX after each block. The same 15 phrases are used every day, so some of the
+improvement may come from remembering them; this is reported. The system is fixed before the first typing session
+(section 8).
+
+**Part C — public data.** The fixed detectors (D1, D3) and the segmenter are run on the per-frame features of public
+videos with annotated natural blinks: Eyeblink8 (8 videos, 4 people) and, if access is granted in time,
+Researcher's Night (107 videos). Method in `docs/public-data.md`.
+
+**Pilot.** One pilot session is recorded first under code **P00** to check the procedure. P00 is excluded from all
+analyses.
+
+**Other volunteers.** If anyone else takes part, their sessions are stored in a separate folder and analysed with
+the original multi-person plan, as an exploratory addition. They never enter the confirmatory analyses above.
+
+## 4. Inclusion, exclusion and stopping
+
+- **Exclusion** (applied by the analysis code, or recorded under Deviations): the pilot (P00); more than 5% missing
+  frames; a median measured frame rate below 12 fps (slower but usable cameras stay in, because frame rate is part
+  of RQ2); a calibration block with fewer than 5 usable closures; no spontaneous block in the log.
+- **Stopping rule:** detection sessions stop at 8 included sessions or at the end of 4 Nov 2026, whichever comes
+  first; at least 6 are needed. Excluded sessions are replaced if time allows. Typing sessions: 5 days.
+- **Power:** with 6–8 sessions of one person, the paired tests can detect only large and consistent differences.
+  Non-significant results are reported as inconclusive. Results describe this person, not people in general.
 
 ## 5. Measured variables
 
-[HUMAN] Event-level P/R/F1 (IoU ≥ 0.3), false triggers per minute in the spontaneous block, duration error,
-short/long confusion; Study B: CPM, WPM, MSD error rate (uncorrected and corrected), closures per character, raw TLX.
+Part A, per session, over the spontaneous, deliberate and mixed blocks (the calibration block only fits
+thresholds): event-level precision, recall and F1 for deliberate closures (IoU ≥ 0.3, one-to-one matching); false
+triggers per minute in the spontaneous block (detected closures not removed by the reject band, holds included,
+that match no deliberate label); duration error (detected minus labelled, ms) against the frame interval;
+short/long accuracy and confusion; measured frame rate and lighting.
+
+Part B, per session and block: CPM, WPM (= CPM / 5), MSD character error rate (uncorrected and corrected),
+closures per character including deletions, raw NASA-TLX.
+
+Part C, per video: annotated natural blink durations; for D1 and D3 the detected closed durations, the share of
+annotated blinks detected, and false triggers per minute with and without the reject window.
 
 ## 6. Ground truth
 
-[HUMAN] Who labels (you, 100%), with what tool, the label types, and the self-agreement check (re-label 2
-participants one week later; Cohen's κ for type and mean absolute onset difference).
+The author labels 100% of his Study A closures in the labelling tool (`/labeler`), from the local video and the
+signal traces: onset, offset and type (spontaneous, short, long, wink-L, wink-R). Cue-based candidates may be shown,
+but only events he confirms are exported. No automatic labels count as ground truth. Labelling time is recorded.
+
+**Self-agreement:** two sessions, chosen at random (seed 2026) once all are labelled, are labelled again at least
+one week later without looking at the first labels. Reported: Cohen's κ for type and mean absolute onset
+difference (ms).
+
+Public data use the datasets' own published annotations.
 
 ## 7. Analysis plan
 
-[HUMAN] Per-participant metrics, then mean and 95% bootstrap CI over participants (10,000 resamples). Paired
-Wilcoxon signed-rank tests for detector comparisons with Holm correction — list exactly which comparisons. k-shot:
-20 random draws per k, evaluated on the participant's other blocks.
+- **Unit of analysis.** Parts A and B: the **session** (`UNIT = "session"` in `analysis/config.py`). Sessions of
+  one person are not independent samples of a population; CIs and tests describe variation across this person's
+  sessions. Part C: the video.
+- Summaries: mean and 95% percentile bootstrap CI over units (10,000 resamples, seed 2026).
+- Paired comparisons: two-sided Wilcoxon signed-rank tests, α = 0.05, Holm correction within each family:
+  - **Part A family** (10 tests): H1 — D2 and D4 at k = 3, 5, 10 vs D1 (6 tests); H2 — D3 vs D1 and D4 vs D2
+    (2 tests, also judged by the non-inferiority CI); H3a — D1 with vs without the reject window, and D4 (k = 5) with
+    the reject window vs D1 without it (2 tests).
+  - **Part C family** (Researcher's Night only, 2 tests): H3b for D1 and D3, with vs without the reject window.
+  - **Exploratory:** H4 — D5 vs D2 and D5 vs D4 on false triggers per minute; everything on Eyeblink8; the H5
+    tests the code computes are shown but not interpreted.
+- **k-shot calibration:** per session and k, 20 random draws of k calibration closures; threshold
+  `thr = open_median − 0.5 · (open_median − closed_median)`; evaluated on that session's other blocks; the session
+  value is the mean over draws. k = 0 is the fixed threshold.
 
-**Open analysis choices to fix here** — they are defaults in `analysis/config.py`, each marked [HUMAN]; whatever you
-decide, make the file match this document before running the real analysis:
+Analysis choices fixed here, and set in `analysis/config.py` to match:
 
-- how both-eye detectors (D1–D4) treat a detection that matches a labelled wink (`WINK_POLICY_BOTH_EYE`);
-- where the k-shot "closed" examples come from: your labels or the cue windows (`CALIBRATION_SOURCE`);
-- which blocks the detection metrics cover (`EVAL_BLOCKS`);
-- the headline comparison and k (`HEADLINE`), and the detector used for the frame-rate analysis (`PRIMARY_DETECTOR`);
-- one- or two-sided tests (`WILCOXON_ALTERNATIVE`) and the Holm families;
-- what counts as a "false trigger" (the analysis counts any closure the reject band does not remove, holds included)
-  and the "v1 app" baseline for H3 (D1 without a reject band).
+| Choice | Setting | Why |
+|---|---|---|
+| Unit (`UNIT`) | `session` | One participant |
+| Matched wink, both-eye detectors (`WINK_POLICY_BOTH_EYE`) | `ignore`: neither a hit nor a false alarm; counted separately | Winks are D5's targets |
+| Calibration examples (`CALIBRATION_SOURCE`) | `labels` | Measures what calibration can achieve with correct examples; cue windows are exploratory |
+| Blocks for detection metrics (`EVAL_BLOCKS`) | spontaneous, deliberate, mixed | The calibration block is training data |
+| Headline comparison (`HEADLINE`) | D1 vs D4 at k = 5 | A few seconds of calibration in practice |
+| Frame-rate analysis detector (`PRIMARY_DETECTOR`) | D4 | Same as the headline |
+| Test sidedness (`WILCOXON_ALTERNATIVE`) | two-sided | Conservative; each hypothesis still states its direction |
+| "v1 app" baseline for H3 | D1 with no reject window | What the v1 app did |
 
-## 8. Threshold selection
+Part A is analysed with the app's default segmenter timing (reject < 200 ms, dot < 600 ms, dash < 1400 ms, hold
+< 2000 ms, backspace ≥ 2000 ms). The thresholds chosen in section 8 are used for Part B and reported for Parts A and
+C as a secondary analysis, labelled as chosen after seeing the data.
 
-[HUMAN] How you will choose the final reject/dot/dash bands from Study A before Study B, and that you will record
-the reasoning in `docs/decisions.md`.
+## 8. Threshold selection (between Part A and Part B)
+
+From the author's labelled Part A durations, pooled over sessions:
+
+- **Reject:** the 95th percentile of spontaneous blink durations, rounded up to the next 10 ms. If that is above the
+  5th percentile of deliberate short closures, use the midpoint of those two values instead, and report both.
+- **Dot/dash boundary:** the duration that minimises short/long misclassification, rounded to the nearest 50 ms.
+- **Dash maximum:** the 95th percentile of deliberate long closures, rounded up to the next 100 ms; backspace stays
+  600 ms above it.
+- **Letter and word gaps:** unchanged (1200 ms and 3000 ms) unless the pilot shows a clear problem.
+- **Typing detector:** the calibrated detector (D2 or D4) with the higher mean F1 at k = 5; D4 if the CIs overlap and
+  the means are within 0.02.
+
+Also reported: what share of the public-data natural blinks, as measured by the chosen detector, would pass the
+chosen reject window, as an estimate of how the thresholds would behave for other people. The values, the
+percentiles and the reasoning go into `docs/decisions.md`, committed before the first typing session.
 
 ## 9. Exploratory analyses
 
-[HUMAN] Everything not covered above is exploratory and will be labelled so (e.g. glasses subgroup, wink mode, fps).
+Everything not listed above: lighting and glasses effects, frame-rate effects beyond the duration-error plot,
+cue-window calibration, head pose, wink mode beyond H4, the learning-curve shape, and any data from other
+volunteers.
 
 ## Deviations
 
-[HUMAN] Dated entries only, after the commit above. Example: `2026-11-02 — P04 excluded: camera ran at 12 fps.`
+Dated entries only, after the commit above. Example: `2026-11-02 — session 5 excluded: camera ran at 10 fps.`

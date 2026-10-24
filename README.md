@@ -20,7 +20,9 @@ needs no keyboard or mouse: delete, pause and (optionally) space and speech are 
 
 ## Key results
 
-Pending Study A (November 2026). This section will hold three numbers, each with a 95% CI across participants:
+Pending (November 2026). The study is a preregistered single-person case study (the author, over many sessions)
+plus a check on a public blink-video dataset ([`docs/preregistration.md`](docs/preregistration.md)). This section
+will hold three numbers, each with a 95% CI across sessions:
 deliberate-closure F1 with and without calibration, false triggers per minute while reading, and characters per
 minute after three practice blocks.
 
@@ -109,8 +111,8 @@ accounts, cookies or analytics. Study Mode keeps recordings in memory until the 
 
 ## Limitations
 
-Small N; the experimenter is also the only labeller (self-agreement κ partly addresses this); a convenience sample;
-one or two camera models; deliberate blinks were cued, not driven by real intent to communicate; able-bodied adults
+One participant, who is also the designer and the only labeller (self-agreement κ and the public-data check
+partly address this); the public check covers only four people and is not blind; one camera; deliberate blinks were cued, not driven by real intent to communicate; able-bodied adults
 only; a lab reading task.
 
 ## Related work

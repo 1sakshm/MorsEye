@@ -138,8 +138,9 @@ export function studyA(seed: number, counterbalance = false): Block[] {
 
 /**
  * 15 phrases from the MacKenzie & Soukoreff (2003) phrase set, lower case.
- * [HUMAN] Check each against the original phrases2.txt before Study B, and confirm the
- * selection: at novice Morse rates (~10 CPM) a 20-character phrase takes about 2 minutes.
+ * All 15 checked word for word against the original phrases2.txt (PhraseSets.zip from
+ * yorku.ca/mack) on 24 Oct 2026. At novice Morse rates (~10 CPM) a 20-character phrase takes
+ * about 2 minutes, so a Study B session is about 20 minutes plus breaks.
  */
 export const PHRASES: readonly string[] = [
   'my watch fell in the water',

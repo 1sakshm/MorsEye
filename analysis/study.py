@@ -115,7 +115,7 @@ def analyze_participant_a(s: Session, timing: Timing, ks: tuple[int, ...] = conf
     }
     n_labels = {t: sum(1 for l in labels if l.type == t) for t in ("spontaneous", "short", "long", "wink-L", "wink-R")}
     return ParticipantA(
-        p=s.participant,
+        p=s.unit_id,
         session=s,
         calib=cd,
         fits=fits,
@@ -175,13 +175,34 @@ def bootstrap_ratio_of_means(after: dict[str, float], before: dict[str, float]) 
     return {"ratio": ratio, "lo": float(lo), "hi": float(hi), "n": len(keys)}
 
 
+def exclusion_reason(s: Session) -> str | None:
+    """The preregistered Study A exclusions (section 4) that the logs can show; None if the session is kept."""
+    if getattr(s, "participant", None) in config.PILOT_IDS:
+        return "pilot session"
+    fps = s.measured_fps
+    if math.isfinite(fps) and fps < config.MIN_MEDIAN_FPS:
+        return f"median frame rate {fps:.1f} fps (minimum {config.MIN_MEDIAN_FPS:g})"
+    if "spontaneous" not in s.blocks:
+        return "no spontaneous block in the log"
+    if s.labels:
+        cd = calibration_data(s)
+        n = cd.n_closures if cd is not None else 0
+        if n < config.MIN_CALIB_CLOSURES:
+            return f"{n} usable calibration closures (minimum {config.MIN_CALIB_CLOSURES})"
+    return None
+
+
 def analyze_study_a(sessions: list[Session], timing: Timing) -> StudyA:
     parts: list[ParticipantA] = []
     skipped: list[str] = []
-    for s in sorted(sessions, key=lambda x: x.participant):
+    for s in sorted(sessions, key=lambda x: x.unit_id):
+        reason = exclusion_reason(s)
+        if reason:
+            skipped.append(f"{s.unit_id}: excluded, {reason}")
+            continue
         pa = analyze_participant_a(s, timing)
         if pa is None:
-            skipped.append(f"{s.participant}: no labels")
+            skipped.append(f"{s.unit_id}: no labels")
         else:
             parts.append(pa)
     st = StudyA(participants=parts, skipped=skipped, timing=timing)
@@ -216,7 +237,7 @@ def analyze_study_a(sessions: list[Session], timing: Timing) -> StudyA:
                 }
             )
 
-    # Confirmatory tests (Holm within the family). [HUMAN] keep in line with docs/preregistration.md.
+    # Confirmatory tests (Holm within the family), as listed in docs/preregistration.md section 7.
     f1 = lambda det: st.pp(det, "f1")  # noqa: E731
     tests: list[PairedTest] = []
     for k in (3, 5, 10):
@@ -291,7 +312,7 @@ def analyze_participant_b(s: Session) -> ParticipantB:
         vals = [float(t[k]) for k in TLX_KEYS if k in t]
         if len(vals) == len(TLX_KEYS):
             tlx[str(t["block"])] = float(np.mean(vals))
-    return ParticipantB(p=s.participant, phrases=results, blocks=blocks, tlx=tlx)
+    return ParticipantB(p=s.unit_id, phrases=results, blocks=blocks, tlx=tlx)
 
 
 def _nanmean(xs: list[float]) -> float:
@@ -311,7 +332,7 @@ class StudyB:
 
 
 def analyze_study_b(sessions: list[Session]) -> StudyB | None:
-    parts = [analyze_participant_b(s) for s in sorted(sessions, key=lambda x: x.participant)]
+    parts = [analyze_participant_b(s) for s in sorted(sessions, key=lambda x: x.unit_id)]
     parts = [p for p in parts if p.blocks]
     if not parts:
         return None

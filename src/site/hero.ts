@@ -201,6 +201,8 @@ export function mountHero(o: HeroOptions): { schedule: HeroSchedule; threshold: 
   }
 
   let W = 400;
+  /** Plot width: the trace runs in [0, PW]; its labels sit in a gutter to the right of the pen. */
+  let PW = 300;
   let H = 72;
   let TW = 800;
   let headX = 400;
@@ -219,16 +221,24 @@ export function mountHero(o: HeroOptions): { schedule: HeroSchedule; threshold: 
     headX = Math.max(TW * 0.3, Math.min(TW * 0.86, eyeCenter));
     speed = TW < 640 ? 0.045 : 0.07;
     head.setAttribute('d', `M${headX - 7},0 L${headX + 7},0 L${headX},9 Z`);
+    // The labels go in a gutter right of the pen, so the scrolling trace never runs through them.
+    // The width estimate (12 px mono) covers the moment before the web font has loaded.
+    const labelW = (el: SVGTextElement) =>
+      Math.max(el.getComputedTextLength(), (el.textContent ?? '').length * 7.3);
+    PW = Math.max(
+      120,
+      W - Math.ceil(Math.max(labelW(trace.thrLabel), labelW(trace.earLabel))) - 14,
+    );
     const y = yOf(thr);
     trace.thrLine.setAttribute('x1', '0');
-    trace.thrLine.setAttribute('x2', String(W));
+    trace.thrLine.setAttribute('x2', String(PW));
     trace.thrLine.setAttribute('y1', y.toFixed(1));
     trace.thrLine.setAttribute('y2', y.toFixed(1));
-    // Left end, under the line: the newest samples arrive on the right.
-    trace.thrLabel.setAttribute('x', '4');
-    trace.thrLabel.setAttribute('y', (y + 14).toFixed(1));
-    trace.earLabel.setAttribute('x', '4');
-    trace.earLabel.setAttribute('y', '13');
+    trace.thrLabel.setAttribute('x', String(PW + 8));
+    trace.thrLabel.setAttribute('y', (y + 4).toFixed(1));
+    // "EAR" names the line at its open-eye level, next to where new samples arrive.
+    trace.earLabel.setAttribute('x', String(PW + 8));
+    trace.earLabel.setAttribute('y', (yOf(earAt(0)) + 4).toFixed(1));
   }
 
   const yOf = (e: number) => H - 8 - (Math.min(e, EAR_MAX) / EAR_MAX) * (H - 20);
@@ -249,7 +259,7 @@ export function mountHero(o: HeroOptions): { schedule: HeroSchedule; threshold: 
 
   function drawTrace(): void {
     const g = globalTime();
-    const x = (t: number) => W - ((g - t) / TRACE_WINDOW) * W;
+    const x = (t: number) => PW - ((g - t) / TRACE_WINDOW) * PW;
     let d = '';
     for (const s of samples) d += `${d ? 'L' : 'M'}${x(s.g).toFixed(1)},${yOf(s.ear).toFixed(1)}`;
     trace.path.setAttribute('d', d);

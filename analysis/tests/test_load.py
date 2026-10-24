@@ -130,3 +130,28 @@ def test_dataset_attaches_labels_and_records_refusals(tmp_path):
     refused = {Path(f).name: why for f, why in ds.rejected}
     assert "broken.jsonl" in refused
     assert "missing" in refused["P03_A_2026-11-05.jsonl"]
+
+
+def test_later_session_never_uses_session_one_labels(tmp_path):
+    from analysis.load import _label_candidates
+
+    s2 = tmp_path / "P01_A_s2_2026-10-29.jsonl"
+    first, second = _label_candidates(s2, {"participant": "P01", "study": "A", "session": 2})
+    assert tmp_path / "P01_A_s2_labels.csv" in first
+    assert tmp_path / "P01_A_labels.csv" not in first
+    assert tmp_path / "P01_A_s2_labels_relabel.csv" in second
+    s1 = tmp_path / "P01_A_2026-10-28.jsonl"
+    first, _ = _label_candidates(s1, {"participant": "P01", "study": "A", "session": 1})
+    assert tmp_path / "P01_A_labels.csv" in first
+
+
+def test_unit_of_analysis(monkeypatch):
+    from analysis import load
+    from analysis.load import Session
+
+    s = Session.__new__(Session)
+    s.header = {"participant": "P01", "session": 3, "study": "A"}
+    monkeypatch.setattr(load, "UNIT", "participant")
+    assert s.unit_id == "P01"
+    monkeypatch.setattr(load, "UNIT", "session")
+    assert s.unit_id == "P01-s3"

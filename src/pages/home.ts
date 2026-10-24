@@ -4,7 +4,7 @@ import { PAUSE_WINDOW_MS } from '../decode/decoder';
 import { DEFAULT_TIMING as T } from '../segment/segmenter';
 import { fmtCI, hasRealResults, loadResults, pct } from '../site/data';
 import { mountHero } from '../site/hero';
-import type { SiteResults } from '../site/results';
+import { unitWord, whoSentence, type SiteResults } from '../site/results';
 
 const $ = <E extends Element = HTMLElement>(sel: string) => document.querySelector<E>(sel);
 
@@ -58,16 +58,15 @@ function showResults(r: SiteResults): void {
   const h = r.headline;
   if (!h) return;
   const status = $('#results-status');
-  if (status) status.textContent = `Study A results · N = ${r.n_participants}`;
+  if (status)
+    status.textContent = `Study A results · N = ${r.n_participants} ${unitWord(r, r.n_participants)}`;
   const lede = $('#results-lede');
   if (lede) {
-    lede.textContent =
-      `Participants were ${r.n_participants} able-bodied adult volunteers. The system has not been ` +
-      'tested with people with motor impairments, and no clinical claim is made.';
+    lede.textContent = whoSentence(r);
   }
   const note = $('#results-note');
   if (note) {
-    note.textContent = `Means across participants; brackets give ${r.ci_method}. Every number is generated from the logged data by the analysis scripts.`;
+    note.textContent = `Means across ${unitWord(r)}; brackets give ${r.ci_method}. Every number is generated from the logged data by the analysis scripts.`;
     note.hidden = false;
   }
   fillCard(

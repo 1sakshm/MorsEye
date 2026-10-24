@@ -19,6 +19,7 @@ import {
 import { DEFAULT_TIMING } from '../segment/segmenter';
 import { chartMessage, dataTable, figureParts, freshSvg, jitter, responsive } from '../site/charts';
 import { fmtCI, fmtNum, loadResults, pct } from '../site/data';
+import { unitWord, whoSentence } from '../site/results';
 import type { CI, DetectorResult, DurationSet, KShotPoint, SiteResults } from '../site/results';
 
 type G = Selection<SVGGElement, unknown, null, undefined>;
@@ -125,7 +126,7 @@ function durationExplorer(r: SiteResults): void {
   const state = { who: 'pooled', reject: base.rejectMs, dot: base.dotMaxMs };
   const people = Object.keys(r.durations.participants ?? {}).sort();
   sel.replaceChildren(
-    new Option('All participants (pooled)', 'pooled'),
+    new Option(`All ${unitWord(r)} (pooled)`, 'pooled'),
     ...people.map((p) => new Option(p, p)),
   );
 
@@ -186,7 +187,7 @@ function durationExplorer(r: SiteResults): void {
         ? `${label}: n = ${s.length}, median ${Math.round(q(s, 0.5))} ms (middle half ${Math.round(q(s, 0.25))}–${Math.round(q(s, 0.75))} ms)`
         : `${label}: none`;
     });
-    const who = state.who === 'pooled' ? 'All participants' : state.who;
+    const who = state.who === 'pooled' ? `All ${unitWord(r)}` : state.who;
     figureParts(fig, r, {
       downloadKeys: ['durations', 'closures', 'labels'],
       summary:
@@ -529,10 +530,10 @@ function detectorChart(r: SiteResults): void {
       summary:
         `Best mean ${METRIC_LABEL[metric]}: ${best.d.id} — ${best.d.label}: ${fmtCI(best.ci, digits)}. ` +
         `Worst: ${worst.d.id} — ${worst.d.label}: ${fmtCI(worst.ci, digits)}. Where intervals overlap, ` +
-        `the difference may not be reliable with this many participants.`,
+        `the difference may not be reliable with this many ${unitWord(r)}.`,
       table: dataTable(
         `Detector ${METRIC_LABEL[metric]}: mean and 95% interval`,
-        ['Detector', 'Description', 'Mean', '95% interval', 'Participant range'],
+        ['Detector', 'Description', 'Mean', '95% interval', `Range over ${unitWord(r)}`],
         rows.map(({ d, ci, pp }) => [
           d.id,
           d.label,
@@ -797,7 +798,7 @@ function textEntryChart(r: SiteResults): void {
         holder,
         w,
         height,
-        `${title} by block, per participant and mean with 95% interval.`,
+        `${title} by block, per ${unitWord(r, 1)} and mean with 95% interval.`,
       );
       const g: G = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
       const x = scalePoint<number>().domain(blocks).range([0, innerW]).padding(0.4);
@@ -942,13 +943,18 @@ function fpsChart(r: SiteResults): void {
   figureParts(fig, r, {
     downloadKeys: ['fps', 'frame_rate'],
     intervals: false,
-    extraMeta: 'Each point is one participant.',
+    extraMeta: `Each point is one ${unitWord(r, 1)}.`,
     summary:
       `Measured frame rates ranged from ${s[0]!.fps.toFixed(1)} to ${s[s.length - 1]!.fps.toFixed(1)} fps ` +
       `(one frame = ${(1000 / s[s.length - 1]!.fps).toFixed(0)}–${(1000 / s[0]!.fps).toFixed(0)} ms).`,
     table: dataTable(
-      'Duration error and frame rate per participant',
-      ['Participant', 'Frame rate (fps)', 'Frame interval (ms)', 'Duration error (ms)'],
+      `Duration error and frame rate per ${unitWord(r, 1)}`,
+      [
+        unitWord(r, 1).replace(/^./, (c) => c.toUpperCase()),
+        'Frame rate (fps)',
+        'Frame interval (ms)',
+        'Duration error (ms)',
+      ],
       s.map((p) => [
         p.p,
         p.fps.toFixed(1),
@@ -1012,15 +1018,13 @@ loadResults().then((r) => {
   if (status) {
     status.textContent = r.synthetic
       ? 'The study has not been analysed yet. Until it is, these charts show synthetic data, so that the analysis and this page can be tested end to end.'
-      : `Study A: N = ${r.n_participants} participants. Generated ${new Date(r.generated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} from the logged data by the analysis scripts.`;
+      : `Study A: N = ${r.n_participants} ${unitWord(r, r.n_participants)}. Generated ${new Date(r.generated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} from the logged data by the analysis scripts.`;
   }
   const banner = byId('synthetic-banner');
   if (banner) banner.hidden = !r.synthetic;
   const limits = byId('limits-lede');
   if (limits && !r.synthetic && r.n_participants > 0) {
-    limits.textContent =
-      `Participants were ${r.n_participants} able-bodied adult volunteers. The system has not been ` +
-      'tested with people with motor impairments, and no clinical claim is made.';
+    limits.textContent = whoSentence(r);
   }
   const labelOf = (id: string) => r.detectors?.find((d) => d.id === id)?.label ?? id;
   durationExplorer(r);

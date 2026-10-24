@@ -1,6 +1,6 @@
 {
   "schema": "morseye-summary/1",
-  "generated_at": "2026-10-24T02:05:10+00:00",
+  "generated_at": "2026-10-24T06:14:33+00:00",
   "analysis_version": "2.0.0",
   "synthetic": true,
   "data_dir": "<synthetic>",
@@ -32,6 +32,7 @@
     "alpha": 0.5,
     "n_boot": 10000,
     "boot_seed": 2026,
+    "unit": "participant",
     "ci_method": "95% percentile bootstrap over participants, 10,000 resamples",
     "wilcoxon_alternative": "two-sided",
     "headline": {

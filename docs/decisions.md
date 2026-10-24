@@ -1,8 +1,9 @@
 # Decisions
 
-[HUMAN] Dated decisions with reasons. In particular (PRD §3.6, §5.3, §11): the final `REJECT_MS`, `DOT_MAX_MS`,
-`DASH_MAX_MS`, `CMD_MS`, letter and word gaps, chosen from the Study A duration distributions, and the detector chosen
-for Study B. Include the numbers you looked at (e.g. the percentile of spontaneous blinks below the reject threshold).
+Dated decisions with reasons. Since 24 Oct 2026 (PRD §2) the AI agent may propose a decision with its reasoning;
+each entry says who proposed it and when Saksham approved it. In particular (PRD §3.6, §5.3, §11): the final `REJECT_MS`, `DOT_MAX_MS`,
+`DASH_MAX_MS`, `CMD_MS`, letter and word gaps, chosen from the Study A duration distributions by the rule in
+`docs/preregistration.md` section 8, and the detector chosen for Study B. Include the numbers you looked at (e.g. the percentile of spontaneous blinks below the reject threshold).
 
 When the thresholds are final, update `DEFAULT_TIMING` in `src/segment/segmenter.ts` and note the commit here.
 

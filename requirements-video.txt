@@ -1,0 +1,4 @@
+# Only for scripts/extract_video_features.py (public blink videos). Not needed for the analysis.
+mediapipe==0.10.21
+opencv-python-headless==4.11.0.86
+numpy<2

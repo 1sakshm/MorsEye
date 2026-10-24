@@ -58,6 +58,11 @@ export interface SiteResults {
   generated_at: string;
   synthetic: boolean;
   n_participants: number;
+  /**
+   * Unit of analysis: one value per participant, or per session in the single-person design.
+   * Missing in files written before it existed, which were per participant.
+   */
+  unit?: 'participant' | 'session';
   /** CI method, e.g. "95% percentile bootstrap over participants, 10,000 resamples". */
   ci_method: string;
   /** The segmenter timing in use (the values the duration explorer starts from). */
@@ -88,4 +93,19 @@ export interface SiteResults {
   fps: { p: string; fps: number; duration_error_ms: number; frame_interval_ms: number }[];
   /** Relative links to downloadable CSVs (under /results/). */
   downloads: Record<string, string>;
+}
+
+/** "participant(s)" or "session(s)", for the unit of analysis in these results. */
+export function unitWord(r: Pick<SiteResults, 'unit'>, n = 2): string {
+  const w = r.unit === 'session' ? 'session' : 'participant';
+  return n === 1 ? w : `${w}s`;
+}
+
+/** The sentence about who was studied, for real (non-synthetic) results. */
+export function whoSentence(r: Pick<SiteResults, 'unit' | 'n_participants'>): string {
+  const who =
+    r.unit === 'session'
+      ? `Results come from ${r.n_participants} sessions of one able-bodied adult, the author.`
+      : `Participants were ${r.n_participants} able-bodied adult volunteers.`;
+  return `${who} The system has not been tested with people with motor impairments, and no clinical claim is made.`;
 }

@@ -1,11 +1,16 @@
 """Analysis settings in one place.
 
-Everything marked [HUMAN] is an analysis decision that belongs in docs/preregistration.md and must be
-fixed there *before* the data are analysed. Changing one afterwards is a deviation: record it, with
-the date, in the preregistration's "Deviations" section.
+Everything marked [PREREG] is an analysis decision fixed in docs/preregistration.md (section 7) *before*
+the data are analysed; the values here match that document. Changing one afterwards is a deviation:
+record it, with the date, in the preregistration's "Deviations" section.
 """
 
 from __future__ import annotations
+
+# [PREREG] The unit of analysis: "participant" (one value per person) or "session" (one value per
+# session, for the single-person design in docs/preregistration.md). Bootstrap CIs and paired tests
+# resample this unit.
+UNIT = "session"
 
 # --- Event matching (PRD §3.5) ---
 IOU_MIN = 0.3  # a detection matches a labelled event if the intervals overlap with IoU >= 0.3
@@ -13,12 +18,12 @@ IOU_MIN = 0.3  # a detection matches a labelled event if the intervals overlap w
 # Blocks the detection metrics are computed over (calibration is used only to fit thresholds).
 EVAL_BLOCKS = ("spontaneous", "deliberate", "mixed")
 
-# [HUMAN] How both-eye detectors (D1-D4) treat a detection that matches a labelled *wink*:
+# [PREREG] How both-eye detectors (D1-D4) treat a detection that matches a labelled *wink*:
 #   "ignore": neither a hit nor a false alarm (winks are D5's targets); counted as `wink_triggers`.
 #   "fp":     a false alarm.
 WINK_POLICY_BOTH_EYE = "ignore"
 
-# [HUMAN] Where the "closed" calibration examples come from:
+# [PREREG] Where the "closed" calibration examples come from:
 #   "labels": the human-labelled short/long closures in the calibration block (default);
 #   "cues":   the cue windows (what the live app can do without labels).
 CALIBRATION_SOURCE = "labels"
@@ -33,16 +38,24 @@ ALPHA = 0.5  # thr = open_median - ALPHA * (open_median - closed_median)
 N_BOOT = 10_000
 BOOT_SEED = 2026
 CI_LEVEL = 0.95
-CI_METHOD = "95% percentile bootstrap over participants, 10,000 resamples"
-WILCOXON_ALTERNATIVE = "two-sided"  # [HUMAN] one-sided only if the preregistration says so
 
-# [HUMAN] Which numbers are the headline (home page, abstract, CV). Fix before analysis.
+
+def ci_method() -> str:
+    """How intervals are computed, in words, for the current unit of analysis."""
+    return f"95% percentile bootstrap over {UNIT}s, 10,000 resamples"
+WILCOXON_ALTERNATIVE = "two-sided"  # [PREREG] one-sided only if the preregistration says so
+
+# [PREREG] Which numbers are the headline (home page, abstract, CV). Fix before analysis.
 HEADLINE = {"uncalibrated": "D1", "calibrated": "D4", "k": 5}
 # Detector whose duration error is plotted against frame rate (F8).
 PRIMARY_DETECTOR = "D4"
 
 # --- Data validation (PRD §9) ---
 MAX_MISSING_FRAC = 0.05  # refuse logs with more than 5% missing frames
+# [PREREG] Study A exclusions (docs/preregistration.md section 4), applied in analysis/study.py.
+PILOT_IDS = ("P00",)  # pilot sessions, never analysed
+MIN_MEDIAN_FPS = 12.0  # exclude a session whose median measured frame rate is below this
+MIN_CALIB_CLOSURES = 5  # exclude a session with fewer usable calibration closures
 
 DETECTOR_LABELS = {
     "D1": "EAR, fixed 0.21",
