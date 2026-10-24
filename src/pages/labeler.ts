@@ -324,6 +324,8 @@ function nextDraft(): void {
     return;
   }
   selected = j;
+  // Zoom in so the lid movement, not the 1.8 s cue window, fills the timeline.
+  view.span = 3000;
   seek(labels[j]!.onset_ms - 300);
   renderList();
   announcer.textContent = `draft ${labels[j]!.type}: set its onset and offset with [ and ]`;
