@@ -4,7 +4,7 @@
 |---|---|
 | **Owner** | Saksham Sharma |
 | **Repo** | `D:\Cactus\MorsEye` (clone of https://github.com/1sakshm/MorsEye) |
-| **Live site** | https://mors-eye.vercel.app (to be replaced) |
+| **Live site** | https://morseye.pages.dev |
 | **Written** | 24 Oct 2026 |
 | **Hard date** | **Fri 13 Nov 2026.** Study A results, the site and a paper draft must exist so the CaCTüS CV and statements can cite real numbers (CaCTüS deadline: 16 Nov 2026). |
 | **Soft date** | 31 Dec 2026: paper ready for an arXiv/workshop submission. Interview prep in January. |
@@ -228,7 +228,7 @@ able-bodied users only; the in-the-lab reading task.
 - Animation: GSAP 3 with ScrollTrigger (pinned exact version) for the site; CSS and the Web Animations API for the app.
 - Charts on the site: D3 v7 (pinned) or Observable Plot (pinned).
 - Tests: Vitest. Lint: ESLint + Prettier. CI: a GitHub Action running build, test and lint.
-- Deploy: Vercel (the existing `mors-eye.vercel.app` project).
+- Deploy: Cloudflare Pages (project `morseye`, https://morseye.pages.dev).
 
 ### 5.2 Module layout
 ```
