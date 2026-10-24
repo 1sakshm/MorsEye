@@ -29,4 +29,4 @@ These were made by the coding agent to fill gaps in the PRD. Review and keep, ch
   No detector output is used, so detectors are not graded against themselves; this is the "cue-based candidates"
   case allowed by the preregistration (§6). Natural blinks have no cue and are still marked from scratch. The
   export metadata records `n_from_cue_drafts`, and the paper should state that cue drafts were used. Cue types
-  can anchor the labeller, so a draft's type is changed whenever the closure he actually made differs from the cue.
+  can anchor the labeller, so a draft's type is changed whenever the closure actually made differs from the cue.

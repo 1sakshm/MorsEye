@@ -48,7 +48,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   and model `face_landmarker.task` (float16, v1).
 - **Is the dataset self-contained?** Yes.
 - **Confidential or sensitive data?** No raw images or video. Eye-landmark and blink timing data are
-  biometric-adjacent; the only participant is the author, who publishes his own data.
+  biometric-adjacent; the only participant is the author, who recorded and publishes the data.
 
 ## Collection process
 
