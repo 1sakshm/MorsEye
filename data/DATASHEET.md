@@ -1,7 +1,7 @@
 # Datasheet: MorsEye blink-closure features
 
 Structure follows Gebru et al., *Datasheets for Datasets* (2021). Fields marked **[HUMAN]** are filled in
-once data collection is complete, from the session logs and Saksham's notebook (the AI agent may fill them from
+once data collection is complete, from the session logs and their setup notes (the AI agent may fill them from
 those sources; Saksham checks them). Numbers should be
 copied from `analysis/out/summary.json` (for example `study_a.n_participants`,
 `study_a.n_labels_total`, `study_a.participants[].fps`) so they match the paper.
@@ -66,7 +66,8 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   SHORT / LONG / WINK-L / WINK-R, 2–4 s apart); mixed block (3 min reading with corner cues). Study B
   (about 20 minutes): 15 MacKenzie & Soukoreff (2003) phrases in 3 blocks of 5, raw NASA-TLX after
   each block. Cue schedules are generated from the seed stored in each log header.
-- **Ethical review.** [HUMAN] See `docs/ethics.md` (who was asked, when, and the answer).
+- **Ethical review.** None was sought: the only participant is the author, who recorded himself. The public
+  comparison videos (Eyeblink8) are used under their published licence and are not part of this dataset.
 - **Consent.** Participants consented on paper and in the app (`docs/consent.md`): purpose, what is
   recorded, a separate opt-in for local video (used only for labelling and deleted afterwards unless
   consent says otherwise), the right to withdraw and have data deleted, no payment.

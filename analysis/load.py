@@ -181,17 +181,27 @@ def _num(x: Any) -> bool:
     return isinstance(x, (int, float)) and not isinstance(x, bool)
 
 
-def missing_fraction(t: np.ndarray) -> tuple[float, float]:
-    """(fraction of frames missing, median frame interval). Gaps longer than 1.5 median intervals
-    count round(gap / median) - 1 missing frames."""
+def missing_fraction(t: np.ndarray, window: int = 31) -> tuple[float, float]:
+    """(fraction of frames missing, median frame interval).
+
+    A gap longer than 1.5 times the *local* frame interval (the median of the ``window`` intervals around it)
+    counts round(gap / local interval) - 1 missing frames. Using the local interval matters because webcams
+    change their frame rate with the light (for example 16.6 fps, then 10 fps while the person reads): a
+    slower camera is not a dropped frame. Judged against one session-wide median, every interval of a 10 fps
+    stretch in a 16.6 fps session would look like a missing frame.
+    """
     if t.size < 2:
         return 0.0, float("nan")
     dt = np.diff(t)
     med = float(np.median(dt))
     if med <= 0:
         return 0.0, med
-    gaps = dt[dt > 1.5 * med]
-    missing = float(np.sum(np.maximum(0, np.floor(gaps / med + 0.5) - 1)))
+    half = window // 2
+    padded = np.pad(dt, half, mode="edge")
+    local = np.median(np.lib.stride_tricks.sliding_window_view(padded, 2 * half + 1), axis=1)
+    local = np.where(local > 0, local, med)
+    over = dt > 1.5 * local
+    missing = float(np.sum(np.maximum(0, np.floor(dt[over] / local[over] + 0.5) - 1)))
     return missing / (t.size + missing), med
 
 

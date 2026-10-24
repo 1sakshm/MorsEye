@@ -1,7 +1,8 @@
 # Recruitment message
 
-Drafted by the AI agent (24 Oct 2026) for Saksham to edit and send. Send only after the ethics question in
-`docs/ethics.md` is answered. Keep any sign-up list (names, slots) offline, not in this repository.
+Drafted by the AI agent (24 Oct 2026) for Saksham to edit and send, only if volunteers are wanted later (the
+current design has one participant, the author). Keep any sign-up list (names, slots) offline, not in this
+repository.
 
 ## Short version (WhatsApp / group chat)
 

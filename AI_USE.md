@@ -19,8 +19,7 @@ record of the AI's part.
 
 **Study materials and documents (drafted by the agent, reviewed by Saksham)**
 
-- The consent form (`docs/consent.md`), the email asking about ethics review (`docs/ethics.md`) and the
-  recruitment message (`docs/recruitment.md`).
+- The consent form (`docs/consent.md`) and the recruitment message (`docs/recruitment.md`).
 - The two reading passages and the selection of 15 phrases used in the study (`src/study/protocol.ts`).
 - The preregistration (`docs/preregistration.md`): the wording of the research questions and hypotheses, and the
   analysis decisions in it, including the H2 non-inferiority margin, the exclusion and stopping rules, the Holm
@@ -48,7 +47,7 @@ AI-use statement.
 - Wrote the project plan (`PRD.md`) that the agent worked from, and changed its rules on 24 Oct 2026.
 - Reviews and approves every document above before it is used.
 - Is the study's participant: records every session himself (and runs any session with volunteers in person).
-- Asks for the ethics advice and requests the Researcher's Night dataset.
+- Requests the Researcher's Night dataset.
 - Labels every closure in the data himself; no automatic labels are used as ground truth.
 
 ## What no one did

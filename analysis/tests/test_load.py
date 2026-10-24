@@ -155,3 +155,17 @@ def test_unit_of_analysis(monkeypatch):
     assert s.unit_id == "P01"
     monkeypatch.setattr(load, "UNIT", "session")
     assert s.unit_id == "P01-s3"
+
+
+def test_slower_camera_is_not_missing_frames():
+    # 60 s at 16.6 fps, then 60 s at 10 fps (the camera lengthening its exposure), then 16.6 fps again.
+    fast = np.arange(0, 60000, 60.0)
+    slow = 60000 + np.arange(0, 60000, 100.0)
+    again = 120000 + np.arange(0, 60000, 60.0)
+    t = np.concatenate([fast, slow, again])
+    miss, _ = missing_fraction(t)
+    assert miss == 0.0
+    # A real dropout inside the slow stretch is still counted: 4 frames missing out of a 1 s gap at 10 fps.
+    t2 = np.delete(t, np.arange(1100, 1104))
+    miss2, _ = missing_fraction(t2)
+    assert miss2 > 0

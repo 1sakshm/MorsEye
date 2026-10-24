@@ -187,3 +187,16 @@ volunteers.
 ## Deviations
 
 Dated entries only, after the commit above. Example: `2026-11-02 — session 5 excluded: camera ran at 10 fps.`
+
+- `2026-10-24` — No separate P00 pilot was recorded. The first session was recorded on 24 Oct (after this
+  document was committed, but before the planned 28 Oct start) as P01 session 1, with the full protocol. It is
+  analysed as session 1 under the rules above.
+- `2026-10-24` — In P01 session 1 the camera itself ran at about 16.6 fps, and at about 10 fps for most of both
+  reading blocks (the recorded video shows the same pattern, so it is the camera's exposure, not the app). The
+  median frame rate (15 fps) is above the 12 fps exclusion limit, so the session is kept; the per-block frame rate
+  is reported.
+- `2026-10-24` — Fix to how "missing frames" are counted (section 4), made after the loader wrongly rejected
+  P01 session 1 with "8.2% of frames missing". The code compared every gap with the session-wide median interval
+  (67 ms), so the camera's 10 fps stretches (100 ms per frame) looked like dropped frames. Gaps are now compared
+  with the local frame interval (the median of the 31 intervals around them). The rule itself (exclude a session
+  with more than 5% missing frames) is unchanged; with the fix, session 1 has 0.06% missing frames.

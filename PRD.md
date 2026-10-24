@@ -70,7 +70,7 @@ checks with CaCTüS whether disclosed AI-drafted text is acceptable, and describ
 | Task | Who |
 |---|---|
 | Research questions, hypotheses and analysis plan in `docs/preregistration.md` | Agent drafts; **Saksham reviews, approves and commits it before the first participant** |
-| Ethics question to BITS faculty, consent text, recruitment message | Agent drafts; Saksham sends them, asks the question, and approves the final consent text |
+| Consent text, recruitment message | Agent drafts; Saksham approves the final consent text and sends any message |
 | Recruiting participants, taking consent, running every session | **Saksham, in person** |
 | Labelling blink onsets and offsets in the labelling tool | **Saksham, 100% of it.** No auto-labels counted as ground truth (they would grade the detector against itself). |
 | Choosing the final dot/dash/reject thresholds from the Study A data | Agent proposes values with reasoning from the real data; Saksham approves; both recorded in `docs/decisions.md` |
@@ -80,8 +80,8 @@ checks with CaCTüS whether disclosed AI-drafted text is acceptable, and describ
 | `AI_USE.md` and the paper's AI-use paragraph | Agent keeps them accurate and complete as the work goes on; Saksham reviews. They never understate the agent's part |
 | No number without data | Nobody, ever, writes a result that did not come from `analysis/out/*.json` computed on real sessions |
 
-Keep a dated lab notebook at `docs/notebook.md`: what was done each day, decisions, surprises, pilot problems.
-Saksham records his own work (sessions, labelling, approvals); the agent's work is recorded in `AI_USE.md`.
+No separate lab notebook is kept (decided 24 Oct 2026). The record of the work is the git history, the dated
+preregistration and its Deviations section, `docs/decisions.md`, the session logs themselves, and `AI_USE.md`.
 
 ---
 
@@ -181,7 +181,8 @@ The same 3–5 people do 10 minutes a day for 5 days. Plot the entry-rate learni
 CaCTüS Project 9 idea that motor behaviour becomes more automatic with practice. Only cite their paper if you read it.
 
 ### 3.8 Ethics and data handling
-- Ask a BITS faculty member whether an ethics review is needed. Record the answer in `docs/ethics.md` **[HUMAN]**.
+- No ethics review is sought (decided by Saksham, 24 Oct 2026): the only participant is the author, and the public
+  videos are used under their published licence. The paper says so. If volunteers take part later, revisit this first.
 - Consent form (`docs/consent.md` plus a screen in the app): purpose, what is recorded, a separate opt-in for video,
   the right to withdraw and have data deleted, contact email, and no payment. Adults (18+) only.
 - Data files hold only IDs. Keep a mapping from ID to name, if any, offline on paper.
@@ -531,7 +532,7 @@ MorsEye/
   public/models/face_landmarker.task  public/og.png
   analysis/ ...                                                         (§9)
   data/public/  data/DATASHEET.md   (features + labels only; raw/ and video/ are gitignored)
-  docs/preregistration.md  docs/notebook.md  docs/consent.md  docs/ethics.md  docs/decisions.md
+  docs/preregistration.md  docs/consent.md  docs/decisions.md  docs/public-data.md
   paper/main.tex  paper/references.bib  paper/figures/
   legacy/opencv_prototype.py  legacy/README.md
   tests/ (Vitest)  analysis/tests/ (pytest)
@@ -547,10 +548,10 @@ agent may draft the writing and propose the analysis decisions for him to approv
 
 | Dates | Work | Owner |
 |---|---|---|
-| Sat 24 – Sun 25 Oct | Read the 4 core papers; write the preregistration; consent text; ask the BITS ethics question; recruit 10 people and book slots | **[HUMAN]** |
+| Sat 24 – Sun 25 Oct | Read the 4 core papers; write the preregistration; consent text; recruit 10 people and book slots | **[HUMAN]** |
 | Sat 24 – Tue 27 Oct | App core: landmarker, features, detectors, calibration, segmenter, decoder, tests; Study Mode + recorder | Agent + review |
 | Tue 27 Oct | Commit the preregistration **before any session** | **[HUMAN]** |
-| Wed 28 Oct | Pilot with 1 person; fix protocol problems; note them in the notebook | **[HUMAN]** |
+| Wed 28 Oct | Pilot with 1 person; fix protocol problems; note them under Deviations if they change the plan | **[HUMAN]** |
 | Wed 28 – Fri 30 Oct | Labelling tool; analysis pipeline on pilot data | Agent + review |
 | Thu 29 Oct – Wed 4 Nov | Study A sessions (≥ 8 people) | **[HUMAN]** |
 | Fri 30 Oct – Fri 6 Nov | Label all sessions (budget about 30–45 min per participant); re-label 2 for κ | **[HUMAN]** |
@@ -595,4 +596,4 @@ word suggestions. **Never cut** the preregistration, human labelling, Study A or
 | Glasses glare breaks EAR | Blendshape detector (D3/D4); record glasses yes/no; report subgroup results descriptively. |
 | Model or CDN changes | Pinned npm version and a self-hosted `.task` file. |
 | Running out of time before 13 Nov | Follow the cut order in §11. The CV can say "preliminary, N = 6" honestly. |
-| The work looks AI-generated | §2 rules, the notebook, human labelling, human commit messages, and an honest `AI_USE.md`. |
+| The work looks AI-generated | §2 rules, human labelling, the dated preregistration, and an honest `AI_USE.md`. |
