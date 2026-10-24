@@ -7,7 +7,7 @@ Checked on 24 Oct 2026 for the single-person design (`docs/preregistration.md`).
 | Dataset | People / videos | Blinks | fps | Access | Use here |
 |---|---|---|---|---|---|
 | **Eyeblink8** (Drutarovsky & Fogelton, 2014) | 4 people (1 with glasses), 8 videos, ~40 min, home setting | 408 annotated | 30 (measured 31.2) | Direct download, GPL-3.0 ([blinkingmatters.com/research](https://www.blinkingmatters.com/research)) | **Used.** Secondary analysis (not blind, see below) |
-| **Researcher's Night** (Fogelton & Benesova, 2016) | many people (~20% glasses), 107 videos, ~223k frames | 1,849 annotated | 15 and 30 | "Available on demand"; contact support@blinkingmatters.com | **Requested** (email below). Would be the blind, confirmatory multi-person check |
+| **Researcher's Night** (Fogelton & Benesova, 2016) | many people (~20% glasses), 107 videos, ~223k frames | 1,849 annotated | 15 and 30 | "Available on demand"; contact support@blinkingmatters.com | **Not yet requested** (email below). Would be the blind, confirmatory multi-person check |
 | Talking Face (INRIA) | 1 person, 200 s | 61 | 25 | Annotations from blinkingmatters; video from INRIA | Not needed (one person) |
 | ZJU (Pan et al., 2007) | 20 people, 80 clips | 261 | ~30, irregular | Annotations from blinkingmatters; videos from the authors' site | Low resolution (320×240); not used |
 | Silesian5 | 5 people | 300 | 100 | Signed licence agreement | Not used (high-speed camera, not a webcam) |
