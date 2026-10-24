@@ -216,3 +216,8 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
     the Researcher's Night dataset is received before any of it is analysed), and session 1 as an exploratory
     single-session case: the cue-versus-response table, the measured frame rate, and detector output on the
     unlabelled recording, all marked exploratory.
+- `2026-10-25` — Correction to the second entry of 24 Oct: the per-block frame rates computed by
+  `analysis/case_study.py` show the camera at about 16.5 fps for the calibration block, most of the spontaneous
+  block and the deliberate block, dropping to about 10 fps for the last minute of the spontaneous block and the
+  whole mixed block (median per block: calibration 16.4, spontaneous 15.1, deliberate 16.4, mixed 10.3 fps). The
+  earlier entry said "most of both reading blocks", which was wrong for the spontaneous block.
