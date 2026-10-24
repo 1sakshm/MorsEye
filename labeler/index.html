@@ -20,6 +20,9 @@
         /></label>
         <span class="mono lab-stat" id="lab-file">no log loaded</span>
         <span class="mono lab-stat" id="lab-time" title="Active labelling time">0:00</span>
+        <button class="btn btn--small" type="button" id="import-cues" disabled>
+          Import cues as drafts
+        </button>
         <button class="btn btn--small btn--primary" type="button" id="export" disabled>
           Export labels
         </button>
@@ -59,6 +62,8 @@
             <dd>play / pause</dd>
             <dt><kbd>N</kbd> / <kbd>B</kbd></dt>
             <dd>jump to next / previous cue candidate</dd>
+            <dt><kbd>D</kbd></dt>
+            <dd>select the next draft (then <kbd>[</kbd> <kbd>]</kbd> sets its times)</dd>
             <dt><kbd>Tab</kbd> on timeline</dt>
             <dd>select next event</dd>
             <dt><kbd>Del</kbd></dt>
@@ -68,7 +73,9 @@
           </dl>
           <p class="muted">
             Dashed boxes are cue candidates. They are guides only and are never exported. Only
-            events you mark with <kbd>[</kbd> <kbd>]</kbd> and a type are ground truth.
+            events you mark with <kbd>[</kbd> <kbd>]</kbd> and a type are ground truth. Imported cue
+            drafts carry the cue's type but the cue's times, so each needs its onset and offset set
+            by hand before export.
           </p>
           <p class="mono" id="lab-counts"></p>
         </aside>

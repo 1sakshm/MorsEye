@@ -23,3 +23,10 @@ These were made by the coding agent to fill gaps in the PRD. Review and keep, ch
 - **Unknown patterns** are announced and spoken but not inserted; the v1 `[..-.?]` insertion is gone.
 - **Study B phrase selection** (`src/study/protocol.ts`): 15 phrases chosen to be short; verify each against the
   original MacKenzie & Soukoreff file and check the session length (about 2 min per 20-character phrase at 10 CPM).
+- **Cue drafts in the labeller** (added 25 Oct 2026 at Saksham's request). "Import cues as drafts" turns each cue
+  into an event with the cue's type and the cue's window (cue onset to +1.8 s) as placeholder times. A draft cannot
+  be exported: the labeller must set its onset and offset with `[` `]` (which confirms it), retype it, or delete it.
+  No detector output is used, so detectors are not graded against themselves; this is the "cue-based candidates"
+  case allowed by the preregistration (§6). Natural blinks have no cue and are still marked from scratch. The
+  export metadata records `n_from_cue_drafts`, and the paper should state that cue drafts were used. Cue types
+  can anchor the labeller, so a draft's type is changed whenever the closure he actually made differs from the cue.

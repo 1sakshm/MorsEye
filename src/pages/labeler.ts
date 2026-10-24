@@ -25,7 +25,18 @@ interface Label {
   offset_ms: number;
   type: LabelType | null;
   labelled_at: string;
+  /** Imported from a cue; its times are the cue window until the labeller sets them with [ and ]. */
+  draft?: boolean;
+  /** Started as a cue draft (reported in the export metadata). */
+  from_cue?: boolean;
 }
+
+const CUE_TYPE: Partial<Record<CueLine['cue'], LabelType>> = {
+  SHORT: 'short',
+  LONG: 'long',
+  'WINK-L': 'wink-L',
+  'WINK-R': 'wink-R',
+};
 
 interface Candidate {
   t0: number;
@@ -119,6 +130,7 @@ $<HTMLInputElement>('f-log').addEventListener('change', async (e) => {
   $('lab-file').textContent =
     `${logName} · ${frames.length} frames${h.video_start_ms === null ? ' · no video' : ''}`;
   ($('export') as HTMLButtonElement).disabled = false;
+  ($('import-cues') as HTMLButtonElement).disabled = false;
   renderList();
   draw();
   canvas.focus();
@@ -237,6 +249,20 @@ function setOffset(): void {
   const a = Math.min(pendingOnset, cursor);
   const b = Math.max(pendingOnset, cursor);
   if (b - a < 1) return;
+  // A selected draft that overlaps the new times takes them and becomes a confirmed event.
+  const d = labels[selected];
+  if (d?.draft && a <= d.offset_ms && b >= d.onset_ms) {
+    d.onset_ms = round(a);
+    d.offset_ms = round(b);
+    d.draft = false;
+    d.labelled_at = new Date().toISOString();
+    labels.sort((x, y) => x.onset_ms - y.onset_ms);
+    selected = labels.indexOf(d);
+    pendingOnset = null;
+    announcer.textContent = `draft confirmed as ${d.type}, ${Math.round(b - a)} ms`;
+    changed();
+    return;
+  }
   labels.push({
     onset_ms: round(a),
     offset_ms: round(b),
@@ -265,6 +291,42 @@ function removeSelected(): void {
   selected = Math.min(selected, labels.length - 1);
   announcer.textContent = 'event removed';
   changed();
+}
+
+/** Turn every cue into a draft event with the cue's type, skipping cues that already overlap an event. */
+function importCues(): void {
+  let n = 0;
+  for (const c of candidates) {
+    const type = CUE_TYPE[c.cue];
+    if (!type) continue;
+    if (labels.some((l) => l.onset_ms <= c.t1 && l.offset_ms >= c.t0)) continue;
+    labels.push({
+      onset_ms: round(c.t0),
+      offset_ms: round(c.t1),
+      type,
+      labelled_at: new Date().toISOString(),
+      draft: true,
+      from_cue: true,
+    });
+    n++;
+  }
+  labels.sort((x, y) => x.onset_ms - y.onset_ms);
+  alertInline(`Imported ${n} cue drafts. Press D to go to the next one.`);
+  changed();
+}
+$('import-cues').addEventListener('click', importCues);
+
+function nextDraft(): void {
+  const i = labels.findIndex((l, j) => l.draft && j !== selected && l.onset_ms >= cursor - 400);
+  const j = i >= 0 ? i : labels.findIndex((l) => l.draft);
+  if (j < 0) {
+    announcer.textContent = 'No drafts left.';
+    return;
+  }
+  selected = j;
+  seek(labels[j]!.onset_ms - 300);
+  renderList();
+  announcer.textContent = `draft ${labels[j]!.type}: set its onset and offset with [ and ]`;
 }
 
 function jumpCandidate(dir: 1 | -1): void {
@@ -301,6 +363,7 @@ window.addEventListener('keydown', (e) => {
   else if (k === ' ') togglePlay();
   else if (k === 'Delete') removeSelected();
   else if (k === 'n' || k === 'N') jumpCandidate(1);
+  else if (k === 'd' || k === 'D') nextDraft();
   else if (k === 'b' || k === 'B') jumpCandidate(-1);
   else if (k === '+' || k === '=') zoom(0.7);
   else if (k === '-' || k === '_') zoom(1 / 0.7);
@@ -365,16 +428,22 @@ function draw(): void {
   labels.forEach((l, i) => {
     if (l.offset_ms < view.start || l.onset_ms > view.start + view.span) return;
     ctx.fillStyle = token('--signal');
-    ctx.globalAlpha = i === selected ? 0.35 : 0.18;
+    ctx.globalAlpha = (i === selected ? 0.35 : 0.18) * (l.draft ? 0.5 : 1);
     ctx.fillRect(x(l.onset_ms), top, x(l.offset_ms) - x(l.onset_ms), 2 * half);
     ctx.globalAlpha = 1;
-    if (i === selected) {
+    if (i === selected || l.draft) {
       ctx.strokeStyle = token('--signal');
-      ctx.lineWidth = 2;
+      ctx.lineWidth = i === selected ? 2 : 1;
+      if (l.draft) ctx.setLineDash([6, 3]);
       ctx.strokeRect(x(l.onset_ms), top, x(l.offset_ms) - x(l.onset_ms), 2 * half);
+      ctx.setLineDash([]);
     }
     ctx.fillStyle = ink;
-    ctx.fillText(l.type ?? '? type', x(l.onset_ms) + 3, top + 2 * half - 4);
+    ctx.fillText(
+      `${l.type ?? '? type'}${l.draft ? ' (draft)' : ''}`,
+      x(l.onset_ms) + 3,
+      top + 2 * half - 4,
+    );
   });
 
   // Traces
@@ -511,11 +580,13 @@ function renderList(): void {
       (l, i) => `<tr${i === selected ? ' class="sel"' : ''} data-i="${i}">
       <td class="num">${i + 1}</td><td class="num">${Math.round(l.onset_ms - t0)}</td>
       <td class="num">${Math.round(l.offset_ms - t0)}</td><td class="num">${Math.round(l.offset_ms - l.onset_ms)}</td>
-      <td>${l.type ?? '<strong>needs type</strong>'}</td></tr>`,
+      <td>${l.type ?? '<strong>needs type</strong>'}${l.draft ? ' <strong>(draft: set times)</strong>' : ''}</td></tr>`,
     )
     .join('');
   const counts = TYPES.map((t) => `${t}: ${labels.filter((l) => l.type === t).length}`).join(' · ');
-  $('lab-counts').textContent = `${labels.length} events · ${counts}`;
+  const drafts = labels.filter((l) => l.draft).length;
+  $('lab-counts').textContent =
+    `${labels.length} events · ${counts}` + (drafts ? ` · ${drafts} drafts to check` : '');
   $('sel-info').textContent = selected >= 0 ? `(selected #${selected + 1})` : '';
 }
 
@@ -541,6 +612,13 @@ $('export').addEventListener('click', () => {
     alertInline('No events marked yet. Mark each closure with [ and ], then give it a type (1–5).');
     return;
   }
+  const drafts = labels.filter((l) => l.draft).length;
+  if (drafts) {
+    alertInline(
+      `${drafts} draft(s) still have cue times. Select each (D), set its onset and offset with [ and ], or delete it.`,
+    );
+    return;
+  }
   const untyped = labels.filter((l) => !l.type).length;
   if (untyped) {
     alertInline(
@@ -559,6 +637,7 @@ $('export').addEventListener('click', () => {
     log: logName,
     labeller,
     n_events: labels.length,
+    n_from_cue_drafts: labels.filter((l) => l.from_cue).length,
     labelling_seconds: Math.round(activeMs / 1000),
     exported_at: new Date().toISOString(),
   };
