@@ -132,6 +132,16 @@ def test_dataset_attaches_labels_and_records_refusals(tmp_path):
     assert "missing" in refused["P03_A_2026-11-05.jsonl"]
 
 
+def test_cue_types_file_is_never_ground_truth(tmp_path):
+    write(tmp_path / "P01_A_2026-11-03.jsonl", [HEADER] + [frame(i * 33.3) for i in range(50)])
+    (tmp_path / "P01_A_cue_types.csv").write_text(
+        "cue_ms,cue,block,response_type,labeller,labelled_at\n100,SHORT,deliberate,short,P01s,\n", encoding="utf-8"
+    )
+    ds = load_dataset(tmp_path)
+    assert ds.study_a[0].labels is None
+    assert any("types only" in w for w in ds.warnings)
+
+
 def test_later_session_never_uses_session_one_labels(tmp_path):
     from analysis.load import _label_candidates
 

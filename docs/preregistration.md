@@ -200,3 +200,10 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
   (67 ms), so the camera's 10 fps stretches (100 ms per frame) looked like dropped frames. Gaps are now compared
   with the local frame interval (the median of the 31 intervals around them). The rule itself (exclude a session
   with more than 5% missing frames) is unchanged; with the fix, session 1 has 0.06% missing frames.
+- `2026-10-25` — P01 session 1 has cue-response **types only, no closure times**. The author checked each cue's
+  response type in the labelling tool but kept the tool's placeholder times (cue onset to +1.8 s) instead of
+  marking onsets and offsets, and marked one natural blink. Those times are not closure times, so session 1 is
+  **excluded from every confirmatory Study A analysis** (H1–H3, H5 and the duration results) and does not count
+  towards the 8-session stopping rule. Its types are kept in `P01_A_cue_types.csv` (one row per cue; 1 of 84
+  cues had no response) and may be reported only as an exploratory cue-versus-response table. Sessions 2 onward
+  are labelled with real onsets and offsets.

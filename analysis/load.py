@@ -8,6 +8,7 @@ Expected files in a data directory (any sub-folder):
     P07_A_2026-11-03.jsonl            Study A session log (the recorder's file name)
     P07_A_labels.csv                  human labels for it (or <log stem>_labels.csv)
     P07_A_labels_relabel.csv          optional second labelling pass, for self-agreement
+    P07_A_cue_types.csv               response types per cue only (no closure times); never ground truth
     P07_B_2026-11-09.jsonl            Study B session log
 """
 
@@ -384,6 +385,14 @@ def _label_candidates(log: Path, header: dict[str, Any]) -> tuple[list[Path], li
     return first, second
 
 
+def _cue_types_path(log: Path, header: dict[str, Any]) -> Path:
+    """Types-only file (one response type per cue, no closure times); never used as ground truth."""
+    pid, study = header["participant"], header["study"]
+    session = int(header.get("session") or 1)
+    short = f"{pid}_{study}" if session <= 1 else f"{pid}_{study}_s{session}"
+    return log.parent / f"{short}_cue_types.csv"
+
+
 @dataclass
 class Dataset:
     study_a: list[Session]
@@ -434,6 +443,11 @@ def load_dataset(data_dir: str | Path, max_missing: float = MAX_MISSING_FRAC) ->
                     s.label_path = lp
                 except LogError as e:
                     rejected.append((str(lp), str(e)))
+            elif _cue_types_path(p, s.header).exists():
+                warns.append(
+                    f"{p.name}: cue-response types only, no closure times (preregistration deviation, 25 Oct 2026); "
+                    "this session is skipped in the detection analysis"
+                )
             else:
                 warns.append(f"{p.name}: no label file; this session is skipped in the detection analysis")
             rp = next((c for c in second_c if c.exists()), None)

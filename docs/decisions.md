@@ -30,3 +30,8 @@ These were made by the coding agent to fill gaps in the PRD. Review and keep, ch
   case allowed by the preregistration (§6). Natural blinks have no cue and are still marked from scratch. The
   export metadata records `n_from_cue_drafts`, and the paper should state that cue drafts were used. Cue types
   can anchor the labeller, so a draft's type is changed whenever the closure actually made differs from the cue.
+- **Session 1 labels are types only** (25 Oct 2026, Saksham's choice). The labeller confirmed the cue drafts' types
+  but not their times, and Export refuses drafts, so the agent read the labeller's saved state from the browser and
+  wrote `data/raw/P01_A_cue_types.csv` (one response type per cue; how it was built is in
+  `P01_A_cue_types_meta.json`). The loader never treats that file as labels, and session 1 is skipped in the
+  detection analysis; see the preregistration's Deviations.
