@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <title>How it works — MorsEye</title>
+    <meta
+      name="description"
+      content="How MorsEye turns a webcam image into text: face landmarks, the eye aspect ratio, a calibrated threshold, closure durations and Morse decoding — step by step."
+    />
+    <meta property="og:title" content="How MorsEye works" />
+    <meta
+      property="og:description"
+      content="From camera frame to letter in six steps: landmarks, eye aspect ratio, calibrated detection, duration bands and Morse decoding."
+    />
+    <meta property="og:type" content="article" />
+  </head>
+  <body class="page-how">
+    <!--#include header-->
+    <main id="main">
+      <header class="page-intro">
+        <div class="wrap">
+          <p class="eyebrow">How it works</p>
+          <h1>From camera frame to letter</h1>
+          <p class="lede">
+            Six steps turn an ordinary webcam image into text. Everything below happens in your
+            browser, frame by frame, about 30 times a second.
+          </p>
+        </div>
+      </header>
+
+      <section class="story" aria-label="The MorsEye pipeline, step by step">
+        <div class="wrap story-grid">
+          <div class="story-stage-col">
+            <div class="story-stage" aria-hidden="true">
+              <svg class="story-svg" id="story-svg" viewBox="0 0 800 600"></svg>
+              <ol class="story-progress" id="story-progress">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="story-steps">
+            <article class="story-step" data-step="0" id="step-points">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 1 of 6</p>
+              <h2>Face to points</h2>
+              <p>
+                In each video frame, MediaPipe’s FaceLandmarker finds 478 landmark points on the
+                face: 468 for the face itself and 10 for the irises. It runs entirely in your
+                browser with WebAssembly, so camera frames never leave your device.
+              </p>
+              <p class="muted">
+                The face drawn here is synthetic: it is generated from curves and a spiral fill, not
+                taken from any person. No real face appears anywhere on this site.
+              </p>
+            </article>
+
+            <article class="story-step" data-step="1" id="step-ear">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 2 of 6</p>
+              <h2>Eye to six points</h2>
+              <p>
+                For blinks, six points per eye matter: the two corners (p1 and p4), two on the upper
+                lid (p2, p3) and two on the lower lid (p6, p5). The
+                <strong>eye aspect ratio</strong>
+                divides the two lid-to-lid distances by twice the eye’s width:
+              </p>
+              <p class="formula-text">
+                <code>EAR = (|p2 − p6| + |p3 − p5|) / (2 · |p1 − p4|)</code>
+              </p>
+              <p>
+                It is about 0.3 for an open eye and falls toward zero as the lid closes (Soukupová
+                &amp; Čech, 2016). MediaPipe also reports a blink score for each eye; the study
+                compares both signals.
+              </p>
+            </article>
+
+            <article class="story-step" data-step="2" id="step-signal">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 3 of 6</p>
+              <h2>Signal over time</h2>
+              <p>
+                Frame after frame, the EAR becomes a signal. A spontaneous blink is a brief dip; a
+                deliberate closure lasts longer. A closure starts when the signal falls below a
+                threshold and ends only when it rises back past a slightly higher level
+                (hysteresis), so jitter cannot split one closure into two.
+              </p>
+              <p>
+                Many blink detectors use one fixed threshold for everyone; the first version of
+                MorsEye used 0.21. For a person whose open eye naturally gives a low EAR, that line
+                sits in the noise and small squints count as closures. Calibration instead puts the
+                line halfway between the user’s own open and closed levels.
+                <span id="signal-numbers"></span>
+              </p>
+              <p class="muted">
+                Illustrative synthetic signal, run through the app’s real detector. Recorded
+                snippets (features only) will replace it after Study A.
+              </p>
+            </article>
+
+            <article class="story-step" data-step="3" id="step-duration">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 4 of 6</p>
+              <h2>Duration to symbol</h2>
+              <p>Next, only the closure’s duration matters:</p>
+              <ul class="band-list">
+                <li>
+                  <span class="band-chip band-chip--reject"></span>under
+                  <span data-t="rejectMs">200</span> ms: ignored, as a probable natural blink
+                </li>
+                <li>
+                  <span class="band-chip band-chip--dot"></span
+                  ><span data-t="rejectMs">200</span>–<span data-t="dotMaxMs">600</span> ms: dot
+                </li>
+                <li>
+                  <span class="band-chip band-chip--dash"></span
+                  ><span data-t="dotMaxMs">600</span>–<span data-t="dashMaxMs">1400</span> ms: dash
+                </li>
+                <li>
+                  <span class="band-chip band-chip--hold"></span
+                  ><span data-t="dashMaxMs">1400</span>–<span data-t="cmdMs">2000</span> ms: no
+                  symbol; two of these within 4 s pause or resume input
+                </li>
+                <li>
+                  <span class="band-chip band-chip--delete"></span
+                  ><span data-t="cmdMs">2000</span> ms or more: delete the last character
+                </li>
+              </ul>
+              <p class="muted">
+                These are starting values. The final bands will be chosen from the duration
+                distributions measured in Study A.
+              </p>
+            </article>
+
+            <article class="story-step" data-step="4" id="step-gaps">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 5 of 6</p>
+              <h2>Gaps to letters and words</h2>
+              <p>
+                Pauses with the eyes open do the spacing. After
+                <span data-t="letterGapMs">1200</span> ms the decoder ends the letter and looks up
+                its pattern (···· is H). After <span data-t="wordGapMs">3000</span> ms it inserts
+                one space, and never two in a row. A pattern that is not in the Morse table is
+                flagged on screen and not typed.
+              </p>
+              <p>On the tape: “HI YOU”, with the real timings.</p>
+            </article>
+
+            <article class="story-step" data-step="5" id="step-turn">
+              <div class="story-static" aria-hidden="true"></div>
+              <p class="step-n">Step 6 of 6</p>
+              <h2>Your turn</h2>
+              <p>
+                Calibration takes under a minute: keep your eyes open for a few seconds, then close
+                them a few times when asked. It works best in even light, with your face 50–70 cm
+                from the camera.
+              </p>
+              <p><a class="btn btn--primary" href="/try/">Try it</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--#include footer-->
+    <script type="module" src="/src/pages/how.ts"></script>
+  </body>
+</html>

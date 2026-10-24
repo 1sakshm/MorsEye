@@ -1,0 +1,546 @@
+{
+  "timing": {
+    "rejectMs": 200,
+    "dotMaxMs": 600,
+    "dashMaxMs": 1400,
+    "cmdMs": 2000,
+    "letterGapMs": 1200,
+    "wordGapMs": 3000
+  },
+  "user": {
+    "ear": {
+      "thr": 0.19,
+      "h": 0.018
+    },
+    "blend": {
+      "thr": 0.45,
+      "h": 0.085
+    },
+    "blendL": {
+      "thr": 0.45,
+      "h": 0.085
+    },
+    "blendR": {
+      "thr": 0.45,
+      "h": 0.085
+    }
+  },
+  "results": {
+    "D1": {
+      "closures": [
+        {
+          "start_ms": 800,
+          "end_ms": 1200,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 1533.33,
+          "end_ms": 1933.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 2266.67,
+          "end_ms": 2666.67,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 3000,
+          "end_ms": 3400,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5033.33,
+          "end_ms": 5400,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5766.67,
+          "end_ms": 6133.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 10133.33,
+          "duration_ms": 133.32999999999993,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10900,
+          "end_ms": 11266.67,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 11633.33,
+          "end_ms": 12000,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 12366.67,
+          "end_ms": 12733.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 14400,
+          "end_ms": 15333.33,
+          "duration_ms": 933.3299999999999,
+          "eye": "both"
+        },
+        {
+          "start_ms": 15700,
+          "end_ms": 16633.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 17000,
+          "end_ms": 17933.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 19600,
+          "end_ms": 19966.67,
+          "duration_ms": 366.66999999999825,
+          "eye": "both"
+        },
+        {
+          "start_ms": 20300,
+          "end_ms": 20700,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 21033.33,
+          "end_ms": 21433.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 23066.67,
+          "end_ms": 23566.67,
+          "duration_ms": 500,
+          "eye": "both"
+        }
+      ],
+      "bands": [
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "reject",
+        "dot",
+        "dot",
+        "dot",
+        "dash",
+        "dash",
+        "dash",
+        "dot",
+        "dot",
+        "dot",
+        "dot"
+      ],
+      "text": "HI SOSE "
+    },
+    "D2": {
+      "closures": [
+        {
+          "start_ms": 800,
+          "end_ms": 1200,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 1533.33,
+          "end_ms": 1933.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 2266.67,
+          "end_ms": 2666.67,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 3000,
+          "end_ms": 3400,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5033.33,
+          "end_ms": 5400,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5766.67,
+          "end_ms": 6133.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 10133.33,
+          "duration_ms": 133.32999999999993,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10900,
+          "end_ms": 11266.67,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 11633.33,
+          "end_ms": 12000,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 12366.67,
+          "end_ms": 12733.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 14400,
+          "end_ms": 15333.33,
+          "duration_ms": 933.3299999999999,
+          "eye": "both"
+        },
+        {
+          "start_ms": 15700,
+          "end_ms": 16633.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 17000,
+          "end_ms": 17933.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 19600,
+          "end_ms": 19966.67,
+          "duration_ms": 366.66999999999825,
+          "eye": "both"
+        },
+        {
+          "start_ms": 20300,
+          "end_ms": 20700,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 21033.33,
+          "end_ms": 21433.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 23066.67,
+          "end_ms": 23566.67,
+          "duration_ms": 500,
+          "eye": "both"
+        }
+      ],
+      "bands": [
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "reject",
+        "dot",
+        "dot",
+        "dot",
+        "dash",
+        "dash",
+        "dash",
+        "dot",
+        "dot",
+        "dot",
+        "dot"
+      ],
+      "text": "HI SOSE "
+    },
+    "D3": {
+      "closures": [
+        {
+          "start_ms": 800,
+          "end_ms": 1200,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 1533.33,
+          "end_ms": 1933.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 2266.67,
+          "end_ms": 2666.67,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 3000,
+          "end_ms": 3400,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5033.33,
+          "end_ms": 5400,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5766.67,
+          "end_ms": 6133.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 10133.33,
+          "duration_ms": 133.32999999999993,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10900,
+          "end_ms": 11266.67,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 11633.33,
+          "end_ms": 12000,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 12366.67,
+          "end_ms": 12733.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 14400,
+          "end_ms": 15333.33,
+          "duration_ms": 933.3299999999999,
+          "eye": "both"
+        },
+        {
+          "start_ms": 15700,
+          "end_ms": 16633.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 17000,
+          "end_ms": 17933.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 19600,
+          "end_ms": 19966.67,
+          "duration_ms": 366.66999999999825,
+          "eye": "both"
+        },
+        {
+          "start_ms": 20300,
+          "end_ms": 20700,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 21033.33,
+          "end_ms": 21433.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 23066.67,
+          "end_ms": 23566.67,
+          "duration_ms": 500,
+          "eye": "both"
+        }
+      ],
+      "bands": [
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "reject",
+        "dot",
+        "dot",
+        "dot",
+        "dash",
+        "dash",
+        "dash",
+        "dot",
+        "dot",
+        "dot",
+        "dot"
+      ],
+      "text": "HI SOSE "
+    },
+    "D4": {
+      "closures": [
+        {
+          "start_ms": 800,
+          "end_ms": 1200,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 1533.33,
+          "end_ms": 1933.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 2266.67,
+          "end_ms": 2666.67,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 3000,
+          "end_ms": 3400,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5033.33,
+          "end_ms": 5400,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 5766.67,
+          "end_ms": 6133.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 10133.33,
+          "duration_ms": 133.32999999999993,
+          "eye": "both"
+        },
+        {
+          "start_ms": 10900,
+          "end_ms": 11266.67,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 11633.33,
+          "end_ms": 12000,
+          "duration_ms": 366.6700000000001,
+          "eye": "both"
+        },
+        {
+          "start_ms": 12366.67,
+          "end_ms": 12733.33,
+          "duration_ms": 366.65999999999985,
+          "eye": "both"
+        },
+        {
+          "start_ms": 14400,
+          "end_ms": 15333.33,
+          "duration_ms": 933.3299999999999,
+          "eye": "both"
+        },
+        {
+          "start_ms": 15700,
+          "end_ms": 16633.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 17000,
+          "end_ms": 17933.33,
+          "duration_ms": 933.3300000000017,
+          "eye": "both"
+        },
+        {
+          "start_ms": 19600,
+          "end_ms": 19966.67,
+          "duration_ms": 366.66999999999825,
+          "eye": "both"
+        },
+        {
+          "start_ms": 20300,
+          "end_ms": 20700,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 21033.33,
+          "end_ms": 21433.33,
+          "duration_ms": 400,
+          "eye": "both"
+        },
+        {
+          "start_ms": 23066.67,
+          "end_ms": 23566.67,
+          "duration_ms": 500,
+          "eye": "both"
+        }
+      ],
+      "bands": [
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "dot",
+        "reject",
+        "dot",
+        "dot",
+        "dot",
+        "dash",
+        "dash",
+        "dash",
+        "dot",
+        "dot",
+        "dot",
+        "dot"
+      ],
+      "text": "HI SOSE "
+    },
+    "D5": {
+      "closures": [
+        {
+          "start_ms": 23066.67,
+          "end_ms": 23566.67,
+          "duration_ms": 500,
+          "eye": "left"
+        }
+      ],
+      "bands": ["dot"],
+      "text": ""
+    }
+  }
+}

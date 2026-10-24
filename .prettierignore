@@ -1,0 +1,14 @@
+dist
+node_modules
+public/wasm
+public/models
+public/results
+legacy
+analysis
+paper
+data
+docs
+*.md
+package-lock.json
+tests/fixtures
+.venv

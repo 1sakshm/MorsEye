@@ -1,0 +1,383 @@
+@import './eye.css';
+@import './figures.css';
+@import './prose.css';
+
+/* ---------- Story layout ---------- */
+
+.story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.story-stage-col {
+  display: none;
+}
+.story-animated .story-stage-col {
+  display: block;
+}
+.story-stage {
+  position: sticky;
+  top: 84px;
+  height: calc(100vh - 110px);
+  max-height: 720px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.story-stage .story-svg {
+  width: 100%;
+  height: auto;
+  max-height: calc(100% - 24px);
+}
+.story-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.story-layer {
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+.story-layer.is-active {
+  opacity: 1;
+}
+.story-progress {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  max-width: none;
+}
+.story-progress li {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tape);
+  border: 1px solid var(--line);
+}
+.story-progress li.is-active {
+  background: var(--signal);
+  border-color: var(--signal);
+}
+
+.story-steps {
+  padding-bottom: 10vh;
+}
+/* Without the pinned stage (reduced motion, small screens) the steps read as one column. */
+html:not(.story-animated) .story-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+html:not(.story-animated) .story-steps {
+  max-width: 760px;
+}
+.story-step {
+  padding: 2.5rem 0;
+}
+.story-animated .story-step {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.story-animated .story-step:first-child {
+  min-height: 70vh;
+}
+.story-static {
+  margin-bottom: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.5rem;
+}
+.story-static:empty {
+  display: none;
+}
+.story-animated .story-static {
+  display: none;
+}
+.step-n {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.story-step h2 {
+  font-size: var(--step-2);
+}
+.formula-text code {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  background: var(--tape);
+  border: 1px solid var(--line);
+}
+.band-list {
+  list-style: none;
+  padding: 0;
+}
+.band-list li {
+  margin-bottom: 0.35rem;
+}
+.band-chip {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 0.55rem;
+  vertical-align: -1px;
+}
+.band-chip--reject {
+  background: var(--band-reject);
+}
+.band-chip--dot {
+  background: var(--band-dot);
+}
+.band-chip--dash {
+  background: var(--band-dash);
+}
+.band-chip--hold {
+  border: 2px solid var(--band-hold);
+}
+.band-chip--delete {
+  background: var(--band-delete);
+}
+
+@media (max-width: 899.98px) {
+  .story-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- SVG content of the steps ---------- */
+
+.face-pt {
+  fill: var(--ink);
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+.face-pt--mesh {
+  fill: var(--muted);
+}
+.face-pt--eye,
+.face-pt--iris {
+  fill: var(--trace);
+}
+.face-pt--lips,
+.face-pt--brow {
+  fill: var(--ink);
+}
+.face--ghost .face-pt {
+  fill: var(--muted);
+}
+
+.pt-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink);
+}
+.formula {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  fill: var(--ink);
+}
+.formula .term {
+  transition: fill 200ms ease;
+}
+.formula .term.is-active.term--v {
+  fill: var(--trace);
+  font-weight: 600;
+}
+.formula .term.is-active.term--h {
+  fill: var(--signal);
+  font-weight: 600;
+}
+.formula-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  fill: var(--muted);
+}
+
+.signal-line {
+  fill: none;
+  stroke: var(--trace);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.thr-line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 7 5;
+}
+.thr-label {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--ink);
+}
+.detected rect {
+  fill: var(--signal);
+}
+.count-label {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  fill: var(--ink);
+}
+.note-line {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+.note-label {
+  font-size: 15px;
+  fill: var(--ink);
+  font-family: var(--font-body);
+}
+
+.band-col {
+  opacity: 0.13;
+}
+.band-col--reject {
+  fill: var(--band-reject);
+}
+.band-col--dot {
+  fill: var(--band-dot);
+}
+.band-col--dash {
+  fill: var(--band-dash);
+}
+.band-col--hold {
+  fill: var(--band-hold);
+}
+.band-col--delete {
+  fill: var(--band-delete);
+}
+.band-edge {
+  stroke: var(--line);
+  stroke-dasharray: 3 3;
+}
+.band-name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.dur-bar {
+  fill: var(--muted);
+  opacity: 0.6;
+}
+.dur-end {
+  fill: var(--muted);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.dur-bar--reject,
+.dur-end--reject {
+  fill: var(--band-reject);
+}
+.dur-bar--dot,
+.dur-end--dot {
+  fill: var(--band-dot);
+}
+.dur-bar--dash,
+.dur-end--dash {
+  fill: var(--band-dash);
+}
+.dur-bar--hold,
+.dur-end--hold {
+  fill: var(--band-hold);
+}
+.dur-bar--delete,
+.dur-end--delete {
+  fill: var(--band-delete);
+}
+
+.story-tape {
+  fill: var(--tape);
+  stroke: var(--line);
+}
+.tape-mark {
+  fill: var(--signal);
+}
+.tape-cursor {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.letter-bracket,
+.word-bracket {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.word-bracket {
+  stroke: var(--ink);
+}
+.story-letter {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.story-word {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 800;
+  fill: var(--ink);
+}
+.gap-arrow {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.gap-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  fill: var(--ink);
+}
+.turn-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 52px;
+  fill: var(--ink);
+}
+
+/* The stage is drawn at 800 units wide and shown at roughly 0.7 scale, so its labels are set larger. */
+.story-svg .axis-label {
+  font-size: 17px;
+}
+.story-svg .axis-title {
+  font-size: 18px;
+}
+.story-svg .band-name {
+  font-size: 19px;
+}
+.story-svg .note-label,
+.story-svg .count-label,
+.story-svg .thr-label,
+.story-svg .gap-label {
+  font-size: 19px;
+}
+.story-svg .formula {
+  font-size: 27px;
+}
+.story-svg .formula-value {
+  font-size: 20px;
+}
+
+/* A halo in the background colour keeps labels readable where they cross a line. */
+.story-stage {
+  --halo: var(--paper);
+}
+.story-static {
+  --halo: var(--surface);
+}
+.story-svg .thr-label,
+.story-svg .note-label,
+.story-svg .gap-label,
+.story-svg .band-name,
+.story-svg .pt-label {
+  paint-order: stroke;
+  stroke: var(--halo, var(--paper));
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}

@@ -1,89 +1,130 @@
-# MorsEye 👁️
+# MorsEye
 
-A web-based application that converts Morse code blinks into readable text using computer vision and real-time eye tracking.
+Type Morse code by closing your eyes, in the browser, and a study of how well a webcam can tell a deliberate eye
+closure from an ordinary blink.
 
-## 🌟 Features
+**Live:** https://morseye.pages.dev · **Paper:** in preparation (see [`paper/`](paper/)) ·
+**Dataset:** [`data/DATASHEET.md`](data/DATASHEET.md)
 
-- **Real-time Eye Tracking**: Uses webcam to detect eye blinks
-- **Morse Code Translation**: Converts blink patterns (dots and dashes) into text
-- **Interactive Web Interface**: Clean, user-friendly design for easy interaction
-- **Live Feedback**: Real-time display of detected Morse code and translated text
-- **Browser-Based**: Runs entirely in your web browser
+<!-- [HUMAN] Add a GIF of the hero animation here (no faces), e.g. docs/hero.gif. -->
 
-## 🚀 Demo
+## What it does
 
-Simply blink in Morse code patterns:
-- **Short blink** = Dot (·)
-- **Long blink** = Dash (−)
-- Pause between letters to separate characters
-- Longer pause to separate words
+MorsEye reads your eyelids through an ordinary webcam with MediaPipe FaceLandmarker and turns deliberate closures
+into Morse code: a short closure is a dot, a longer one a dash, and a very long one deletes. Natural blinks are
+filtered out by a minimum-duration band, and a 20-second calibration fits the detector to your eyes. After setup it
+needs no keyboard or mouse: delete, pause and (optionally) space and speech are all eye gestures.
 
-## 📋 Prerequisites
+**Status:** research prototype. Study A is in progress; results will be reported here from
+`analysis/out/summary.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
 
-- Python 3.7+
-- Webcam
-- Modern web browser (Chrome, Firefox, Edge)
+## Key results
 
-## 📁 Project Structure
+Pending Study A (November 2026). This section will hold three numbers, each with a 95% CI across participants:
+deliberate-closure F1 with and without calibration, false triggers per minute while reading, and characters per
+minute after three practice blocks.
+
+## How it works
 
 ```
-MorsEye/
-│
-├── app.py              # Backend with eye tracking logic
-├── index.html          # Main web interface
-├── style.css           # Styling for the web interface
-├── script.js           # Frontend JavaScript logic
-└── README.md           # Project documentation
+camera ─▶ FaceLandmarker ─▶ features ─────────▶ detector ──────▶ segmenter ─────▶ decoder ─▶ text, speech
+ (rVFC      (on device,      EAR (6 points/eye),   hysteresis,      duration →       Morse table,
+  frame      WASM, self-     eyeBlink scores,      per-user         reject / dot /   letter & word
+  times)     hosted model)   head pose             threshold        dash / hold /    gaps, commands
+                                                                    delete
 ```
 
-## 🛠️ Technologies Used
+| Closure duration | Meaning |
+|---|---|
+| < 200 ms | ignored (probable spontaneous blink) |
+| 200 – 600 ms | dot |
+| 600 – 1400 ms | dash |
+| 1400 – 2000 ms | “pause” hold — two within 4 s turn input off or on |
+| ≥ 2000 ms | delete the last letter (or the letter in progress) |
 
-- **Backend**: 
-  - Python
-  - OpenCV (Computer vision)
-  - MediaPipe (Face mesh detection)
-  
-- **Frontend**:
-  - HTML5
-  - CSS
-  - JavaScript
-  - Python
+| Eyes open for | Meaning |
+|---|---|
+| ≥ 1200 ms | finish the letter |
+| ≥ 3000 ms | add a space (once) |
 
-## 📖 How It Works
+These are the starting values from the PRD. The final values will be chosen from the Study A duration
+distributions and recorded in [`docs/decisions.md`](docs/decisions.md). Presets scale all of them (Slow ×1.5,
+Fast ×0.7).
 
-1. The webcam captures your face in real-time
-2. MediaPipe's Face Mesh detects facial landmarks, including eyes
-3. Eye blink patterns are analyzed to determine dots and dashes
-4. The Morse code is translated into text using standard Morse code mappings
-5. Results are displayed on the web interface in real-time
+The detectors compared in the study (all run offline on the same recordings, all with hysteresis and no
+majority-vote buffer):
 
-## 🎯 Morse Code Reference
+| ID | Signal | Threshold |
+|---|---|---|
+| D1 | mean EAR | fixed 0.21 (the v1 app) |
+| D2 | mean EAR | per user, from *k* calibration closures |
+| D3 | `max(eyeBlinkLeft, eyeBlinkRight)` | fixed 0.5 |
+| D4 | blendshape | per user |
+| D5 | wink: one eye closed, the other open | per user (exploratory) |
 
-| Letter | Code | Letter | Code | Number | Code |
-|--------|------|--------|------|--------|------|
-| A | ·− | N | −· | 0 | −−−−− |
-| B | −··· | O | −−− | 1 | ·−−−− |
-| C | −·−· | P | ·−−· | 2 | ··−−− |
-| D | −·· | Q | −−·− | 3 | ···−− |
-| E | · | R | ·−· | 4 | ····− |
-| F | ··−· | S | ··· | 5 | ····· |
-| G | −−· | T | − | 6 | −···· |
-| H | ···· | U | ··− | 7 | −−··· |
-| I | ·· | V | ···− | 8 | −−−·· |
-| J | ·−−− | W | ·−− | 9 | −−−−· |
-| K | −·− | X | −··− | | |
-| L | ·−·· | Y | −·−− | | |
-| M | −− | Z | −−·· | | |
+Code map: `src/vision` (features), `src/detect` (D1–D5, calibration), `src/segment`, `src/decode`,
+`src/pipeline.ts` (offline replay), `src/study` (protocol, log schema, recorder), `src/pages` (one entry per page).
 
-## 🤝 Contributing
+## Run locally
 
-Contributions are welcome! Feel free to:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+```sh
+npm ci
+npm run dev        # http://localhost:5173 — /try, /study, /labeler
+npm test           # Vitest: segmenter, decoder, calibration, features, detectors, protocol, replay
+npm run lint
+npm run build
+```
 
-## 📝 License
+`npm run dev` and `npm run build` first copy the pinned MediaPipe WASM into `public/wasm/` and fetch
+`public/models/face_landmarker.task` if it is missing, so the app makes no CDN requests.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Pages: `/` home · `/try` the app · `/how` how it works · `/research` results · `/data` dataset · `/about`.
+`/study` (Study Mode) and `/labeler` (labelling tool) are not linked and are `noindex`.
+
+## Reproduce the analysis
+
+Python 3.11 (CPython from python.org, or `uv venv --python 3.11` — MSYS/Git-Bash Python cannot install the
+numpy wheels):
+
+```sh
+python -m venv .venv && .venv/Scripts/activate    # or source .venv/bin/activate
+pip install -r requirements.txt
+python -m analysis.run --data data/public         # regenerates every number, table and figure
+python -m analysis.run --synthetic                # the same pipeline on clearly-marked synthetic data
+pytest analysis/tests
+```
+
+The Python replay is a port of the TypeScript detector/segmenter/decoder and is checked against it on a shared
+fixture (`tests/fixtures/`) with zero tolerance. `npm run replay -- <log.jsonl>` runs the TypeScript version.
+
+## Dataset
+
+Per-frame features and human labels only — no images, no video, and no landmarks beyond the 12 eye points. See
+[`data/DATASHEET.md`](data/DATASHEET.md). Licence: CC BY 4.0 ([`LICENSE-DATA`](LICENSE-DATA)). Not yet released.
+
+## Privacy
+
+Everything runs in the browser. Camera frames are processed on the device and never uploaded. There are no
+accounts, cookies or analytics. Study Mode keeps recordings in memory until the experimenter downloads them.
+
+## Limitations
+
+Small N; the experimenter is also the only labeller (self-agreement κ partly addresses this); a convenience sample;
+one or two camera models; deliberate blinks were cued, not driven by real intent to communicate; able-bodied adults
+only; a lab reading task.
+
+## Related work
+
+- Soukupová & Čech (2016), real-time blink detection with facial landmarks (the EAR method).
+- Grauman et al. (2003), communication via eye blinks and eyebrow raises.
+- Majaranta & Räihä (2002), twenty years of eye typing.
+- MacKenzie & Soukoreff (2003), phrase sets; Soukoreff & MacKenzie (2003), text-entry metrics.
+- Hart & Staveland (1988), NASA-TLX.
+
+## AI use
+
+See [`AI_USE.md`](AI_USE.md).
+
+## Citation and licence
+
+Cite with [`CITATION.cff`](CITATION.cff). Code: MIT ([`LICENSE`](LICENSE)). Data: CC BY 4.0.

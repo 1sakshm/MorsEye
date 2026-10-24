@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>MorsEye Study Mode</title>
+  </head>
+  <body class="page-study">
+    <main id="main" class="wrap study">
+      <!-- 1. Experimenter setup -->
+      <section class="screen card" id="s-setup" aria-labelledby="setup-title">
+        <p class="eyebrow">Study Mode · experimenter</p>
+        <h1 id="setup-title">New session</h1>
+        <p class="notice">
+          Everything recorded here stays in this browser until you download it at the end. Nothing
+          is uploaded. Use participant codes only (P01, P02, …), never names.
+        </p>
+        <form id="setup-form" class="form-grid" novalidate>
+          <label
+            >Participant ID
+            <input
+              name="participant"
+              required
+              pattern="P\d{2,3}"
+              placeholder="P01"
+              autocomplete="off"
+            />
+            <span class="hint">Format P01. No names.</span>
+          </label>
+          <label
+            >Session
+            <input name="session" type="number" min="1" value="1" required />
+          </label>
+          <label
+            >Study
+            <select name="study">
+              <option value="A">A: blink detection benchmark (~12 min)</option>
+              <option value="B">B: text entry (~20 min)</option>
+            </select>
+          </label>
+          <label
+            >Seed
+            <input name="seed" type="number" required />
+            <span class="hint">Derived from the ID by default; stored in the log.</span>
+          </label>
+          <label class="check"
+            ><input name="counterbalance" type="checkbox" /> Counterbalance the order of blocks 3–5
+            (Study A)</label
+          >
+          <fieldset class="study-b-only" hidden>
+            <legend>Study B system (fixed in advance from Study A)</legend>
+            <label
+              >Detector
+              <select name="detector">
+                <option value="D4">D4: blendshape, calibrated</option>
+                <option value="D2">D2: EAR, calibrated</option>
+                <option value="D3">D3: blendshape, fixed 0.5</option>
+                <option value="D1">D1: EAR, fixed 0.21</option>
+              </select>
+            </label>
+            <div class="timing-grid" id="timing-grid"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Setup (no names)</legend>
+            <label
+              >Age range
+              <select name="age_range">
+                <option value="">—</option>
+                <option>18–24</option>
+                <option>25–34</option>
+                <option>35–44</option>
+                <option>45–54</option>
+                <option>55–64</option>
+                <option>65+</option>
+              </select>
+            </label>
+            <label
+              >Glasses
+              <select name="glasses">
+                <option value="">—</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </label>
+            <label
+              >Lighting <input name="lighting" placeholder="e.g. ceiling LED + window left"
+            /></label>
+            <label
+              >Camera model
+              <input name="camera_model" placeholder="e.g. built-in 720p, Dell XPS 13"
+            /></label>
+            <label
+              >Distance (cm) <input name="distance_cm" inputmode="numeric" placeholder="60"
+            /></label>
+            <label class="wide">Notes <textarea name="notes" rows="2"></textarea></label>
+          </fieldset>
+          <p class="form-error" id="setup-error" role="alert"></p>
+          <button class="btn btn--primary" type="submit">Continue to consent</button>
+        </form>
+      </section>
+
+      <!-- 2. Consent -->
+      <section class="screen card" id="s-consent" hidden aria-labelledby="consent-heading">
+        <h1 class="visually-hidden" id="consent-heading">Consent</h1>
+        <div class="consent-text" id="consent-text"></div>
+        <form id="consent-form" class="consent-form">
+          <label class="check"
+            ><input type="checkbox" name="data" required /> I am 18 or older, I have read the
+            information above, and I agree to take part and to the eye features being
+            recorded.</label
+          >
+          <label class="check"
+            ><input type="checkbox" name="video" />
+            <span
+              ><strong>Optional:</strong> I also agree to a video of my face being recorded on this
+              laptop, only for labelling, and deleted afterwards.</span
+            ></label
+          >
+          <p class="form-error" id="consent-error" role="alert"></p>
+          <div class="row">
+            <button class="btn btn--primary" type="submit">I agree, continue</button>
+            <button class="btn btn--ghost" type="button" id="consent-decline">
+              I do not want to take part
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 3. Camera check -->
+      <section class="screen card" id="s-check" hidden aria-labelledby="check-title">
+        <h1 id="check-title">Camera check</h1>
+        <div class="check-grid">
+          <div class="cam small-cam">
+            <video id="video" playsinline muted aria-hidden="true"></video>
+          </div>
+          <div>
+            <dl class="readouts">
+              <dt>Measured fps</dt>
+              <dd class="mono" id="check-fps">--</dd>
+              <dt>Status</dt>
+              <dd id="check-status">starting…</dd>
+              <dt>Camera</dt>
+              <dd id="check-camera">—</dd>
+              <dt>Clock</dt>
+              <dd class="mono" id="check-clock">—</dd>
+              <dt>Video recording</dt>
+              <dd id="check-video">—</dd>
+            </dl>
+            <p class="muted">
+              Seat the participant 50–70 cm from the screen with light on their face. Wait for a
+              steady fps reading.
+            </p>
+            <button class="btn btn--primary" type="button" id="check-go" disabled>
+              Start the study
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Block intro -->
+      <section class="screen card" id="s-intro" hidden aria-labelledby="intro-title">
+        <p class="eyebrow" id="intro-step"></p>
+        <h1 id="intro-title"></h1>
+        <p class="lede" id="intro-text"></p>
+        <p class="muted">
+          Experimenter: press <kbd>Enter</kbd> or the button when the participant is ready.
+        </p>
+        <button class="btn btn--primary" type="button" id="intro-go">Start block</button>
+      </section>
+
+      <!-- 6. TLX -->
+      <section class="screen card" id="s-tlx" hidden aria-labelledby="tlx-title">
+        <h1 id="tlx-title">How was that block?</h1>
+        <p class="muted">Move each slider. Raw NASA-TLX, 0–100.</p>
+        <form id="tlx-form" class="tlx"></form>
+      </section>
+
+      <!-- 7. End -->
+      <section class="screen card" id="s-end" hidden aria-labelledby="end-title">
+        <h1 id="end-title">Session complete</h1>
+        <p class="lede">
+          Thank the participant. Then download the files below and move them to
+          <code>data/raw/</code> (gitignored). Video goes to <code>data/video/</code> and is deleted
+          after labelling.
+        </p>
+        <dl class="readouts" id="end-stats"></dl>
+        <div class="row">
+          <button class="btn btn--primary" type="button" id="dl-jsonl">
+            Download log (.jsonl)
+          </button>
+          <button class="btn" type="button" id="dl-webm" hidden>Download video (.webm)</button>
+        </div>
+        <p class="notice">Closing this tab discards anything not downloaded.</p>
+      </section>
+    </main>
+
+    <!-- 5. The stage: full-screen cues -->
+    <div class="stage" id="stage" hidden>
+      <div class="stage-progress" aria-hidden="true"><span id="stage-bar"></span></div>
+      <div class="stage-reading" id="stage-reading" hidden></div>
+      <div class="stage-center" id="stage-center" aria-live="assertive"></div>
+      <div class="stage-corner" id="stage-corner" aria-live="assertive"></div>
+      <div class="stage-b" id="stage-b" hidden>
+        <p class="eyebrow">Type this phrase</p>
+        <p class="phrase-target mono" id="phrase-target"></p>
+        <p class="phrase-typed mono" id="phrase-typed"></p>
+        <p class="phrase-pattern mono" id="phrase-pattern"></p>
+        <p class="muted">
+          Experimenter: <kbd>Enter</kbd> when the participant has finished this phrase.
+        </p>
+        <ul class="morse-list mono" id="stage-morse"></ul>
+      </div>
+      <button class="btn btn--small btn--ghost stage-abort" type="button" id="stage-abort">
+        Abort session
+      </button>
+    </div>
+    <script type="module" src="/src/pages/study.ts"></script>
+  </body>
+</html>

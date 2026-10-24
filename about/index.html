@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <title>About — MorsEye</title>
+    <meta
+      name="description"
+      content="Who built MorsEye, how AI tools were used, and the open-source software and fonts it relies on."
+    />
+    <meta property="og:title" content="About MorsEye" />
+    <meta
+      property="og:description"
+      content="Who built MorsEye, the AI-use statement, and credits."
+    />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="page-about">
+    <!--#include header-->
+    <main id="main">
+      <header class="page-intro">
+        <div class="wrap">
+          <p class="eyebrow">About</p>
+          <h1>About MorsEye</h1>
+          <p class="lede">
+            MorsEye is a research project by Saksham Sharma (BITS). It began as a small browser demo
+            that turned eye closures into Morse code; this version rebuilds it around a measured,
+            preregistered study.
+          </p>
+          <!-- [HUMAN] Expand: a short bio, your role, and links (Saksham to write). -->
+        </div>
+      </header>
+
+      <section class="section prose" id="ai-use" aria-labelledby="ai-use-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="ai-use-title">AI-use statement</h2>
+          </div>
+          <div>
+            <div class="notice" id="ai-use-pending" role="note" hidden>
+              <p>
+                <strong>Not written yet.</strong> This statement is written by Saksham, not by an AI
+                tool, and will list exactly what AI tools did in this project. Until then, the
+                placeholder from <code>AI_USE.md</code> is shown below.
+              </p>
+            </div>
+            <div class="md-body" id="ai-use-body">
+              <p>
+                The statement is kept in
+                <a href="https://github.com/1sakshm/MorsEye/blob/main/AI_USE.md"
+                  ><code>AI_USE.md</code></a
+                >
+                on GitHub.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section prose" aria-labelledby="contact-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="contact-title">Contact and source</h2>
+          </div>
+          <div>
+            <p>
+              The code, the analysis scripts and the paper source are on GitHub at
+              <a href="https://github.com/1sakshm/MorsEye">github.com/1sakshm/MorsEye</a>. Questions
+              and problems are welcome as
+              <a href="https://github.com/1sakshm/MorsEye/issues">GitHub issues</a>.
+            </p>
+            <!-- [HUMAN] Add a contact email address here. -->
+          </div>
+        </div>
+      </section>
+
+      <section class="section prose" aria-labelledby="credits-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="credits-title">Credits</h2>
+          </div>
+          <div>
+            <ul>
+              <li>
+                Face landmarks and blink scores:
+                <a href="https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker"
+                  >MediaPipe FaceLandmarker</a
+                >
+                (Apache 2.0), running locally in the browser.
+              </li>
+              <li>Animation: <a href="https://gsap.com/">GSAP</a> and ScrollTrigger.</li>
+              <li>Charts: <a href="https://d3js.org/">D3</a> (ISC licence).</li>
+              <li>
+                Type:
+                <a href="https://www.brailleinstitute.org/freefont/">Atkinson Hyperlegible</a>,
+                designed by the Braille Institute for legibility; Bricolage Grotesque; JetBrains
+                Mono (all SIL Open Font License).
+              </li>
+              <li>
+                Eye aspect ratio: Soukupová and Čech (2016),
+                <em>Real-Time Eye Blink Detection using Facial Landmarks</em>.
+              </li>
+            </ul>
+            <p>Code: MIT licence. Data: CC BY 4.0.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--#include footer-->
+    <script type="module" src="/src/pages/about.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Morse Code Blink Decoder</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="app">
+    <div class="video-wrap panel">
+      <video id="video" playsinline autoplay muted></video>
+      <canvas id="overlay"></canvas>
+      <div style="position:absolute;left:10px;top:10px;z-index:5">
+        <div class="small">Mode: <span id="modeLabel">Eye Blink</span></div>
+      </div>
+      <div style="position:absolute;right:10px;top:10px;z-index:5">
+        <div id="blinkDot" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;background:transparent"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="panel">
+        <div class="buttons">
+          <button id="eyeMode" class="active">Eye Blink Mode</button>
+          <button id="lightMode"></button>
+          <button id="clearBtn">Clear Text</button>
+          <button id="spaceBtn">Add Space</button>
+        </div>
+        <div class="small" style="margin-top:8px">For light mode: click & drag on the video to select the ROI. If no ROI selected, whole frame is used.</div>
+      </div>
+
+      <div class="panel">
+        <div class="small">Timing thresholds (editable)</div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <label class="small">Dot(ms): <input id="dotInput" type="number" value="300" style="width:80px;margin-left:6px"></label>
+          <label class="small">Dash(ms): <input id="dashInput" type="number" value="800" style="width:80px;margin-left:6px"></label>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <label class="small">Symbol gap(ms): <input id="symbolGap" type="number" value="500" style="width:80px;margin-left:6px"></label>
+          <label class="small">Letter gap(ms): <input id="letterGap" type="number" value="1500" style="width:80px;margin-left:6px"></label>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <label class="small">Word gap(ms): <input id="wordGap" type="number" value="3000" style="width:80px;margin-left:6px"></label>
+        </div>
+        <div class="small" style="margin-top:8px;color:#06b6d4">
+          Tip: Quick blink = dot (.), Long blink = dash (-)<br>
+          Wait ~0.5s between dots/dashes in same letter<br>
+          Wait ~1.5s to finish a letter, ~3s for space
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="small">Decoded Text</div>
+        <div id="decoded" class="decoded"></div>
+      </div>
+
+      <div class="panel small">
+        <strong>How to use</strong>
+        <ul>
+          <li>Allow camera access (works on HTTPS / localhost).</li>
+          <li>Use <em>Eye Blink Mode</em> to blink to send dots/dashes (auto-detects blinks).</li>
+          <li>For letter A (.-): Quick blink, wait 0.5s, long blink, wait 1.5s</li>
+          <li>For letter S (...): Three quick blinks with 0.5s gaps, wait 1.5s</li>
+          <!-- <li>Use <em>Light Mode</em> to flash a bright LED or phone screen into the camera.</li> -->
+        </ul>
+      </div>
+    </div>
+    <footer>Built with MediaPipe FaceMesh (eye detection) + Web camera. Works best on modern browsers.</footer>
+  </div>
+
+  <!-- MediaPipe FaceMesh CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+</body>
+</html>

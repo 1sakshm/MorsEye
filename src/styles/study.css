@@ -1,0 +1,300 @@
+/* /study and /labeler (PRD §5.7, §5.8). Experimenter-facing, large and plain. */
+
+.study {
+  padding: 2rem var(--gutter);
+}
+.screen {
+  max-width: 920px;
+  margin: 0 auto 2rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+.screen h1 {
+  font-size: var(--step-3);
+}
+.screen h1:focus {
+  outline: none;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem 1.5rem;
+  margin-top: 1.25rem;
+}
+.form-grid > fieldset,
+.form-grid > .check,
+.form-grid > .form-error,
+.form-grid > button {
+  grid-column: 1 / -1;
+}
+.form-grid fieldset {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem 1.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+.form-grid fieldset legend {
+  padding-right: 0.5rem;
+}
+.form-grid label:not(.check) {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 700;
+  font-size: var(--step--1);
+}
+.form-grid .wide {
+  grid-column: 1 / -1;
+}
+.form-grid button {
+  justify-self: start;
+}
+input:not([type='checkbox']):not([type='radio']):not([type='range']),
+select,
+textarea {
+  font: inherit;
+  font-weight: 400;
+  font-size: var(--step-0);
+  min-height: var(--target);
+  padding: 0.4rem 0.6rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1.5px solid var(--muted);
+  border-radius: var(--radius);
+  width: 100%;
+}
+.hint {
+  font-weight: 400;
+  color: var(--muted);
+}
+.form-error {
+  color: var(--band-delete);
+  font-weight: 700;
+  min-height: 1.2em;
+  margin: 0;
+}
+.timing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem 1rem;
+  grid-column: 1 / -1;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.consent-text {
+  max-width: var(--measure);
+}
+.consent-text h1 {
+  font-size: var(--step-3);
+}
+.consent-text h2 {
+  font-size: var(--step-1);
+  margin-top: 1.5rem;
+}
+.consent-form {
+  border-top: 1px solid var(--line);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.consent-form .check {
+  align-items: flex-start;
+  padding: 0.4rem 0;
+}
+.consent-form .check input {
+  margin-top: 0.2rem;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 760px) {
+  .check-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.small-cam {
+  aspect-ratio: 4 / 3;
+}
+.readouts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0 0 1rem;
+}
+.readouts dt {
+  font-weight: 700;
+}
+.readouts dd {
+  margin: 0;
+}
+
+/* ---------- Stage (full screen during blocks) ---------- */
+
+body.on-stage .site-header,
+body.on-stage .site-footer {
+  display: none;
+}
+.stage {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+  z-index: 90;
+}
+.stage[hidden] {
+  display: none;
+}
+.stage-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--tape);
+}
+.stage-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--trace);
+}
+.stage-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.stage-center .count {
+  font-family: var(--font-head);
+  font-size: clamp(6rem, 20vw, 14rem);
+  font-weight: 800;
+}
+.cue {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(4rem, 12vw, 9rem);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.cue--short {
+  color: var(--band-dot);
+}
+.cue--long {
+  color: var(--band-dash);
+}
+.cue--wink-l,
+.cue--wink-r {
+  color: var(--signal);
+}
+.dot-target {
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.dot-target.dim {
+  opacity: 0.25;
+}
+.cue-sub {
+  display: block;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: var(--step-1);
+}
+.stage-corner {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  pointer-events: none;
+}
+.stage-corner .cue {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  background: var(--surface);
+  border: 3px solid currentColor;
+  border-radius: var(--radius);
+  padding: 0.3em 0.6em;
+}
+.stage-reading {
+  position: absolute;
+  inset: 4rem 0 4rem;
+  overflow-y: auto;
+  padding: 0 var(--gutter);
+  max-width: 70ch;
+  margin: 0 auto;
+  font-size: 1.35rem;
+  line-height: 1.75;
+}
+.stage-b {
+  position: absolute;
+  inset: 3rem var(--gutter) 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.phrase-target {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin: 0 0 1rem;
+}
+.phrase-typed {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--trace);
+  border-bottom: 2px solid var(--line);
+  min-height: 1.5em;
+  margin: 0;
+}
+.phrase-pattern {
+  font-size: 2rem;
+  color: var(--signal);
+  letter-spacing: 0.15em;
+  min-height: 1.5em;
+}
+.stage-abort {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  opacity: 0.6;
+}
+
+.tlx {
+  display: grid;
+  gap: 1.25rem;
+}
+.tlx-item p {
+  margin: 0.2rem 0 0.4rem;
+}
+.tlx-item input {
+  width: 100%;
+  min-height: var(--target);
+  accent-color: var(--signal);
+}
+.tlx-ends {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.tlx button {
+  justify-self: start;
+}
+
+.consent-text blockquote {
+  margin: 1rem 0;
+  border-left: 4px solid var(--signal);
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.consent-text blockquote p:last-child {
+  margin-bottom: 0;
+}

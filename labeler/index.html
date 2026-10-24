@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>MorsEye Labelling Tool</title>
+  </head>
+  <body class="page-labeler">
+    <main id="main" class="labeler">
+      <header class="lab-bar">
+        <strong class="lab-title">MorsEye labeller</strong>
+        <label class="file-btn btn btn--small"
+          >Log (.jsonl)<input type="file" id="f-log" accept=".jsonl,.json,application/x-ndjson"
+        /></label>
+        <label class="file-btn btn btn--small"
+          >Video (.webm)<input type="file" id="f-video" accept="video/webm,video/*"
+        /></label>
+        <label class="lab-field"
+          >Labeller <input id="labeller" size="6" placeholder="initials"
+        /></label>
+        <span class="mono lab-stat" id="lab-file">no log loaded</span>
+        <span class="mono lab-stat" id="lab-time" title="Active labelling time">0:00</span>
+        <button class="btn btn--small btn--primary" type="button" id="export" disabled>
+          Export labels
+        </button>
+      </header>
+
+      <section class="lab-main">
+        <div class="lab-video">
+          <video id="video" playsinline muted></video>
+          <p class="lab-novideo muted" id="no-video">
+            No video loaded. You can still label from the traces.
+          </p>
+          <div class="lab-transport">
+            <button class="btn btn--small" type="button" id="play">Play</button>
+            <label class="lab-field"
+              >Speed
+              <select id="rate">
+                <option value="0.25">0.25×</option>
+                <option value="0.5" selected>0.5×</option>
+                <option value="1">1×</option>
+              </select>
+            </label>
+            <span class="mono" id="cursor-t">t = —</span>
+          </div>
+        </div>
+        <aside class="lab-side">
+          <h2>Keys</h2>
+          <dl class="keys">
+            <dt><kbd>[</kbd></dt>
+            <dd>onset at cursor</dd>
+            <dt><kbd>]</kbd></dt>
+            <dd>offset at cursor (creates the event)</dd>
+            <dt><kbd>1</kbd>–<kbd>5</kbd></dt>
+            <dd>type: 1 spontaneous, 2 short, 3 long, 4 wink-L, 5 wink-R</dd>
+            <dt><kbd>←</kbd> <kbd>→</kbd></dt>
+            <dd>previous / next frame (<kbd>Shift</kbd>: 10 frames)</dd>
+            <dt><kbd>Space</kbd></dt>
+            <dd>play / pause</dd>
+            <dt><kbd>N</kbd> / <kbd>B</kbd></dt>
+            <dd>jump to next / previous cue candidate</dd>
+            <dt><kbd>Tab</kbd> on timeline</dt>
+            <dd>select next event</dd>
+            <dt><kbd>Del</kbd></dt>
+            <dd>remove the selected event</dd>
+            <dt><kbd>+</kbd> <kbd>−</kbd></dt>
+            <dd>zoom timeline</dd>
+          </dl>
+          <p class="muted">
+            Dashed boxes are cue candidates. They are guides only and are never exported. Only
+            events you mark with <kbd>[</kbd> <kbd>]</kbd> and a type are ground truth.
+          </p>
+          <p class="mono" id="lab-counts"></p>
+        </aside>
+      </section>
+
+      <section class="lab-timeline">
+        <canvas
+          id="timeline"
+          tabindex="0"
+          aria-label="Timeline of eye signals and labels. Use keyboard shortcuts to label."
+        ></canvas>
+        <input type="range" id="scroll" min="0" max="1000" value="0" aria-label="Scroll timeline" />
+        <p class="legend muted">
+          <span class="lg lg-ear"></span>EAR left/right · <span class="lg lg-blink"></span>blink
+          score left/right · <span class="lg lg-cue"></span>cue candidates
+        </p>
+      </section>
+
+      <section class="lab-list">
+        <h2>Events <span class="muted" id="sel-info"></span></h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th class="num">#</th>
+                <th class="num">onset ms</th>
+                <th class="num">offset ms</th>
+                <th class="num">duration</th>
+                <th>type</th>
+              </tr>
+            </thead>
+            <tbody id="events"></tbody>
+          </table>
+        </div>
+      </section>
+      <div class="visually-hidden" aria-live="polite" id="lab-announce"></div>
+    </main>
+    <script type="module" src="/src/pages/labeler.ts"></script>
+  </body>
+</html>

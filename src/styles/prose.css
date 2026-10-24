@@ -1,0 +1,74 @@
+/* Shared layout for text pages (/research, /data, /about) and page intros. */
+
+.page-intro {
+  padding: clamp(2.5rem, 6vw, 5rem) 0 1rem;
+}
+.page-intro h1 {
+  max-width: 20ch;
+}
+.prose h2 {
+  font-size: var(--step-2);
+  margin-top: 0.25rem;
+}
+.prose h3 {
+  margin-top: 1.5rem;
+}
+.prose-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.prose-grid > :first-child h2 {
+  position: sticky;
+  top: 88px;
+}
+@media (max-width: 860px) {
+  .prose-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .prose-grid > :first-child h2 {
+    position: static;
+  }
+}
+.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1.25rem;
+  margin: 0 0 1rem;
+  max-width: var(--measure);
+}
+.kv dt {
+  font-weight: 700;
+}
+.kv dd {
+  margin: 0;
+}
+@media (max-width: 520px) {
+  .kv {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .kv dd {
+    margin-bottom: 0.5rem;
+  }
+}
+.md-body h3,
+.md-body h4,
+.md-body h5 {
+  margin-top: 1.25rem;
+}
+.md-body pre {
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: var(--tape);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  max-width: var(--measure);
+  overflow-x: auto;
+}
+.md-body blockquote {
+  margin: 0 0 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--line);
+}

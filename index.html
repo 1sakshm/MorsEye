@@ -1,79 +1,276 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Morse Code Blink Decoder</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-</head>
-<body>
-  <div class="app">
-    <div class="video-wrap panel">
-      <video id="video" playsinline autoplay muted></video>
-      <canvas id="overlay"></canvas>
-      <div style="position:absolute;left:10px;top:10px;z-index:5">
-        <div class="small">Mode: <span id="modeLabel">Eye Blink</span></div>
-      </div>
-      <div style="position:absolute;right:10px;top:10px;z-index:5">
-        <div id="blinkDot" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;background:transparent"></div>
-      </div>
-    </div>
+  <head>
+    <!--#include head-->
+    <title>MorsEye — deliberate blinks, typed as Morse code</title>
+    <meta
+      name="description"
+      content="MorsEye is a browser research prototype that tells deliberate from spontaneous blinks on a webcam and types them as Morse code. Everything runs on your device."
+    />
+    <meta property="og:title" content="MorsEye — deliberate blinks, typed as Morse code" />
+    <meta
+      property="og:description"
+      content="Telling deliberate from spontaneous blinks on a consumer webcam, with a few seconds of personal calibration. A research prototype that runs entirely in the browser."
+    />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="page-home">
+    <!--#include header-->
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Research prototype · webcam Morse text entry</p>
+            <h1 id="hero-title">Blink in Morse.<br />The webcam types it.</h1>
+            <p class="lede">
+              MorsEye turns deliberate eye closures into dots and dashes, and learns to ignore the
+              15–20 blinks a minute you don't mean. A few seconds of personal calibration replace a
+              one-size-fits-all threshold.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn--primary" href="/try/">Try it</a>
+              <a class="btn" href="/research/#paper">Read the paper</a>
+            </div>
+            <p class="hero-privacy muted">
+              Runs in your browser. Camera frames never leave your device.
+            </p>
+          </div>
 
-    <div class="controls">
-      <div class="panel">
-        <div class="buttons">
-          <button id="eyeMode" class="active">Eye Blink Mode</button>
-          <button id="lightMode"></button>
-          <button id="clearBtn">Clear Text</button>
-          <button id="spaceBtn">Add Space</button>
+          <figure class="hero-figure" aria-labelledby="hero-fig-caption">
+            <svg
+              class="hero-eye"
+              id="hero-eye"
+              role="img"
+              aria-labelledby="hero-eye-title hero-eye-desc"
+            >
+              <title id="hero-eye-title">
+                An eye drawn from 30 landmark points, blinking “HI” in Morse code
+              </title>
+              <desc id="hero-eye-desc">
+                The upper lid closes four times briefly for the letter H, pauses, then closes twice
+                for the letter I. Each closure is inked onto a paper tape below the eye, and each
+                letter appears under its marks when the decoder commits it.
+              </desc>
+            </svg>
+            <div class="hero-trace-wrap" aria-hidden="true">
+              <svg class="hero-trace" id="hero-trace"></svg>
+            </div>
+            <figcaption id="hero-fig-caption" class="hero-caption">
+              <span class="legend"
+                ><span class="swatch swatch--trace"></span>Eye aspect ratio (EAR) of the
+                drawing</span
+              >
+              <span class="legend"
+                ><span class="swatch swatch--thr"></span>Calibrated threshold</span
+              >
+              <span class="legend"
+                ><span class="swatch swatch--signal"></span>Eye counted as closed</span
+              >
+            </figcaption>
+            <button class="btn btn--ghost btn--small hero-toggle" id="hero-toggle" type="button">
+              Pause animation
+            </button>
+          </figure>
         </div>
-        <div class="small" style="margin-top:8px">For light mode: click & drag on the video to select the ROI. If no ROI selected, whole frame is used.</div>
-      </div>
 
-      <div class="panel">
-        <div class="small">Timing thresholds (editable)</div>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-          <label class="small">Dot(ms): <input id="dotInput" type="number" value="300" style="width:80px;margin-left:6px"></label>
-          <label class="small">Dash(ms): <input id="dashInput" type="number" value="800" style="width:80px;margin-left:6px"></label>
+        <div class="tape hero-tape" aria-hidden="true">
+          <svg class="hero-tape-svg" id="hero-tape"></svg>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-          <label class="small">Symbol gap(ms): <input id="symbolGap" type="number" value="500" style="width:80px;margin-left:6px"></label>
-          <label class="small">Letter gap(ms): <input id="letterGap" type="number" value="1500" style="width:80px;margin-left:6px"></label>
+        <div class="wrap">
+          <p class="hero-spec" id="hero-spec">
+            Each closure in this animation lasts 400 ms, inside the dot band (200–600 ms). A letter
+            is committed after 1200 ms with the eyes open. These are the app’s current settings.
+          </p>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-          <label class="small">Word gap(ms): <input id="wordGap" type="number" value="3000" style="width:80px;margin-left:6px"></label>
-        </div>
-        <div class="small" style="margin-top:8px;color:#06b6d4">
-          Tip: Quick blink = dot (.), Long blink = dash (-)<br>
-          Wait ~0.5s between dots/dashes in same letter<br>
-          Wait ~1.5s to finish a letter, ~3s for space
-        </div>
-      </div>
+      </section>
 
-      <div class="panel">
-        <div class="small">Decoded Text</div>
-        <div id="decoded" class="decoded"></div>
-      </div>
+      <section class="section results" aria-labelledby="results-title">
+        <div class="wrap">
+          <p class="eyebrow" id="results-status">
+            Study A in progress · results expected November 2026
+          </p>
+          <h2 id="results-title">What the study measures</h2>
+          <p class="lede" id="results-lede">
+            “It works on my face” is not a result. MorsEye is being evaluated in a preregistered
+            study with adult volunteers; the three headline numbers will appear here, with
+            confidence intervals across participants, once the data are labelled and analysed.
+          </p>
+          <div class="grid-3 result-cards" id="result-cards">
+            <article class="card result-card" data-result="f1">
+              <h3>Telling deliberate blinks apart</h3>
+              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
+              <p data-slot="text">
+                Event-level F1 for deliberate closures, with the fixed EAR threshold of 0.21 versus
+                a threshold calibrated from a few of the user’s own closures.
+              </p>
+            </article>
+            <article class="card result-card" data-result="ftpm">
+              <h3>False triggers while reading</h3>
+              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
+              <p data-slot="text">
+                Natural blinks typed as symbols, per minute of reading, before and after adding a
+                minimum-duration reject window.
+              </p>
+            </article>
+            <article class="card result-card" data-result="cpm">
+              <h3>Typing speed and accuracy</h3>
+              <p class="result-value" data-slot="value"><span class="pending">Pending</span></p>
+              <p data-slot="text">
+                Characters per minute and error rate for novices after three short practice blocks
+                of standard phrases.
+              </p>
+            </article>
+          </div>
+          <p class="muted" id="results-note" hidden></p>
+          <p class="results-more"><a href="/research/">Study design and interactive results</a></p>
+        </div>
+      </section>
 
-      <div class="panel small">
-        <strong>How to use</strong>
-        <ul>
-          <li>Allow camera access (works on HTTPS / localhost).</li>
-          <li>Use <em>Eye Blink Mode</em> to blink to send dots/dashes (auto-detects blinks).</li>
-          <li>For letter A (.-): Quick blink, wait 0.5s, long blink, wait 1.5s</li>
-          <li>For letter S (...): Three quick blinks with 0.5s gaps, wait 1.5s</li>
-          <!-- <li>Use <em>Light Mode</em> to flash a bright LED or phone screen into the camera.</li> -->
-        </ul>
-      </div>
-    </div>
-    <footer>Built with MediaPipe FaceMesh (eye detection) + Web camera. Works best on modern browsers.</footer>
-  </div>
+      <section class="section how-short" aria-labelledby="how-title">
+        <div class="wrap">
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-title">From camera frame to letter</h2>
+          <ol class="pipeline">
+            <li class="reveal">
+              <span class="pipeline-n">1</span>
+              <h3>Camera</h3>
+              <p>About 30 frames a second from an ordinary laptop webcam.</p>
+            </li>
+            <li class="reveal">
+              <span class="pipeline-n">2</span>
+              <h3>Face landmarks</h3>
+              <p>MediaPipe finds 478 points on the face, on your device.</p>
+            </li>
+            <li class="reveal">
+              <span class="pipeline-n">3</span>
+              <h3>Eye signal</h3>
+              <p>Eye aspect ratio from six points per eye, or blink scores.</p>
+            </li>
+            <li class="reveal">
+              <span class="pipeline-n">4</span>
+              <h3>Detector</h3>
+              <p>A threshold fitted to you, with hysteresis, finds each closure.</p>
+            </li>
+            <li class="reveal">
+              <span class="pipeline-n">5</span>
+              <h3>Segmenter</h3>
+              <p>The closure’s duration decides: ignore, dot, dash or delete.</p>
+            </li>
+            <li class="reveal">
+              <span class="pipeline-n">6</span>
+              <h3>Decoder</h3>
+              <p>Pauses end letters and words; the text can be spoken aloud.</p>
+            </li>
+          </ol>
 
-  <!-- MediaPipe FaceMesh CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
-</body>
+          <div class="bands-block">
+            <div>
+              <h3>Closure duration decides the symbol</h3>
+              <p>
+                Spontaneous blinks are short, so anything shorter than the reject window is ignored.
+                These are the starting values; the final ones will be chosen from the Study A
+                duration data.
+              </p>
+              <p><a href="/how/">See the pipeline step by step</a></p>
+            </div>
+            <div class="table-scroll">
+              <table class="bands-table">
+                <caption class="visually-hidden">
+                  Closure duration bands and pause rules
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Eyes closed for</th>
+                    <th scope="col">Means</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="num" data-band="reject">under 200 ms</td>
+                    <td>
+                      <span class="band-chip band-chip--reject"></span>Ignored (probably a natural
+                      blink)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="dot">200–600 ms</td>
+                    <td><span class="band-chip band-chip--dot"></span>Dot</td>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="dash">600–1400 ms</td>
+                    <td><span class="band-chip band-chip--dash"></span>Dash</td>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="hold">1400–2000 ms</td>
+                    <td>
+                      <span class="band-chip band-chip--hold"></span>Nothing; two of these within 4
+                      s pause or resume input
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="backspace">2000 ms or more</td>
+                    <td>
+                      <span class="band-chip band-chip--delete"></span>Delete the last character
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody class="gaps">
+                  <tr>
+                    <th scope="col">Eyes open for</th>
+                    <th scope="col">Means</th>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="letter">1200 ms</td>
+                    <td>End of letter</td>
+                  </tr>
+                  <tr>
+                    <td class="num" data-band="word">3000 ms</td>
+                    <td>Space (once)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section limits" aria-labelledby="limits-title">
+        <div class="wrap limits-grid">
+          <div>
+            <p class="eyebrow">Honest status</p>
+            <h2 id="limits-title">What it is, and what it is not</h2>
+          </div>
+          <div>
+            <ul class="limits-list">
+              <li>
+                <strong>A research prototype.</strong> It is being evaluated with able-bodied adult
+                volunteers. It has not been tested with people with motor impairments, and no
+                clinical claim is made.
+              </li>
+              <li>
+                <strong>Small study.</strong> Around ten participants, mostly a convenience sample,
+                with one or two camera models. The power to detect small differences is low.
+              </li>
+              <li>
+                <strong>Cued closures.</strong> Deliberate blinks in the study are made in response
+                to cues, not from a user’s own intent to write.
+              </li>
+              <li>
+                <strong>Webcam timing.</strong> At 30 frames a second each frame is 33 ms long,
+                which limits how precisely a closure can be timed.
+              </li>
+              <li>
+                <strong>Private by design.</strong> No server, accounts or analytics. Study
+                recordings stay on the experimenter’s laptop; only features, never faces, are
+                published.
+              </li>
+            </ul>
+            <p><a href="/research/#limits">All threats to validity</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--#include footer-->
+    <script type="module" src="/src/pages/home.ts"></script>
+  </body>
 </html>

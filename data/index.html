@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <title>Data — MorsEye</title>
+    <meta
+      name="description"
+      content="The MorsEye dataset: per-frame eye features and hand-made blink labels from a webcam study. Features only: no images, no video, no faces. CC BY 4.0."
+    />
+    <meta property="og:title" content="MorsEye dataset: features only, no faces" />
+    <meta
+      property="og:description"
+      content="Per-frame eye features and hand-made labels of spontaneous and deliberate closures from a consumer webcam. CC BY 4.0."
+    />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="page-data">
+    <!--#include header-->
+    <main id="main">
+      <header class="page-intro">
+        <div class="wrap">
+          <p class="eyebrow">Data</p>
+          <h1>A features-only dataset</h1>
+          <p class="lede">
+            Per-frame eye features and hand-made labels of spontaneous and deliberate eye closures,
+            recorded with consumer webcams, so that anyone can test their own blink detectors. No
+            images, no video, no faces.
+          </p>
+          <div class="notice" role="note">
+            <p>
+              <strong>Not released yet.</strong> The dataset will be published in
+              <a href="https://github.com/1sakshm/MorsEye/tree/main/data/public"><code>data/public/</code> on GitHub</a>
+              once Study A has been labelled, together with a full datasheet
+              (<a href="https://github.com/1sakshm/MorsEye/blob/main/data/DATASHEET.md"><code>data/DATASHEET.md</code></a>).
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <section class="section prose" aria-labelledby="contents-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="contents-title">What is in it</h2>
+          </div>
+          <div>
+            <h3>Per-frame features (one row per video frame)</h3>
+            <div class="table-scroll">
+              <table>
+                <caption class="visually-hidden">Per-frame feature columns</caption>
+                <thead>
+                  <tr><th scope="col">Column</th><th scope="col">Meaning</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>t_ms</code></td><td>Frame capture time in milliseconds</td></tr>
+                  <tr><td><code>face</code></td><td>Whether a face was found in the frame</td></tr>
+                  <tr><td><code>earL</code>, <code>earR</code></td><td>Eye aspect ratio of each eye, from six landmarks</td></tr>
+                  <tr><td><code>blinkL</code>, <code>blinkR</code></td><td>MediaPipe blink scores (blendshapes), 0 to 1</td></tr>
+                  <tr><td><code>yaw</code>, <code>pitch</code>, <code>roll</code></td><td>Head pose in degrees</td></tr>
+                  <tr><td><code>n_faces</code></td><td>Number of faces in view</td></tr>
+                  <tr><td><code>eye_pts</code></td><td>The 12 eye landmarks (6 per eye) as normalised x, y; no other face points</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Labels (one row per closure)</h3>
+            <p>
+              Made by hand by the experimenter in the labelling tool. Only closures confirmed by a
+              person count as ground truth.
+            </p>
+            <div class="table-scroll">
+              <table>
+                <caption class="visually-hidden">Label columns</caption>
+                <thead>
+                  <tr><th scope="col">Column</th><th scope="col">Meaning</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>onset_ms</code>, <code>offset_ms</code></td><td>Start and end of the closure, on the frame clock</td></tr>
+                  <tr><td><code>type</code></td><td>spontaneous, deliberate-short, deliberate-long, wink-L or wink-R</td></tr>
+                  <tr><td><code>labeller</code>, <code>labelled_at</code></td><td>Who labelled it, and when</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Session information</h3>
+            <p>
+              Cue times and types, block start and end times, the participant ID (P01, P02, …), age
+              range, glasses (yes or no), lighting, camera model and the measured frame rate.
+            </p>
+
+            <h3>What is not in it</h3>
+            <ul>
+              <li>No images or video, and no face mesh beyond the 12 eye points.</li>
+              <li>No names, contact details or anything else that identifies a participant.</li>
+              <li>No audio.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section prose" aria-labelledby="datasheet-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="datasheet-title">Datasheet in brief</h2>
+          </div>
+          <div>
+            <dl class="kv">
+              <dt>Purpose</dt>
+              <dd>Measure how well a consumer webcam separates deliberate from spontaneous blinks, and how much per-user calibration helps.</dd>
+              <dt>Who</dt>
+              <dd>Adult volunteers (18+), able-bodied, mostly a convenience sample. The planned size is at least 8 people.</dd>
+              <dt>How</dt>
+              <dd>Laptop webcams at about 50–70 cm in normal room light; about 12 minutes per person in the app’s study mode, with everything recorded on the experimenter’s laptop.</dd>
+              <dt>Labelling</dt>
+              <dd>Every closure labelled by hand by the experimenter; two participants re-labelled a week later to measure self-agreement.</dd>
+              <dt>Intended uses</dt>
+              <dd>Research on blink detection, calibration and blink-based text entry.</dd>
+              <dt>Not intended for</dt>
+              <dd>Identifying people, or any clinical or diagnostic use.</dd>
+              <dt>Licence</dt>
+              <dd><a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 (CC BY 4.0)</a>. The code is MIT-licensed.</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="section prose" aria-labelledby="privacy-title">
+        <div class="wrap prose-grid">
+          <div>
+            <h2 id="privacy-title">Privacy and consent</h2>
+          </div>
+          <div>
+            <ul>
+              <li>Every participant gives consent on a screen in the app before anything is recorded.</li>
+              <li>
+                Video is recorded only if the participant ticks a separate box, only to help with
+                labelling, and it is deleted after labelling unless the participant agreed otherwise.
+                Video is never published.
+              </li>
+              <li>Participants can withdraw at any time and have their data deleted.</li>
+              <li>Files carry an ID only. Any link between an ID and a name is kept offline, on paper.</li>
+              <li>Participation is unpaid.</li>
+              <li>
+                The public website and the <a href="/try/">Try it</a> app record nothing: frames are
+                processed in your browser and never uploaded.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--#include footer-->
+    <script type="module" src="/src/pages/data.ts"></script>
+  </body>
+</html>

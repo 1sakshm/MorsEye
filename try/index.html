@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--#include head-->
+    <title>Try MorsEye: type with your eyes</title>
+    <meta
+      name="description"
+      content="Type Morse code by closing your eyes. Runs entirely in your browser; nothing is uploaded."
+    />
+    <meta property="og:title" content="Try MorsEye" />
+    <meta
+      property="og:description"
+      content="Type Morse code by closing your eyes, in the browser."
+    />
+  </head>
+  <body class="page-try">
+    <!--#include header-->
+    <main id="main" class="wrap try">
+      <h1 class="visually-hidden">Try MorsEye</h1>
+
+      <section class="try-start card" id="start-panel" aria-labelledby="start-title">
+        <p class="eyebrow">Try it</p>
+        <h2 id="start-title">Type by closing your eyes</h2>
+        <p>
+          MorsEye watches your eyelids through the webcam. A short deliberate closure is a dot, a
+          longer one is a dash, and ordinary quick blinks are ignored. Everything runs on this
+          device; no video leaves your browser.
+        </p>
+        <ol class="start-steps">
+          <li>Allow the camera.</li>
+          <li>
+            Calibrate for about 20 seconds, so MorsEye learns what your open and closed eyes look
+            like.
+          </li>
+          <li>Type. After setup you do not need a keyboard or mouse.</li>
+        </ol>
+        <button class="btn btn--primary" type="button" id="start-btn">Start the camera</button>
+        <p class="muted small-print">
+          Works best in Chrome or Edge on a laptop, with light on your face, about an arm’s length
+          from the screen.
+        </p>
+      </section>
+
+      <section class="camera-error card" id="camera-error" hidden aria-live="assertive">
+        <h2 id="camera-error-title">The camera could not start</h2>
+        <ul id="camera-error-fixes"></ul>
+        <button class="btn btn--primary" type="button" id="camera-retry">Try again</button>
+      </section>
+
+      <div class="try-grid" id="app" hidden>
+        <section class="cam-col" aria-label="Camera">
+          <div class="cam">
+            <video id="video" playsinline muted aria-hidden="true"></video>
+            <canvas id="overlay" aria-hidden="true"></canvas>
+            <span class="chip fps-chip mono" id="fps-chip" title="Measured camera frame rate"
+              >-- fps</span
+            >
+            <div class="status-banner" id="status-banner" role="status" hidden>
+              <strong id="status-title"></strong>
+              <span id="status-body"></span>
+            </div>
+            <div class="paused-badge" id="paused-badge" hidden>
+              <strong>Paused</strong>
+              <span>Two “pause” holds to resume</span>
+            </div>
+          </div>
+          <div class="trace-wrap">
+            <div class="trace-head">
+              <span class="eyebrow" id="trace-label">Eye signal</span>
+              <button class="btn btn--small btn--ghost" type="button" id="recalibrate">
+                Recalibrate
+              </button>
+            </div>
+            <canvas id="trace" class="trace" aria-hidden="true"></canvas>
+          </div>
+        </section>
+
+        <section class="out-col" aria-label="Output">
+          <div class="live">
+            <div class="ring-host" id="ring"></div>
+            <div class="live-text">
+              <p class="eyebrow">Current letter</p>
+              <p class="pattern mono" id="pattern" aria-label="Current pattern">&nbsp;</p>
+              <p class="big-letter" id="big-letter" aria-hidden="true"></p>
+            </div>
+          </div>
+
+          <div class="decoded-wrap">
+            <p class="eyebrow" id="decoded-label">Text</p>
+            <div
+              class="decoded"
+              id="decoded"
+              aria-labelledby="decoded-label"
+              role="textbox"
+              aria-readonly="true"
+              aria-multiline="true"
+              tabindex="0"
+            ></div>
+            <div class="visually-hidden" aria-live="polite" id="announcer"></div>
+            <div class="out-actions">
+              <button class="btn btn--small" type="button" id="copy-btn">Copy</button>
+              <button class="btn btn--small" type="button" id="speak-btn">Speak</button>
+              <span class="clear-wrap">
+                <button class="btn btn--small btn--ghost" type="button" id="clear-btn">
+                  Clear
+                </button>
+                <span class="clear-confirm" id="clear-confirm" hidden>
+                  <span>Clear all text?</span>
+                  <button class="btn btn--small btn--signal" type="button" id="clear-yes">
+                    Yes, clear
+                  </button>
+                  <button class="btn btn--small" type="button" id="clear-no">Keep</button>
+                </span>
+              </span>
+              <span class="muted copy-status" id="copy-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <details class="card commands" open>
+            <summary>Commands</summary>
+            <table class="bands-table">
+              <thead>
+                <tr>
+                  <th>Close your eyes for</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody id="bands-body"></tbody>
+            </table>
+            <p class="muted" id="gaps-text"></p>
+            <p class="muted" id="wink-text" hidden>
+              Wink left: space. Wink right: read the text aloud.
+            </p>
+          </details>
+        </section>
+
+        <section class="settings card" aria-labelledby="settings-title">
+          <h2 id="settings-title">Settings</h2>
+          <div class="settings-grid">
+            <fieldset>
+              <legend>Speed</legend>
+              <div class="seg" role="radiogroup" aria-label="Speed preset">
+                <label><input type="radio" name="preset" value="slow" /> Slow</label>
+                <label><input type="radio" name="preset" value="medium" /> Medium</label>
+                <label><input type="radio" name="preset" value="fast" /> Fast</label>
+                <label><input type="radio" name="preset" value="custom" /> Custom</label>
+              </div>
+              <div class="custom" id="custom-panel" hidden></div>
+            </fieldset>
+            <fieldset>
+              <legend>Detector</legend>
+              <label class="radio"
+                ><input type="radio" name="signal" value="blend" /> Blendshape score
+                (eyeBlink)</label
+              >
+              <label class="radio"
+                ><input type="radio" name="signal" value="ear" /> Eye aspect ratio (6 points)</label
+              >
+              <label class="check"
+                ><input type="checkbox" id="opt-winks" /> Wink commands (left: space, right:
+                speak)</label
+              >
+            </fieldset>
+            <fieldset>
+              <legend>Feedback</legend>
+              <label class="check"
+                ><input type="checkbox" id="opt-speak-letters" /> Speak each letter</label
+              >
+              <label class="check"
+                ><input type="checkbox" id="opt-speak-words" /> Speak each word</label
+              >
+              <label class="check"
+                ><input type="checkbox" id="opt-sound" /> Click on each symbol</label
+              >
+              <label class="check"
+                ><input type="checkbox" id="opt-keys" />
+                <span
+                  >Keyboard helpers (<kbd>Space</kbd>, <kbd>Backspace</kbd>,
+                  <kbd>P</kbd> pause)</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" id="opt-camera" /> Show camera image</label
+              >
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="card morse-card" aria-labelledby="ref-title">
+          <h2 id="ref-title">Morse reference</h2>
+          <ul class="morse-list mono" id="morse-list"></ul>
+        </section>
+      </div>
+
+      <div
+        class="calib"
+        id="calib"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="calib-title"
+        hidden
+      >
+        <div class="calib-inner">
+          <p class="eyebrow" id="calib-step">Calibration</p>
+          <h2 id="calib-title">Let MorsEye learn your eyes</h2>
+          <div class="calib-target" id="calib-target" aria-hidden="true"><span></span></div>
+          <p class="calib-msg" id="calib-msg" aria-live="assertive"></p>
+          <canvas id="calib-trace" class="trace" aria-hidden="true" hidden></canvas>
+          <ol class="calib-ticks" id="calib-ticks" aria-label="Practice blinks" hidden></ol>
+          <p class="notice" id="calib-warning" hidden></p>
+          <div class="calib-actions">
+            <button class="btn btn--primary" type="button" id="calib-go">Begin</button>
+            <button class="btn" type="button" id="calib-retry" hidden>Calibrate again</button>
+            <button class="btn btn--ghost" type="button" id="calib-skip">
+              Skip (use default thresholds)
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!--#include footer-->
+    <script type="module" src="/src/pages/try.ts"></script>
+  </body>
+</html>

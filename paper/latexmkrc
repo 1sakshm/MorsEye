@@ -1,0 +1,6 @@
+# Build the paper: cd paper && latexmk
+# Figures and tables must exist first: python -m analysis.run --data data/public
+$pdf_mode = 1;
+$bibtex_use = 2;
+@default_files = ('main.tex');
+$clean_ext = 'bbl run.xml';

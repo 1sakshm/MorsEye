@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: 'If you use MorsEye or its dataset, please cite it as below.'
+title: 'MorsEye: telling deliberate from spontaneous blinks for webcam Morse text entry'
+type: software
+authors:
+  - family-names: Sharma
+    given-names: Saksham
+repository-code: 'https://github.com/1sakshm/MorsEye'
+url: 'https://morseye.pages.dev'
+license: MIT
+version: 2.0.0
+keywords:
+  - blink detection
+  - text entry
+  - Morse code
+  - accessibility
+  - MediaPipe

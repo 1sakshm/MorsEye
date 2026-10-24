@@ -1,0 +1,81 @@
+/* The drawn landmark eye (src/site/eye.ts). Colours only via theme tokens.
+   The pupil stays dark in every theme, so it gets its own token. */
+
+:root {
+  --pupil: #13202b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='contrast']) {
+    --pupil: #030608;
+  }
+}
+:root[data-theme='dark'],
+:root[data-theme='contrast'] {
+  --pupil: #030608;
+}
+
+.eye-white {
+  fill: var(--surface);
+}
+.eye-lid {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.eye-lid--lower {
+  stroke-width: 1.6;
+  opacity: 0.8;
+}
+.eye-crease {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+.eye-iris {
+  fill: color-mix(in srgb, var(--trace) 20%, var(--surface));
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+.eye-iris-inner {
+  fill: none;
+  stroke: var(--trace);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+  opacity: 0.7;
+}
+.eye-pupil {
+  fill: var(--pupil);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+.eye-glint {
+  fill: #fff;
+  opacity: 0.85;
+}
+.lm {
+  fill: var(--muted);
+}
+.lm-ear {
+  fill: var(--trace);
+  stroke: var(--surface);
+  stroke-width: 1.2;
+}
+.lm-iris {
+  fill: var(--ink);
+  opacity: 0.55;
+}
+.ear-line {
+  stroke: var(--trace);
+  stroke-width: 1.8;
+  stroke-dasharray: 4 3;
+}
+.ear-line--h {
+  stroke: var(--signal);
+}
+:root[data-theme='contrast'] .eye-iris {
+  fill: #000;
+}

@@ -1,0 +1,26 @@
+/* Shared SVG figure and chart styles. Every colour is a theme token, so charts follow the theme. */
+
+.axis line,
+.axis path {
+  stroke: var(--muted);
+  stroke-width: 1;
+  fill: none;
+}
+.axis text,
+.axis-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--muted);
+}
+.axis-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.gridline line {
+  stroke: var(--line);
+}
+.gridline path {
+  display: none;
+}
