@@ -47,6 +47,10 @@
             ><input name="counterbalance" type="checkbox" /> Counterbalance the order of blocks 3–5
             (Study A)</label
           >
+          <label class="check"
+            ><input name="video" type="checkbox" checked /> Record a video of the face on this
+            laptop, for labelling only</label
+          >
           <fieldset class="study-b-only" hidden>
             <legend>Study B system (fixed in advance from Study A)</legend>
             <label
@@ -95,34 +99,7 @@
             <label class="wide">Notes <textarea name="notes" rows="2"></textarea></label>
           </fieldset>
           <p class="form-error" id="setup-error" role="alert"></p>
-          <button class="btn btn--primary" type="submit">Continue to consent</button>
-        </form>
-      </section>
-
-      <!-- 2. Consent -->
-      <section class="screen card" id="s-consent" hidden aria-labelledby="consent-heading">
-        <h1 class="visually-hidden" id="consent-heading">Consent</h1>
-        <div class="consent-text" id="consent-text"></div>
-        <form id="consent-form" class="consent-form">
-          <label class="check"
-            ><input type="checkbox" name="data" required /> I am 18 or older, I have read the
-            information above, and I agree to take part and to the eye features being
-            recorded.</label
-          >
-          <label class="check"
-            ><input type="checkbox" name="video" />
-            <span
-              ><strong>Optional:</strong> I also agree to a video of my face being recorded on this
-              laptop, only for labelling, and deleted afterwards.</span
-            ></label
-          >
-          <p class="form-error" id="consent-error" role="alert"></p>
-          <div class="row">
-            <button class="btn btn--primary" type="submit">I agree, continue</button>
-            <button class="btn btn--ghost" type="button" id="consent-decline">
-              I do not want to take part
-            </button>
-          </div>
+          <button class="btn btn--primary" type="submit">Continue to camera check</button>
         </form>
       </section>
 

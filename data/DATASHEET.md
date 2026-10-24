@@ -48,7 +48,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   and model `face_landmarker.task` (float16, v1).
 - **Is the dataset self-contained?** Yes.
 - **Confidential or sensitive data?** No raw images or video. Eye-landmark and blink timing data are
-  biometric-adjacent; they are published only with explicit consent for data sharing.
+  biometric-adjacent; the only participant is the author, who publishes his own data.
 
 ## Collection process
 
@@ -61,16 +61,15 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 - **Devices and setting.** [HUMAN] Camera models: __. Measured frame rates: __–__ fps (median __).
   Distance about 50–70 cm. Lighting: [HUMAN] (normal room light; describe any variation).
 - **Over what timeframe?** [HUMAN] Study A sessions __ to __ 2026; Study B __ to __.
-- **Protocol.** Study A (about 12 minutes): consent; calibration block (10 cued short, 10 cued long
+- **Protocol.** Study A (about 12 minutes): calibration block (10 cued short, 10 cued long
   closures, 15 s eyes open); spontaneous block (3 min reading); deliberate block (40 randomised cues
   SHORT / LONG / WINK-L / WINK-R, 2–4 s apart); mixed block (3 min reading with corner cues). Study B
   (about 20 minutes): 15 MacKenzie & Soukoreff (2003) phrases in 3 blocks of 5, raw NASA-TLX after
   each block. Cue schedules are generated from the seed stored in each log header.
 - **Ethical review.** None was sought: the only participant is the author, who recorded himself. The public
   comparison videos (Eyeblink8) are used under their published licence and are not part of this dataset.
-- **Consent.** Participants consented on paper and in the app (`docs/consent.md`): purpose, what is
-  recorded, a separate opt-in for local video (used only for labelling and deleted afterwards unless
-  consent says otherwise), the right to withdraw and have data deleted, no payment.
+- **Consent.** No consent form was used, because the only participant is the author. The log header keeps a
+  `consent` field for format compatibility; its `video` flag says whether a local video was recorded.
 
 ## Preprocessing, cleaning and labelling
 
@@ -80,7 +79,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   video and the signal traces; cue-based candidates were shown but only human-confirmed events were
   exported. Labelling time: [HUMAN] about __ minutes per participant. Two participants were re-labelled
   about a week later to measure self-agreement.
-- **Is the raw data saved?** Raw video is not kept (see consent). The per-frame features are the raw data
+- **Is the raw data saved?** Raw video is never published. The per-frame features are the raw data
   of this dataset.
 
 ## Uses
@@ -99,7 +98,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 
 ## Maintenance
 
-- **Maintainer:** [HUMAN] Saksham Sharma, [contact email].
+- **Maintainer:** [HUMAN] Saksham Sharma (contact through the GitHub repository).
 - **Withdrawal:** a participant who withdraws has their files removed from the repository and from any
   later release; [HUMAN] describe how (and that git history is rewritten only for this purpose, if at all).
 - **Errata and updates:** recorded in this file with dates.

@@ -86,31 +86,6 @@ textarea {
   align-items: center;
 }
 
-.consent-text {
-  max-width: var(--measure);
-}
-.consent-text h1 {
-  font-size: var(--step-3);
-}
-.consent-text h2 {
-  font-size: var(--step-1);
-  margin-top: 1.5rem;
-}
-.consent-form {
-  border-top: 1px solid var(--line);
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  display: grid;
-  gap: 0.5rem;
-}
-.consent-form .check {
-  align-items: flex-start;
-  padding: 0.4rem 0;
-}
-.consent-form .check input {
-  margin-top: 0.2rem;
-}
-
 .check-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -286,15 +261,4 @@ body.on-stage .site-footer {
 }
 .tlx button {
   justify-self: start;
-}
-
-.consent-text blockquote {
-  margin: 1rem 0;
-  border-left: 4px solid var(--signal);
-  background: var(--surface);
-  padding: 0.75rem 1rem;
-  border-radius: 0 var(--radius) var(--radius) 0;
-}
-.consent-text blockquote p:last-child {
-  margin-bottom: 0;
 }

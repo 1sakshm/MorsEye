@@ -70,8 +70,8 @@ checks with CaCTüS whether disclosed AI-drafted text is acceptable, and describ
 | Task | Who |
 |---|---|
 | Research questions, hypotheses and analysis plan in `docs/preregistration.md` | Agent drafts; **Saksham reviews, approves and commits it before the first participant** |
-| Consent text, recruitment message | Agent drafts; Saksham approves the final consent text and sends any message |
-| Recruiting participants, taking consent, running every session | **Saksham, in person** |
+| Recruitment message (only if volunteers are wanted) | Agent drafts; Saksham sends it |
+| Recruiting any participants, running every session | **Saksham, in person** |
 | Labelling blink onsets and offsets in the labelling tool | **Saksham, 100% of it.** No auto-labels counted as ground truth (they would grade the detector against itself). |
 | Choosing the final dot/dash/reject thresholds from the Study A data | Agent proposes values with reasoning from the real data; Saksham approves; both recorded in `docs/decisions.md` |
 | Paper: every section | Agent may draft; Saksham reviews and edits. Each AI-drafted section is named in `AI_USE.md` and in the paper's AI-use statement |
@@ -140,7 +140,7 @@ and 95% CI across participants. This is deliberately parallel to FewGaze's label
   model and **measured** fps. No names in any data file. Use IDs P01, P02, …
 - **Setup:** laptop webcam, around 50–70 cm away, normal room light. Record each person's setup in the session log.
 - **Protocol** (runs inside the app's Study Mode, §5.7, about 12 min per person):
-  1. Consent screen and checkbox (§3.8).
+  1. Setup screen: ID, session, seed, setup notes, and whether to record video (§3.8).
   2. *Calibration block* (1 min): 10 cued "short closures", 10 cued "long closures", 15 s eyes open looking at a dot.
   3. *Spontaneous block* (3 min): read a neutral text on screen, no task. This yields natural blinks only.
   4. *Deliberate block* (3 min): randomised cues "SHORT" / "LONG" / "WINK-L" / "WINK-R", 40 cues, 2–4 s apart with jitter.
@@ -148,7 +148,7 @@ and 95% CI across participants. This is deliberately parallel to FewGaze's label
 - **What is recorded:** per frame, the video timestamp, the 6 EAR landmarks for each eye, EAR left/right, the 52
   blendshape scores (or at least the eye ones), head yaw/pitch/roll from the transformation matrix, and a face-found
   flag. Cue onset times are also logged. **Video** is recorded locally, *only if the participant ticks the separate
-  video checkbox*, and only for labelling. Delete it after labelling unless consent says otherwise.
+  video checkbox* on the setup screen, and only for labelling. It is never published.
 - **Ground truth [HUMAN]:** in the Labelling Tool (§5.8), mark every closure's onset and offset and its type
   (spontaneous / deliberate-short / deliberate-long / wink-L / wink-R). Cues help, but the human label is the truth.
   To check yourself, re-label two participants a week later and report your agreement with yourself (Cohen's κ for
@@ -183,8 +183,8 @@ CaCTüS Project 9 idea that motor behaviour becomes more automatic with practice
 ### 3.8 Ethics and data handling
 - No ethics review is sought (decided by Saksham, 24 Oct 2026): the only participant is the author, and the public
   videos are used under their published licence. The paper says so. If volunteers take part later, revisit this first.
-- Consent form (`docs/consent.md` plus a screen in the app): purpose, what is recorded, a separate opt-in for video,
-  the right to withdraw and have data deleted, contact email, and no payment. Adults (18+) only.
+- No consent form (decided by Saksham, 25 Oct 2026): the only participant is the author. If volunteers take part
+  later, write a consent form and add a consent screen to Study Mode first.
 - Data files hold only IDs. Keep a mapping from ID to name, if any, offline on paper.
 - **Public dataset** (`data/public/`): per-frame features and labels only. No images, no video, no landmarks beyond the
   12 eye points. Licence CC BY 4.0. Add a datasheet `data/DATASHEET.md` describing who, how many, devices and lighting.
@@ -244,7 +244,6 @@ src/
   output/suggest.ts          (optional) word completion from a small frequency list
   study/protocol.ts          cue schedules for Study A/B, seeded RNG
   study/recorder.ts          per-frame log + events -> JSONL/CSV, local download
-  study/consent.ts           consent screen logic
   ui/...                     components (meter, ring, tape, cards)
 analysis/                    Python: load logs, label join, metrics, stats, figures
 labeler/                     the labelling tool page (§5.8)
@@ -301,7 +300,7 @@ matters most for usability. Each committed symbol gives a short sound (optional,
 
 ### 5.7 Study Mode (`/study`, hidden from the main nav)
 - An experimenter screen enters the participant ID, session, block order seed and camera notes.
-- Consent screen and checkboxes (data; optional video).
+- A checkbox on the setup screen for the optional local video.
 - Runs the Study A and B protocols from §3.5/3.6 with full-screen cues. Large text, a 3-2-1 lead-in, and progress.
 - Records `FrameFeatures` for **every frame** plus cue and event logs, and optionally the video (`MediaRecorder`, webm).
 - At the end, **the experimenter downloads** `P07_A_2026-11-03.jsonl` (+ `.webm`). Nothing is uploaded anywhere.
@@ -347,7 +346,7 @@ accessibility project looks careless.
 | `/try` | The app (§5) |
 | `/how` | Scroll story explaining the pipeline (§6.5) |
 | `/research` | Research questions, study design, interactive results, paper PDF, dataset link, citation |
-| `/data` | Dataset datasheet, download, privacy and consent summary |
+| `/data` | Dataset datasheet, download, privacy summary |
 | `/about` | Who built it, AI-use statement (the full text of `AI_USE.md`), contact, GitHub |
 | `/study`, `/labeler` | Not linked in the nav. `noindex`. |
 
@@ -532,7 +531,7 @@ MorsEye/
   public/models/face_landmarker.task  public/og.png
   analysis/ ...                                                         (§9)
   data/public/  data/DATASHEET.md   (features + labels only; raw/ and video/ are gitignored)
-  docs/preregistration.md  docs/consent.md  docs/decisions.md  docs/public-data.md
+  docs/preregistration.md  docs/decisions.md  docs/public-data.md
   paper/main.tex  paper/references.bib  paper/figures/
   legacy/opencv_prototype.py  legacy/README.md
   tests/ (Vitest)  analysis/tests/ (pytest)
@@ -548,7 +547,7 @@ agent may draft the writing and propose the analysis decisions for him to approv
 
 | Dates | Work | Owner |
 |---|---|---|
-| Sat 24 – Sun 25 Oct | Read the 4 core papers; write the preregistration; consent text; recruit 10 people and book slots | **[HUMAN]** |
+| Sat 24 – Sun 25 Oct | Read the 4 core papers; write the preregistration; recruit 10 people and book slots | **[HUMAN]** |
 | Sat 24 – Tue 27 Oct | App core: landmarker, features, detectors, calibration, segmenter, decoder, tests; Study Mode + recorder | Agent + review |
 | Tue 27 Oct | Commit the preregistration **before any session** | **[HUMAN]** |
 | Wed 28 Oct | Pilot with 1 person; fix protocol problems; note them under Deviations if they change the plan | **[HUMAN]** |

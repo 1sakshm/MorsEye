@@ -19,7 +19,7 @@ record of the AI's part.
 
 **Study materials and documents (drafted by the agent, reviewed by Saksham)**
 
-- The consent form (`docs/consent.md`) and the recruitment message (`docs/recruitment.md`).
+- The recruitment message (`docs/recruitment.md`), kept in case volunteers are wanted later.
 - The two reading passages and the selection of 15 phrases used in the study (`src/study/protocol.ts`).
 - The preregistration (`docs/preregistration.md`): the wording of the research questions and hypotheses, and the
   analysis decisions in it, including the H2 non-inferiority margin, the exclusion and stopping rules, the Holm

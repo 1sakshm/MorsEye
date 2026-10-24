@@ -43,7 +43,7 @@ export class Recorder {
     this.lines.push(JSON.stringify(e));
   }
 
-  /** Start local video recording (only with the separate video consent). */
+  /** Start local video recording (only when the setup screen's video box is ticked). */
   startVideo(stream: MediaStream): void {
     const type = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find((t) =>
       MediaRecorder.isTypeSupported(t),

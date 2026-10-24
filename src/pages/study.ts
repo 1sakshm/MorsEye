@@ -1,7 +1,6 @@
 import '../site/layout';
 import '../styles/try.css';
 import '../styles/study.css';
-import consentMd from '../../docs/consent.md?raw';
 import { fitAll } from '../app/calibrate';
 import { Engine, STATUS_TEXT, type EngineFrame } from '../app/engine';
 import { CAMERA_HELP, CameraError } from '../capture/camera';
@@ -10,7 +9,6 @@ import { mulberry32 } from '../detect/calibration';
 import { makeDetector, type Detector, type DetectorId } from '../detect/detector';
 import { DEFAULT_TIMING, segment, validTiming, type Timing } from '../segment/segmenter';
 import type { FrameFeatures } from '../types';
-import { renderMarkdown } from '../site/markdown';
 import { calibrationBlock, studyA, studyBPhrases, type Block } from '../study/protocol';
 import { download, Recorder } from '../study/recorder';
 import { LOG_SCHEMA, type BlockName, type HeaderLine, type TlxLine } from '../study/schema';
@@ -19,7 +17,7 @@ const APP_VERSION = '2.0.0';
 const LEAD_IN_MS = 3000;
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
-const screens = ['s-setup', 's-consent', 's-check', 's-intro', 's-tlx', 's-end'];
+const screens = ['s-setup', 's-check', 's-intro', 's-tlx', 's-end'];
 function show(id: string | null): void {
   screens.forEach((s) => ($(s).hidden = s !== id));
   $('stage').hidden = id !== null;
@@ -39,6 +37,8 @@ interface Setup {
   detector: DetectorId;
   timing: Timing;
   setup: HeaderLine['setup'];
+  /** Record a local video of the face for labelling. */
+  video: boolean;
 }
 
 const form = $<HTMLFormElement>('setup-form');
@@ -105,35 +105,12 @@ form.addEventListener('submit', (e) => {
       distance_cm: v('distance_cm'),
       notes: (form.elements.namedItem('notes') as HTMLTextAreaElement).value.trim(),
     },
-  };
-  show('s-consent');
-});
-
-// ---------- 2. Consent ----------
-
-$('consent-text').innerHTML = renderMarkdown(consentMd, 0);
-let consent: HeaderLine['consent'];
-$<HTMLFormElement>('consent-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const f = e.target as HTMLFormElement;
-  const data = (f.elements.namedItem('data') as HTMLInputElement).checked;
-  if (!data) {
-    $('consent-error').textContent = 'The first box must be ticked to take part.';
-    return;
-  }
-  consent = {
-    data: true,
-    video: (f.elements.namedItem('video') as HTMLInputElement).checked,
-    consented_at: new Date().toISOString(),
+    video: (form.elements.namedItem('video') as HTMLInputElement).checked,
   };
   void cameraCheck();
 });
-$('consent-decline').addEventListener('click', () => {
-  // Nothing has been recorded yet; just reset.
-  location.reload();
-});
 
-// ---------- 3. Camera check ----------
+// ---------- 2. Camera check ----------
 
 const video = $<HTMLVideoElement>('video');
 const engine = new Engine(video);
@@ -142,7 +119,7 @@ let clockSeen: HeaderLine['clock'] = 'callback';
 
 async function cameraCheck(): Promise<void> {
   show('s-check');
-  $('check-video').textContent = consent.video ? 'yes (consented)' : 'no';
+  $('check-video').textContent = setup.video ? 'yes' : 'no';
   try {
     await engine.start();
   } catch (e) {
@@ -165,7 +142,7 @@ async function cameraCheck(): Promise<void> {
 
 $('check-go').addEventListener('click', () => void run());
 
-// ---------- 4–7. Running the protocol ----------
+// ---------- 3–6. Running the protocol ----------
 
 function header(): HeaderLine {
   return {
@@ -182,7 +159,8 @@ function header(): HeaderLine {
     video_width: video.videoWidth,
     video_height: video.videoHeight,
     setup: setup.setup,
-    consent,
+    // The field name is kept so old and new logs share one format; there is no consent screen since 25 Oct 2026.
+    consent: { data: true, video: setup.video, consented_at: new Date().toISOString() },
     timing: setup.timing,
     video_start_ms: null,
   };
@@ -192,7 +170,7 @@ let aborted = false;
 
 async function run(): Promise<void> {
   recorder = new Recorder(header());
-  if (consent.video && engine.stream) recorder.startVideo(engine.stream);
+  if (setup.video && engine.stream) recorder.startVideo(engine.stream);
   engine.onFrame((f) => recorder.frame(f));
   let fpsTimer = window.setInterval(
     () =>
