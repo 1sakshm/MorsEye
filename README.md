@@ -15,16 +15,16 @@ into Morse code: a short closure is a dot, a longer one a dash, and a very long 
 filtered out by a minimum-duration band, and a 20-second calibration fits the detector to your eyes. After setup it
 needs no keyboard or mouse: delete, pause and (optionally) space and speech are all eye gestures.
 
-**Status:** research prototype. Study A is in progress; results will be reported here from
-`analysis/out/summary.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
+**Status:** research prototype. Data collection stopped after one detection session (25 Oct 2026); results
+from the public-video analysis will be reported here from `analysis/out/summary.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
 
 ## Key results
 
-Pending (November 2026). The study is a preregistered single-person case study (the author, over many sessions)
-plus a check on a public blink-video dataset ([`docs/preregistration.md`](docs/preregistration.md)). This section
-will hold three numbers, each with a 95% CI across sessions:
-deliberate-closure F1 with and without calibration, false triggers per minute while reading, and characters per
-minute after three practice blocks.
+Pending. The study was preregistered as a single-person case study (the author, over many sessions) plus a check
+on a public blink-video dataset ([`docs/preregistration.md`](docs/preregistration.md)). Data collection stopped
+after one session, which has cue-response types but no closure times, so the detection tests on the author's data
+and the typing study were not run (see the Deviations section). This section will hold the public-video result:
+false triggers per minute on other people's natural blinks, with and without the reject window.
 
 ## How it works
 

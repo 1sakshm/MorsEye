@@ -55,8 +55,8 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 - **How was the data acquired?** In the MorsEye app's Study Mode (`/study`), in the browser, on the
   participant's or experimenter's laptop. All processing ran on the device; nothing was uploaded.
   The experimenter downloaded the log at the end of each session.
-- **Who were the participants?** [HUMAN] __ able-bodied adult volunteers (18+), recruited as a
-  convenience sample (friends/classmates). Age ranges: [HUMAN]. Glasses: [HUMAN] __ of N.
+- **Who were the participants?** One able-bodied adult, the author (P01), in one Study A session on
+  24 Oct 2026. Data collection stopped after that session (see the preregistration's Deviations). Glasses: [HUMAN].
   **The system has not been tested with people with motor impairments, and no clinical claim is made.**
 - **Devices and setting.** [HUMAN] Camera models: __. Measured frame rates: __–__ fps (median __).
   Distance about 50–70 cm. Lighting: [HUMAN] (normal room light; describe any variation).

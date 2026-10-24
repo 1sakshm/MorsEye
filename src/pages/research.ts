@@ -996,7 +996,7 @@ function noData(): void {
   const status = byId('results-status');
   if (status) {
     status.textContent =
-      'Results are not available yet. Study A is in progress; results are expected in November 2026.';
+      'Results are not available yet. Data collection stopped after one session; the public-video results are still to come.';
   }
   for (const id of ['dur-chart', 'det-chart', 'kshot-chart', 'text-cpm', 'fps-chart']) {
     const h = byId(id);
@@ -1017,7 +1017,7 @@ loadResults().then((r) => {
   const status = byId('results-status');
   if (status) {
     status.textContent = r.synthetic
-      ? 'The study has not been analysed yet. Until it is, these charts show synthetic data, so that the analysis and this page can be tested end to end.'
+      ? 'These charts show synthetic data, so that the analysis and this page can be tested end to end. The planned multi-session study was not completed (one session recorded), so no real results of this kind exist.'
       : `Study A: N = ${r.n_participants} ${unitWord(r, r.n_participants)}. Generated ${new Date(r.generated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} from the logged data by the analysis scripts.`;
   }
   const banner = byId('synthetic-banner');

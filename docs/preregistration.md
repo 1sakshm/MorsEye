@@ -207,3 +207,12 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
   towards the 8-session stopping rule. Its types are kept in `P01_A_cue_types.csv` (one row per cue; 1 of 84
   cues had no response) and may be reported only as an exploratory cue-versus-response table. Sessions 2 onward
   are labelled with real onsets and offsets.
+- `2026-10-25` — **Data collection ends after P01 session 1** (the author's decision). No further detection
+  sessions and no typing sessions (Part B) will be recorded. Consequences:
+  - Session 1 has no labelled closure times (entry above), so no session qualifies for Part A. **H1, H2 and H3a
+    are not tested** and are reported as not tested; the 6-session minimum in section 4 is not met.
+  - Part B is not run: RQ3 is not answered and **H5 is not reported**. H4 (exploratory) is not run on own data.
+  - What remains: **Part C** as planned (Eyeblink8 as a secondary, not blind analysis; H3b confirmatory only if
+    the Researcher's Night dataset is received before any of it is analysed), and session 1 as an exploratory
+    single-session case: the cue-versus-response table, the measured frame rate, and detector output on the
+    unlabelled recording, all marked exploratory.
