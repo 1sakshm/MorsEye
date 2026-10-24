@@ -537,6 +537,10 @@ $('export').addEventListener('click', () => {
     $('labeller').focus();
     return;
   }
+  if (!labels.length) {
+    alertInline('No events marked yet. Mark each closure with [ and ], then give it a type (1–5).');
+    return;
+  }
   const untyped = labels.filter((l) => !l.type).length;
   if (untyped) {
     alertInline(
