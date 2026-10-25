@@ -1,7 +1,7 @@
 # Datasheet: MorsEye blink-closure features
 
 Structure follows Gebru et al., _Datasheets for Datasets_ (2021). Filled in on 25 Oct 2026 from the session log, its setup
-notes and `analysis/out/results.json`; Saksham checks it. Fields still marked **[HUMAN]** need Saksham's answer.
+notes and `analysis/out/results.json`; Saksham checks it.
 
 Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 
@@ -14,7 +14,7 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
   multi-session single-person study; data collection stopped after the first session (see the preregistration's
   Deviations), so the dataset is that one session.
 - **Who created it, and on whose behalf?** Saksham Sharma, BITS Pilani, for the MorsEye research project.
-- **Who funded it?** [HUMAN] (for example "No external funding.")
+- **Who funded it?** No external funding.
 
 ## Composition
 
@@ -90,5 +90,5 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 
 ## Maintenance
 
-- **Maintainer:** Saksham Sharma (contact through the GitHub repository).
+- **Maintainer:** Saksham Sharma, 2025eb01657@online.bits-pilani.ac.in.
 - **Errata and updates:** recorded in this file with dates.

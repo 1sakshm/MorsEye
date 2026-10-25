@@ -5,8 +5,8 @@
 %%    (after `python -m analysis.public_blinks`). Do not edit them.
 %%  - Every number in the text comes from analysis/out/results.json via \CS{key} (tables/case_numbers.tex).
 %%  - No "state of the art" claims and no claims about users with disabilities.
-%%  - [HUMAN] marks what only Saksham can do: read every cited paper and replace its placeholder BibTeX,
-%%    finalise title, affiliation, CCS concepts and keywords, and review every section.
+%%  - [HUMAN] marks what only Saksham can do: finalise the title, the campus city, and the CCS concepts and
+%%    keywords.
 
 \documentclass[sigconf,nonacm]{acmart}
 
@@ -27,7 +27,8 @@
 \affiliation{%
   \institution{BITS Pilani}
   \country{India}}
-% [HUMAN] Check the affiliation; add your campus \city{...} and, if you want, an \email{...}.
+\email{2025eb01657@online.bits-pilani.ac.in}
+% [HUMAN] Add your campus \city{...} if you want one.
 
 \begin{abstract}
 Blink-based text entry uses the eyelid as a key, but the eyelid also closes on its own many times a minute.
@@ -75,9 +76,8 @@ completed (Section~\ref{sec:plan}).
 
 %% ---------------------------------------------------------------------------------------------
 \section{Related Work}
-% [HUMAN] Read each paper before keeping its
-% citation, check every sentence against it, replace the placeholder BibTeX, and add the recent (2020-2026)
-% webcam blink-typing systems you find, saying how this work differs from each.
+% Every cited paper was read by Saksham (25 Oct 2026). Optional: add recent (2020-2026) webcam blink-typing
+% systems, saying how this work differs from each.
 
 Soukupov\'{a} and \v{C}ech~\cite{soukupova2016} proposed the eye aspect ratio (EAR), computed from six landmarks
 around each eye, as a per-frame measure of eye opening for real-time blink detection. Grauman et

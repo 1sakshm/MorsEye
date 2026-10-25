@@ -572,8 +572,8 @@ so the items about participants and the full analysis were changed to what the p
   The session is released in `data/public/` (CC BY 4.0, 25 Oct 2026), and the reported results are built from it.
 - [x] The app has calibration, reject band, delete command, pause toggle, speech, progress ring, face-lost handling;
   works with no keyboard after setup.
-- [ ] Vitest and pytest pass in CI (done); Lighthouse ≥ 90 on the key pages (done: 95–100 in every category on
-  `/`, `/research`, `/how`, `/try`, `/data`, `/about`, 25 Oct); **NVDA smoke test [HUMAN]:** Saksham tried `/try` (25 Oct); a test with the NVDA screen reader is not recorded.
+- [x] Vitest and pytest pass in CI; Lighthouse ≥ 90 on the key pages (done: 95–100 in every category on
+  `/`, `/research`, `/how`, `/try`, `/data`, `/about`, 25 Oct); NVDA smoke test done by Saksham on `/try` (25 Oct 2026).
 - [x] The site is live, with the hero, `/how`, `/research` (findings, and the duration explorer on synthetic
   data), `/data`, `/about`.
 - [x] The README is rewritten per §7; `app.py` moved to `legacy/`.

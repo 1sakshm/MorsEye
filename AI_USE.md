@@ -98,6 +98,7 @@ were removed at Saksham's request.
   and to stop data collection after one session (24–25 Oct 2026).
 - Read the paper draft, tried the app at `/try`, and decided to publish the session data, not to request the
   Researcher's Night dataset, and to keep all AI disclosure in this file (25 Oct 2026).
+- Read every paper the draft cites, tested `/try` with the NVDA screen reader, and reviewed this file (25 Oct 2026).
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.
 
