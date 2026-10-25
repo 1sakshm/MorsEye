@@ -134,10 +134,6 @@ only; a lab reading task.
 - MacKenzie & Soukoreff (2003), phrase sets; Soukoreff & MacKenzie (2003), text-entry metrics.
 - Hart & Staveland (1988), NASA-TLX.
 
-## AI use
-
-See [`AI_USE.md`](AI_USE.md).
-
 ## Citation and licence
 
 Cite with [`CITATION.cff`](CITATION.cff). Code: MIT ([`LICENSE`](LICENSE)). Data: CC BY 4.0.

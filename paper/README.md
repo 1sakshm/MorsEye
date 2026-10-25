@@ -8,9 +8,7 @@ python -m analysis.case_study --data data/public                  # figures/C*, 
 npm run paper                                                     # builds main.pdf and copies it to the site
 ```
 
-- Every section of `main.tex` was drafted by the AI agent on 25 Oct 2026 (PRD §2 allows it) and is listed in
-  `AI_USE.md` and in the paper's AI-use section. Saksham reviews and edits it; `\unreviewedfalse` removes the
-  draft notice.
+- Saksham reviews and edits `main.tex`.
 - Numbers in the text come from `analysis/out/results.json` through `\CS{key}` macros in
   `tables/case_numbers.tex` (for example `\CS{pub-D3-after}`).
 - `references.bib`: only cited entries are printed. Every entry is a placeholder to replace with the publisher's

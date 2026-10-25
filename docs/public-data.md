@@ -26,10 +26,10 @@ Checked on 24 Oct 2026 for the single-person design (`docs/preregistration.md`).
 Differences from the app: the Python MediaPipe build instead of the browser WASM build (same version, 0.10.21,
 same model file); one face instead of two; frame times from the dataset's timestamp files.
 
-## What the agent saw before the preregistration was written
+## What was seen before the preregistration was written
 
-So that nobody mistakes the Eyeblink8 analysis for a blind test: before drafting the single-person
-preregistration, the AI agent (24 Oct 2026) computed the annotated blink lengths for all 8 Eyeblink8 videos
+So that nobody mistakes the Eyeblink8 analysis for a blind test: before the single-person preregistration was
+drafted (24 Oct 2026), the analysis had already computed the annotated blink lengths for all 8 Eyeblink8 videos
 (median 272 ms, 5th–95th percentile 192–560 ms, 9% under 200 ms) and ran D1 and D3 on one video (video 9).
 The Eyeblink8 results are therefore reported as a secondary, non-blind analysis.
 

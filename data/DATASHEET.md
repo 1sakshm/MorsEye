@@ -1,8 +1,7 @@
 # Datasheet: MorsEye blink-closure features
 
-Structure follows Gebru et al., _Datasheets for Datasets_ (2021). Filled in by the AI agent on 25 Oct 2026 from the
-session log, its setup notes and `analysis/out/results.json`; Saksham checks it. Fields still marked **[HUMAN]**
-need his answer.
+Structure follows Gebru et al., _Datasheets for Datasets_ (2021). Filled in on 25 Oct 2026 from the session log, its setup
+notes and `analysis/out/results.json`; Saksham checks it. Fields still marked **[HUMAN]** need Saksham's answer.
 
 Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 

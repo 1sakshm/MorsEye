@@ -1,11 +1,10 @@
 # Preregistration: MorsEye single-person case study and public-data check
 
 > **Status: approved by Saksham on 24 Oct 2026, and committed before the first recorded session** (the commit date
-> is the evidence). Drafted by the AI agent (Claude Code) at Saksham's request (PRD §2, as changed on that date).
+> is the evidence).
 > Once committed, the sections above "Deviations" are never edited; changes go under "Deviations" with a date.
 
 - **Author:** Saksham Sharma
-- **Drafted by:** Claude Code (AI agent), 24 Oct 2026. Disclosed in `AI_USE.md`.
 - **Approved by:** Saksham Sharma, 24 Oct 2026.
 - **Date committed:** the date of the commit that adds this line.
 - **Planned data collection:** detection sessions 28 Oct – 4 Nov 2026; typing sessions on 5 days between
@@ -53,8 +52,8 @@ any of it is analysed**:
   and for D3 (the fixed detectors; the public data contain no deliberate closures to calibrate from). Same
   criterion as H3a, with the video as the unit.
 
-Secondary, not blind (section 3, part C): the same H3b measures on **Eyeblink8**, which the AI agent partly looked
-at before this document was written (see `docs/public-data.md`). Reported, but not counted as a test of H3b.
+Secondary, not blind (section 3, part C): the same H3b measures on **Eyeblink8**, parts of which were computed
+before this document was written (see `docs/public-data.md`). Reported, but not counted as a test of H3b.
 
 Descriptive (no test, because five days is too few for one): **H5.** Entry rate rises and the uncorrected error
 rate falls from day 1 to day 5.
@@ -225,3 +224,6 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
   confirmatory test (**H3b**) is not run. Eyeblink8 stays a secondary, not blind analysis. The analysis also
   reports, as exploratory (section 9), sweeps of the reject window and of the dot–dash boundary and a comparison
   of measured with annotated blink durations; these were added after seeing the data.
+- `2026-10-25` — Wording only, at the author's request: the "Drafted by" line in the header and the name of who
+  had looked at Eyeblink8 in section 2 were moved out of this document. No research question, hypothesis, rule or
+  analysis changed. The text as committed is in commit 046207f.

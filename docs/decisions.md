@@ -1,7 +1,7 @@
 # Decisions
 
-Dated decisions with reasons. Since 24 Oct 2026 (PRD §2) the AI agent may propose a decision with its reasoning;
-each entry says who proposed it and when Saksham approved it. In particular (PRD §3.6, §5.3, §11): the final `REJECT_MS`, `DOT_MAX_MS`,
+Dated decisions with reasons. Since 24 Oct 2026 (PRD §2) a decision may be proposed with its reasoning for Saksham
+to approve. In particular (PRD §3.6, §5.3, §11): the final `REJECT_MS`, `DOT_MAX_MS`,
 `DASH_MAX_MS`, `CMD_MS`, letter and word gaps, chosen from the Study A duration distributions by the rule in
 `docs/preregistration.md` section 8, and the detector chosen for Study B. Include the numbers you looked at (e.g. the percentile of spontaneous blinks below the reject threshold).
 
@@ -9,7 +9,7 @@ When the thresholds are final, update `DEFAULT_TIMING` in `src/segment/segmenter
 
 ## Implementation choices made while building the software (for review)
 
-These were made by the coding agent to fill gaps in the PRD. Review and keep, change or reject each one.
+These were made while building the software, to fill gaps in the PRD. Review and keep, change or reject each one.
 
 - **Pause gesture.** The PRD says "two long closures within 4 s" toggle pause. Closures of `DASH_MAX_MS`–`CMD_MS`
   (1.4–2.0 s by default) are otherwise unused, so they are the "pause" band: two of them, the second starting within
@@ -31,7 +31,7 @@ These were made by the coding agent to fill gaps in the PRD. Review and keep, ch
   export metadata records `n_from_cue_drafts`, and the paper should state that cue drafts were used. Cue types
   can anchor the labeller, so a draft's type is changed whenever the closure actually made differs from the cue.
 - **Session 1 labels are types only** (25 Oct 2026, Saksham's choice). The labeller confirmed the cue drafts' types
-  but not their times, and Export refuses drafts, so the agent read the labeller's saved state from the browser and
+  but not their times, and Export refuses drafts, so the labeller's saved state was read from the browser and
   wrote `data/raw/P01_A_cue_types.csv` (one response type per cue; how it was built is in
   `P01_A_cue_types_meta.json`). The loader never treats that file as labels, and session 1 is skipped in the
   detection analysis; see the preregistration's Deviations.

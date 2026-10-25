@@ -1,5 +1,5 @@
 /**
- * A deliberately small Markdown renderer for trusted repository files (AI_USE.md).
+ * A deliberately small Markdown renderer for trusted repository files.
  * It escapes all HTML first, then supports headings, paragraphs, lists, block quotes,
  * fenced code, inline code, bold, italic and links (http/https/mailto/relative only).
  * Tables are shown as preformatted text.
