@@ -1,0 +1,12 @@
+{
+  "log": "P01_A_2026-10-24",
+  "kind": "cue response types only; no closure times",
+  "labeller": "P01s",
+  "n_cues": 84,
+  "n_no_response": 1,
+  "n_cues_with_conflicting_events": 1,
+  "rule": "one row per cue; response_type is the type of the labeller's own [ ]-marked event overlapping the cue window if there is one, else the type of the cue draft the labeller kept (deleted draft = none)",
+  "labelling_seconds": 1283,
+  "recovered_from": "the labeller's saved browser state (Arc, morseye.pages.dev localStorage), because Export is blocked while drafts remain",
+  "written_at": "2026-10-24T23:23:35+00:00"
+}

@@ -54,6 +54,10 @@ propose the final thresholds.
   ethics and data, the AI-use statement and conclusion). The related-work sentences come from the agent's general
   knowledge of those papers and must be checked against the papers themselves.
 - It rewrote the site's results text (home page, `/research`) and the README results to match.
+- After Saksham read the draft, it added the exploratory sweeps (reject window, dot–dash boundary), the
+  measured-versus-annotated comparison, the calibration table, the example trace and figures C4–C7 to the analysis,
+  the paper and the site; it prepared the data release in `data/public/` and filled in the datasheet; and it
+  deleted the old Vercel project at his request.
 
 ## What Saksham did
 
@@ -63,6 +67,8 @@ propose the final thresholds.
 - Checked the response type of every cue in session 1 in the labelling tool.
 - Decided to drop the ethics review, the lab notebook and the consent form, to finalise session 1 with types only,
   and to stop data collection after one session (24–25 Oct 2026).
+- Read the paper draft, tried the app at `/try`, and decided to publish the session data and not to request the
+  Researcher's Night dataset (25 Oct 2026).
 - Requests the Researcher's Night dataset.
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.

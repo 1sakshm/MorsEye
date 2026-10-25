@@ -1,10 +1,8 @@
 # Datasheet: MorsEye blink-closure features
 
-Structure follows Gebru et al., *Datasheets for Datasets* (2021). Fields marked **[HUMAN]** are filled in
-once data collection is complete, from the session logs and their setup notes (the AI agent may fill them from
-those sources; Saksham checks them). Numbers should be
-copied from `analysis/out/summary.json` (for example `study_a.n_participants`,
-`study_a.n_labels_total`, `study_a.participants[].fps`) so they match the paper.
+Structure follows Gebru et al., _Datasheets for Datasets_ (2021). Filled in by the AI agent on 25 Oct 2026 from the
+session log, its setup notes and `analysis/out/results.json`; Saksham checks it. Fields still marked **[HUMAN]**
+need his answer.
 
 Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 
@@ -12,93 +10,86 @@ Licence: **CC BY 4.0** (see `LICENSE-DATA`). Code is MIT (see `LICENSE`).
 
 ## Motivation
 
-- **For what purpose was the dataset created?**
-  To measure how well a consumer webcam can separate *deliberate* eye closures (used as Morse "key
-  presses") from *spontaneous* blinks, how much a few seconds of per-user calibration helps, and how fast
-  people can type with blink-based Morse input (PRD §3).
-- **Who created it, and on whose behalf?** [HUMAN] Saksham Sharma, [institution].
-- **Who funded it?** [HUMAN] (e.g. "No external funding.")
+- **For what purpose was the dataset created?** To measure how well a consumer webcam can separate _deliberate_
+  eye closures (used as Morse "key presses") from _spontaneous_ blinks. It was meant to be part of a preregistered
+  multi-session single-person study; data collection stopped after the first session (see the preregistration's
+  Deviations), so the dataset is that one session.
+- **Who created it, and on whose behalf?** Saksham Sharma, BITS Pilani, for the MorsEye research project.
+- **Who funded it?** [HUMAN] (for example "No external funding.")
 
 ## Composition
 
-- **What do the instances represent?** One Study A or Study B session of one participant: per-frame
-  features from MediaPipe FaceLandmarker plus event logs, and (Study A) human labels of every eye closure.
-- **How many instances?** [HUMAN] N = __ participants in Study A, __ in Study B; __ labelled closures
-  (spontaneous __, deliberate short __, deliberate long __, wink-L __, wink-R __).
+- **What do the instances represent?** One Study A session of one participant: per-frame features from MediaPipe
+  FaceLandmarker, block and cue events, and the participant's check of the response type to each cue.
+- **How many instances?** One session (P01, session 1): about 9.6 minutes, 84 cues (26 short, 26 long, 16 left
+  wink, 16 right wink).
 - **What does each instance contain?**
-  - `P07_A_<date>.jsonl`: `morseye-log/1` log (schema: `src/study/schema.ts`). A header (participant ID,
-    session, seed, measured setup, consent flags, segmenter timing), then per frame: timestamp (ms),
-    face found, EAR left/right, `eyeBlinkLeft/Right` blendshape scores, head yaw/pitch/roll, number of
-    faces, and the 12 eye landmark points (6 per eye, normalised x/y). Block, cue and fps lines.
-  - `P07_A_labels.csv`: `onset_ms, offset_ms, type, labeller, labelled_at`; type is one of
-    `spontaneous`, `short`, `long`, `wink-L`, `wink-R`.
-  - `P07_A_labels_relabel.csv` (two participants): the second labelling pass used for self-agreement.
-  - `P07_B_<date>.jsonl`: Study B log with phrase, decoder-action and NASA-TLX lines.
-- **What is NOT included?** No images, no video, no audio, no face landmarks other than the 12 eye
-  points, no names, no contact details. Participant IDs are not linked to identities anywhere in the
-  repository; the only ID-to-name mapping, if any, is kept offline on paper.
-- **Is there a label or target?** Yes: the human-labelled closure onsets/offsets and types (Study A).
-  Labels were made by the experimenter (the author), which is a known source of bias; self-agreement
-  is reported (Cohen's kappa [HUMAN] __, mean absolute onset difference [HUMAN] __ ms).
-- **Is any information missing?** Frames where no face was found are logged with `face: false`. Logs with
-  more than 5% missing frames were excluded by `analysis/load.py`. [HUMAN] List any excluded sessions and why.
-- **Recommended splits?** None. Analyses are per participant; calibration uses the calibration block only.
-- **Errors, noise or redundancies?** Label timing is limited by the video frame rate (about one frame,
-  33 ms at 30 fps). Feature values depend on MediaPipe version `@mediapipe/tasks-vision` 0.10.21
-  and model `face_landmarker.task` (float16, v1).
+  - `P01_A_2026-10-24.jsonl`: the `morseye-log/1` log exactly as downloaded from Study Mode (schema:
+    `src/study/schema.ts`; SHA-256 `d30cf5ec26c1dd4e027246127f8b2830cfa77eb35e0584c22b1c66951d1af9b8`). A header
+    (participant ID, session, seed, setup notes, camera label, segmenter timing, and a `consent` field kept for
+    format compatibility), then per frame: timestamp (ms), face found, EAR left/right, `eyeBlinkLeft/Right`
+    blendshape scores, head yaw/pitch/roll, number of faces, and the 12 eye landmark points (6 per eye, normalised
+    x/y). Block, cue and measured-fps lines.
+  - `P01_A_cue_types.csv`: one row per cue: `cue_ms, cue, block, response_type, labeller, labelled_at`.
+    `response_type` is the type of closure the participant made in response (`short`, `long`, `wink-L`,
+    `wink-R`, or `none`), as checked by the participant in the labelling tool.
+  - `P01_A_cue_types_meta.json`: how the CSV was built.
+- **What is NOT included?** No images, video or audio; no face landmarks other than the 12 eye points; no names or
+  contact details. **No closure onset/offset labels**: the session was labelled with response types only.
+- **Is there a label or target?** Only the per-cue response types above. They are not closure times, so the
+  analysis never uses them as ground truth for detection; closure durations reported in the paper are measured by
+  the detectors.
+- **Is any information missing?** Frames where no face was found are logged with `face: false` (0.3% of frames).
+  0.06% of frames are missing, judged against the local frame interval (`analysis/load.py`).
+- **Recommended splits?** None. The calibration block is the only block meant for fitting thresholds.
+- **Errors, noise or redundancies?** The camera did not deliver 30 fps: about 16.5 fps in the calibration and cued
+  blocks, dropping to about 10 fps for the last minute of the first reading block and the whole mixed block (median
+  15.0 fps). The response types were checked against placeholder cue windows, not exact closure times. Feature
+  values depend on `@mediapipe/tasks-vision` 0.10.21 and model `face_landmarker.task` (float16, v1).
 - **Is the dataset self-contained?** Yes.
-- **Confidential or sensitive data?** No raw images or video. Eye-landmark and blink timing data are
+- **Confidential or sensitive data?** No images or video. Eye-landmark and blink timing data are
   biometric-adjacent; the only participant is the author, who recorded and publishes the data.
 
 ## Collection process
 
-- **How was the data acquired?** In the MorsEye app's Study Mode (`/study`), in the browser, on the
-  participant's or experimenter's laptop. All processing ran on the device; nothing was uploaded.
-  The experimenter downloaded the log at the end of each session.
-- **Who were the participants?** One able-bodied adult, the author (P01), in one Study A session on
-  24 Oct 2026. Data collection stopped after that session (see the preregistration's Deviations). Glasses: [HUMAN].
+- **How was the data acquired?** In the MorsEye app's Study Mode (`/study`), in the browser, on the author's
+  laptop. All processing ran on the device; nothing was uploaded. The log was downloaded at the end of the session.
+- **Who were the participants?** One able-bodied adult, the author (P01), aged 18–24, no glasses.
   **The system has not been tested with people with motor impairments, and no clinical claim is made.**
-- **Devices and setting.** [HUMAN] Camera models: __. Measured frame rates: __–__ fps (median __).
-  Distance about 50–70 cm. Lighting: [HUMAN] (normal room light; describe any variation).
-- **Over what timeframe?** [HUMAN] Study A sessions __ to __ 2026; Study B __ to __.
-- **Protocol.** Study A (about 12 minutes): calibration block (10 cued short, 10 cued long
-  closures, 15 s eyes open); spontaneous block (3 min reading); deliberate block (40 randomised cues
-  SHORT / LONG / WINK-L / WINK-R, 2–4 s apart); mixed block (3 min reading with corner cues). Study B
-  (about 20 minutes): 15 MacKenzie & Soukoreff (2003) phrases in 3 blocks of 5, raw NASA-TLX after
-  each block. Cue schedules are generated from the seed stored in each log header.
-- **Ethical review.** None was sought: the only participant is the author, who recorded himself. The public
-  comparison videos (Eyeblink8) are used under their published licence and are not part of this dataset.
-- **Consent.** No consent form was used, because the only participant is the author. The log header keeps a
-  `consent` field for format compatibility; its `video` flag says whether a local video was recorded.
+- **Devices and setting.** Built-in 1080p laptop camera (reported as "USB2.0 FHD UVC WebCam"), 1280 × 720, about
+  45 cm away, front lighting.
+- **Over what timeframe?** One session, 24 Oct 2026.
+- **Protocol.** Calibration block (10 cued short, 10 cued long closures, 15 s eyes open); spontaneous block (3 min
+  reading, no cues); deliberate block (40 randomised cues SHORT / LONG / WINK-L / WINK-R, 2–4 s apart); mixed block
+  (3 min reading with corner cues). The cue schedule is generated from the seed in the log header.
+- **Ethical review.** None was sought: the only participant is the author. The public comparison videos
+  (Eyeblink8) are used under their published licence and are not part of this dataset.
+- **Consent.** No consent form was used, because the only participant is the author.
 
 ## Preprocessing, cleaning and labelling
 
-- **Preprocessing.** None beyond what the app computes per frame. Video, where recorded for labelling,
-  is never part of the dataset. [HUMAN] Confirm video was deleted after labelling (date).
-- **Labelling.** Every closure was labelled by Saksham in the labelling tool (`/labeler`) from the local
-  video and the signal traces; cue-based candidates were shown but only human-confirmed events were
-  exported. Labelling time: [HUMAN] about __ minutes per participant. Two participants were re-labelled
-  about a week later to measure self-agreement.
-- **Is the raw data saved?** Raw video is never published. The per-frame features are the raw data
-  of this dataset.
+- **Preprocessing.** None beyond what the app computes per frame. The log is published unchanged.
+- **Labelling.** The author checked the response type of every cue in the labelling tool (`/labeler`) against
+  the local video, in about 21 minutes of active labelling. Cue drafts were imported with the cued type, and the
+  author changed the type wherever the response differed. Closure onsets and offsets were not marked.
+- **Is the raw data saved?** The local video used for checking stays on the author's laptop and is never
+  published. The per-frame features are the raw data of this dataset.
 
 ## Uses
 
-- **Used for:** the MorsEye paper (detector comparison, few-shot calibration, duration distributions,
-  text-entry evaluation); every number is regenerated by `python -m analysis.run --data data/public`.
-- **Other possible uses:** blink-detection benchmarks on consumer webcams; studies of blink-duration
-  distributions; teaching.
-- **Uses to avoid:** identifying or re-identifying people; any clinical or diagnostic claim; inferring
-  traits or states (fatigue, emotion, health) about the individual participants.
+- **Used for:** the MorsEye paper's exploratory single-session results; every number is regenerated by
+  `python -m analysis.case_study --data data/public`.
+- **Other possible uses:** examples of cued deliberate closures and winks on a consumer webcam at a low frame
+  rate; testing blink detectors and timing rules; teaching.
+- **Uses to avoid:** identifying or re-identifying people; any clinical or diagnostic claim; inferring traits or
+  states (fatigue, emotion, health) about the participant.
 
 ## Distribution
 
 - **How is it distributed?** In this repository under `data/public/`, licence CC BY 4.0.
-- **When?** [HUMAN] With the paper preprint.
+- **When?** 25 Oct 2026.
 
 ## Maintenance
 
-- **Maintainer:** [HUMAN] Saksham Sharma (contact through the GitHub repository).
-- **Withdrawal:** a participant who withdraws has their files removed from the repository and from any
-  later release; [HUMAN] describe how (and that git history is rewritten only for this purpose, if at all).
+- **Maintainer:** Saksham Sharma (contact through the GitHub repository).
 - **Errata and updates:** recorded in this file with dates.

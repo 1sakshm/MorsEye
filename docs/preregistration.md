@@ -221,3 +221,7 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
   block and the deliberate block, dropping to about 10 fps for the last minute of the spontaneous block and the
   whole mixed block (median per block: calibration 16.4, spontaneous 15.1, deliberate 16.4, mixed 10.3 fps). The
   earlier entry said "most of both reading blocks", which was wrong for the spontaneous block.
+- `2026-10-25` — The Researcher's Night dataset will not be requested (the author's decision), so the Part C
+  confirmatory test (**H3b**) is not run. Eyeblink8 stays a secondary, not blind analysis. The analysis also
+  reports, as exploratory (section 9), sweeps of the reject window and of the dot–dash boundary and a comparison
+  of measured with annotated blink durations; these were added after seeing the data.

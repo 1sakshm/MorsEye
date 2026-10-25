@@ -20,6 +20,8 @@ interface PublicDetector {
   wilcoxon_p: number;
   blink_recall: number;
   frac_closed_below_reject: number;
+  halving_reject_ms: number | null;
+  annotated_frac_below_halving: number | null;
 }
 
 interface Pct {
@@ -60,6 +62,16 @@ export interface CaseResults {
       }
     >;
     duration_pct: Record<string, Record<string, Pct | null>>;
+    dot_sweep: Record<
+      string,
+      {
+        n: number;
+        best_accuracy: number;
+        best_from_ms: number;
+        best_to_ms: number;
+        accuracy_at_default: number;
+      }
+    >;
   } | null;
 }
 
@@ -112,6 +124,9 @@ export function caseValues(r: CaseResults): Record<string, string> {
       v[`${d}afterCI`] = ci(x.ftpm);
       v[`${d}ratio`] = f(x.ratio_of_means, 2);
       v[`${d}belowReject`] = pctText(x.frac_closed_below_reject);
+      if (x.halving_reject_ms != null) v[`${d}halving`] = f(x.halving_reject_ms, 0);
+      if (x.annotated_frac_below_halving != null)
+        v[`${d}belowHalving`] = pctText(x.annotated_frac_below_halving);
     }
   }
   const s = r.session;
@@ -126,6 +141,14 @@ export function caseValues(r: CaseResults): Record<string, string> {
     v.sD3readBefore = f(s.reading.D3?.ftpm_no_reject);
     v.sD3readAfter = f(s.reading.D3?.ftpm);
     v.sD5correct = `${s.cue_response.D5?.correct ?? '–'} of ${s.cue_response.D5?.n ?? '–'}`;
+    const ds = s.dot_sweep?.D4;
+    if (ds) {
+      v.sDotBestFrom = f(ds.best_from_ms, 0);
+      v.sDotBestTo = f(ds.best_to_ms, 0);
+      v.sDotBest = pctText(ds.best_accuracy);
+      v.sDotDefault = pctText(ds.accuracy_at_default);
+      v.sDotN = String(ds.n);
+    }
     const short = s.cue_response.D4?.confusion.short;
     if (short) {
       v.sShortDash = String(short.dash ?? 0);

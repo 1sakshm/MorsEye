@@ -44,7 +44,9 @@ report what remains. On \CS{pubBlinks} annotated natural blinks of \CS{pubPeople
 dataset (Eyeblink8; secondary, not blind), a \CS{rejectMs}\,ms reject window cut false triggers from
 \CS{pub-D3-before} to \CS{pub-D3-after} per minute with a blendshape detector, but only from \CS{pub-D1-before}
 to \CS{pub-D1-after} with the eye aspect ratio. In the one recorded session (exploratory), the author's cued short
-closures mostly lasted longer than the \CS{dotMaxMs}\,ms dot limit, and winks closed both eyes as far as the
+closures mostly lasted longer than the \CS{dotMaxMs}\,ms dot limit (a boundary near
+\CS{s-D4-dotBestFrom}\,ms would have classified \CS{s-D4-dotBest} of short and long responses correctly, against
+\CS{s-D4-dotDefault}), and winks closed both eyes as far as the
 camera could tell.
 \end{abstract}
 
@@ -55,8 +57,8 @@ camera could tell.
 
 \ifunreviewed
 \noindent\fcolorbox{red}{white}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\color{red}\small
-\textbf{Draft.} Every section of this text was drafted by an AI agent (Claude Code) and has not yet been
-reviewed by the author. Every number is generated from the logged data by the analysis scripts.}}
+\textbf{Draft.} Every section of this text was drafted by an AI agent (Claude Code); the author has read it.
+Every number is generated from the logged data by the analysis scripts.}}
 \fi
 
 %% ---------------------------------------------------------------------------------------------
@@ -173,7 +175,8 @@ and summarised as the mean over videos with a 95\% percentile bootstrap CI (10,0
 
 This analysis is secondary and \emph{not blind}: before the preregistration was written, the AI agent that built
 the analysis had already computed the annotated blink durations and run both detectors on one of the videos. The
-blind version of this check, on the Researcher's Night dataset~\cite{fogelton2016}, has not been done.
+blind version of this check, on the Researcher's Night dataset~\cite{fogelton2016}, was not done: the author
+decided not to request that dataset.
 
 \paragraph{Results.} The annotated blinks lasted a median of \CS{pubBlink-median}\,ms (5th--95th percentile
 \CS{pubBlink-p5}--\CS{pubBlink-p95}\,ms); \CS{pubBelowReject} were shorter than \CS{rejectMs}\,ms.
@@ -184,12 +187,6 @@ Table~\ref{tab:public} and Fig.~\ref{fig:public} give false triggers per minute.
 for D1 and $\CS{pub-D3-p}$ for D3, the smallest possible with eight videos), but only D3 met the preregistered criterion of at least halving the rate. The
 four people are not a sample of a population, and the eight videos are not independent, so these intervals
 describe these recordings only.
-
-The difference between the detectors comes from how long each one measures a blink to be. D3 measured the
-detected blinks as a median of \CS{pub-D3-closedMedian}\,ms, and \CS{pub-D3-belowReject} fell under the reject
-window. D1 measured them as \CS{pub-D1-closedMedian}\,ms, and only \CS{pub-D1-belowReject} fell under it. The fixed
-EAR threshold registers the eye as closed for longer, so a reject window tuned for one signal does not transfer to
-the other.
 
 \begin{figure}[t]
   \centering
@@ -207,6 +204,67 @@ the other.
   \resizebox{\columnwidth}{!}{\input{tables/case_public.tex}}
 \end{table}
 
+\paragraph{Why the detectors differ.} The difference comes from how long each detector measures a blink to be
+(Fig.~\ref{fig:measured}). For blinks that both the annotation and the detector found, D3's closed period was a
+median \CS{pub-D3-diffMedianAbs}\,ms shorter than the annotated blink (interquartile range \CS{pub-D3-diffP25} to
+\CS{pub-D3-diffP75}\,ms), because its threshold of 0.5 is crossed only near the middle of the lid movement. D1's was
+a median \CS{pub-D1-diffMedianAbs}\,ms shorter, with a long tail of closures measured as much longer than the blink
+(\CS{pub-D1-diffP25} to \CS{pub-D1-diffP75}\,ms). Only \CS{pub-D3-matchedAnnBelow} of these annotated blinks lasted
+under \CS{rejectMs}\,ms, but \CS{pub-D3-matchedMeasBelow} of D3's measurements did, against
+\CS{pub-D1-matchedMeasBelow} of D1's. The reject window works on the measured duration, not the true one, so a
+window tuned for one signal does not transfer to the other.
+
+\paragraph{What the false triggers would type.} Table~\ref{tab:bands} shows how the segmenter would have used every
+closure the detectors found. With D1, natural blinks would have typed \CS{pub-D1-dot-perMin} dots,
+\CS{pub-D1-dash-perMin} dashes and \CS{pub-D1-backspace-perMin} deletions per minute (pooled over all videos): a
+user would lose a character about once a minute without touching anything. With D3, the same blinks typed
+\CS{pub-D3-dot-perMin} dots and \CS{pub-D3-dash-perMin} dashes per minute and no deletions.
+
+\paragraph{How long a window would be needed.} Sweeping the reject window after the fact
+(Fig.~\ref{fig:sweep}, left; exploratory) shows that D3 reaches half its no-window rate at \CS{pub-D3-halving}\,ms,
+while D1 needs \CS{pub-D1-halving}\,ms. A \CS{pub-D1-halving}\,ms window would cover \CS{pub-D1-belowHalving} of
+the annotated blinks, so with D1 the shortest deliberate closure would have to be longer than most natural blinks
+by a wide margin, which slows typing.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{C5_measured_vs_annotated}
+  \Description{Two scatter plots of measured closure duration against annotated blink duration, for D1 and D3, with the identity line and a dashed line at 200 ms. D3 points lie mostly below the identity line and many fall under 200 ms; D1 points scatter around the identity line with some far above it.}
+  \caption{Eyeblink8: measured closure against annotated blink length for matched blinks. The solid line is
+  equality; the dashed line is the \CS{rejectMs}\,ms reject window.}
+  \label{fig:measured}
+\end{figure}
+
+\begin{table}[t]
+  \caption{Eyeblink8: what the segmenter would do with every detected closure, pooled over all videos: count
+  (per minute). Every closure here is a natural blink or noise, so everything except ``reject'' is a false
+  trigger.}
+  \label{tab:bands}
+  \small
+  \resizebox{\columnwidth}{!}{\input{tables/case_bands.tex}}
+\end{table}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{C4_reject_sweep}
+  \Description{Two line plots of false triggers per minute against reject window length from 0 to 600 ms. Left, Eyeblink8: D3 falls steeply between 100 and 250 ms; D1 falls slowly. Dotted lines mark half of each no-window rate. Right, session 1 reading block: all four detectors fall steeply between 90 and 210 ms; D2 and D3 reach zero.}
+  \caption{False triggers per minute against the reject window length (exploratory sweep, after seeing the
+  data). Left: Eyeblink8, mean over videos; dotted lines mark half of each detector's rate without a window.
+  Right: session 1, reading block without cues. The dashed line is the default \CS{rejectMs}\,ms.}
+  \label{fig:sweep}
+\end{figure*}
+
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.66\textwidth]{C2_durations}
+  \Description{Histogram of closure durations from 0 to 2000 ms. Eyeblink8 natural blinks cluster around 200 to 350 ms. Session 1 short responses, measured by D4, cluster around 600 to 900 ms, mostly to the right of the 600 ms dot-dash line. Long responses spread from about 700 to 1400 ms.}
+  \caption{Closure durations against the default segmenter bands: annotated natural blinks of other people
+  (Eyeblink8) and the author's short and long responses in session 1, as measured by D4 (not labelled).}
+  \label{fig:durations}
+\end{figure*}
+
 %% ---------------------------------------------------------------------------------------------
 \section{One Recorded Session (Exploratory)}\label{sec:session}
 
@@ -221,6 +279,31 @@ the app.
 Everything in this section comes from one session of one person, without confidence intervals, and is
 exploratory. Closure durations here are \emph{measured by the detectors}, not labelled, so they inherit each
 detector's measurement error (Section~\ref{sec:public}).
+
+\paragraph{Calibration.} The calibrated detectors were fitted from the \CS{sCalib} cued closures of the calibration
+block, using the cue windows (Table~\ref{tab:calibration}), as the app does for a new user. The eyes-open EAR was
+\CS{sCal-earMean-open_median} and the closed peaks \CS{sCal-earMean-closed_median}, giving a calibrated threshold
+of \CS{sCal-earMean-thr} instead of the fixed 0.21. The blink score was \CS{sCal-blendMax-open_median} open and
+\CS{sCal-blendMax-closed_median} closed, giving \CS{sCal-blendMax-thr} instead of 0.5. Figure~\ref{fig:trace}
+shows the first 16 seconds of the cued block with both pairs of thresholds.
+
+\begin{table}[t]
+  \caption{Session 1: calibration from the cue windows of the calibration block (\CS{sCalib} closures). The
+  calibrated threshold lies halfway between the open and closed medians.}
+  \label{tab:calibration}
+  \small
+  \resizebox{\columnwidth}{!}{\input{tables/case_calibration.tex}}
+\end{table}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{C6_trace}
+  \Description{Two stacked line plots over 16 seconds at the start of the cued block. Top: eye aspect ratio, around 0.3 when open, dropping to about 0.05 for each closure, with the fixed 0.21 and calibrated 0.18 thresholds. Bottom: blink score, near 0.05 when open and rising to 0.6 to 0.8 for each closure, with the fixed 0.5 and calibrated 0.42 thresholds. Vertical lines mark the cues: short, short, wink-left, short, long, wink-right. Shaded spans show the closures D4 found, coloured by band: the short responses fall in the dash band.}
+  \caption{Session 1, start of the cued block: EAR (top) and blink score (bottom) with fixed and calibrated
+  thresholds. Vertical lines are cues; shaded spans are D4's closures, coloured by segmenter band (blue dot,
+  orange dash). Every cued short closure here falls in the dash band.}
+  \label{fig:trace}
+\end{figure*}
 
 \begin{figure}[t]
   \centering
@@ -247,7 +330,9 @@ minutes,
 with median measured durations of \CS{s-D3-reading-median}\,ms (D3) and \CS{s-D1-reading-median}\,ms (D1). The
 reject window removed most of them: false triggers fell from \CS{s-D3-reading-before} to
 \CS{s-D3-reading-after} per minute with D3 and from \CS{s-D1-reading-before} to \CS{s-D1-reading-after} with D1
-(Table~\ref{tab:session}).
+(Table~\ref{tab:session}). In this session most of the reduction happened between 100 and 200\,ms
+(Fig.~\ref{fig:sweep}, right): at 100\,ms, D3 still had \CS{s-D3-reading-at100} false triggers per minute, and at
+300\,ms D1 still had \CS{s-D1-reading-at300}.
 
 \paragraph{Short closures ran long.} For each response in the cued and mixed blocks that the author checked as
 short or long (\CS{sBothEyeCues} responses), the longest closure each detector found in the cue window (cue onset
@@ -258,14 +343,22 @@ The measured short responses had a median of \CS{s-D4-short-median}\,ms and the 
 around a boundary well above the default \CS{dotMaxMs}\,ms. This is what the planned threshold selection
 (preregistration, section 8) would have measured with labelled data.
 
-\begin{figure*}[t]
+\paragraph{Where the boundary would have been.} Sweeping the dot--dash boundary over these responses
+(Fig.~\ref{fig:dotsweep}; exploratory) shows how much the default cost. With D4, \CS{s-D4-dotDefault} of the
+\CS{s-D4-dotN} responses were classified correctly at \CS{dotMaxMs}\,ms; the best boundary, between
+\CS{s-D4-dotBestFrom} and \CS{s-D4-dotBestTo}\,ms, reached \CS{s-D4-dotBest} (D3: \CS{s-D3-dotDefault} and
+\CS{s-D3-dotBest}). The boundary was chosen on the same data it is scored on, so the best accuracy is optimistic;
+the point is the size of the shift, not the exact value.
+
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.66\textwidth]{C2_durations}
-  \Description{Histogram of closure durations from 0 to 2000 ms. Eyeblink8 natural blinks cluster around 200 to 350 ms. Session 1 short responses, measured by D4, cluster around 600 to 900 ms, mostly to the right of the 600 ms dot-dash line. Long responses spread from about 700 to 1400 ms.}
-  \caption{Closure durations against the default segmenter bands: annotated natural blinks of other people
-  (Eyeblink8) and the author's short and long responses in session 1, as measured by D4 (not labelled).}
-  \label{fig:durations}
-\end{figure*}
+  \includegraphics[width=\columnwidth]{C7_dot_sweep}
+  \Description{Line plot of the percentage of short and long responses classified correctly against the dot-dash boundary from 300 to 1400 ms, for D1 to D4. All curves are near 50 percent below 600 ms, rise to a peak of about 87 to 94 percent between 900 and 1000 ms, and fall after that. A dashed line marks the default 600 ms.}
+  \caption{Session 1: short and long responses classified correctly against the dot--dash boundary
+  (exploratory sweep over the same responses). The dashed line is the default \CS{dotMaxMs}\,ms.}
+  \label{fig:dotsweep}
+\end{figure}
+
 
 \paragraph{Winks closed both eyes.} The wink detector (D5) found none of the author's winks. In every one of the
 \CS{sWinks} wink responses, the other eye's blendshape score was at or above 0.3 when the winking eye was most
@@ -293,7 +386,8 @@ the signal and threshold in use, not carried over from published blink durations
 
 The single session points to the other half of the problem: deliberate closures have to be reliably longer than the
 window, and the dot--dash boundary has to fit the person. The author's cued short closures, measured from the
-camera, mostly exceeded the default dot limit. With the defaults, most dots would have been typed as dashes. A
+camera, mostly exceeded the default dot limit. With the defaults, most dots would have been typed as dashes; a
+boundary near \CS{s-D4-dotBestFrom}\,ms would have separated most of them. A
 per-user timing calibration, analogous to the threshold calibration, is the natural next step, and the planned
 study would have tested one.
 
@@ -315,8 +409,8 @@ impairment used the system, and no clinical claim is made.
 
 No ethics review was sought. The only participant is the author, and the public videos are used under their
 published licence (GPL-3.0). The app processes video on the device and logs only per-frame features; no faces,
-video or names are published. The session's features may be released with a datasheet
-(\texttt{data/DATASHEET.md}).
+video or names are published. The session's log and response types are released under
+CC BY 4.0 in \texttt{data/public/}, with a datasheet (\texttt{data/DATASHEET.md}).
 
 \section{Use of AI Tools}
 

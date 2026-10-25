@@ -20,7 +20,16 @@ def fake_public(before: list[float], after: list[float]) -> dict:
             "fps": 30.0,
             "n_blinks": 10,
             "blink_ms": [150.0, 250.0, 300.0],
-            "detectors": {"D1": {"ftpm_no_reject": b, "ftpm": a, "blinks_detected": 8, "n_detected": 9}},
+            "detectors": {
+                "D1": {
+                    "ftpm_no_reject": b,
+                    "ftpm": a,
+                    "blinks_detected": 8,
+                    "n_detected": 9,
+                    "closed_ms_all": [100.0, 150.0, 250.0, 400.0],
+                    "matched_pairs_ms": [[250.0, 200.0], [300.0, 260.0]],
+                }
+            },
         }
         for i, (b, a) in enumerate(zip(before, after))
     ]
@@ -41,6 +50,11 @@ def fake_public(before: list[float], after: list[float]) -> dict:
 def test_public_summary_means_and_halving_criterion():
     s = public_summary(fake_public([10, 12, 8, 10], [4, 6, 4, 6]))
     d = s["detectors"]["D1"]
+    # Sweep: at 0 ms all 4 closures count (4 / 5 min); at 200 ms two remain.
+    assert d["sweep"]["ftpm"][0] == pytest.approx(0.8)
+    assert d["sweep"]["ftpm"][d["sweep"]["reject_ms"].index(200)] == pytest.approx(0.4)
+    assert d["halving_reject_ms"] == 160
+    assert d["measured_minus_annotated_ms"]["median"] == pytest.approx(-45.0)
     assert d["ftpm_no_reject"]["mean"] == pytest.approx(10.0)
     assert d["ftpm"]["mean"] == pytest.approx(5.0)
     assert d["meets_halving_criterion"] is True

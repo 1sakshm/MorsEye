@@ -4,7 +4,7 @@ ACM `acmart` (`sigconf`), 4 pages + references (PRD §8).
 
 ```
 python -m analysis.public_blinks --dataset <unpacked eyeblink8/>   # Eyeblink8 -> analysis/out/public_blinks.json
-python -m analysis.case_study --data data/raw                     # figures/C*, F1 and tables/case_* (never edit)
+python -m analysis.case_study --data data/public                  # figures/C*, F1 and tables/case_* (never edit)
 npm run paper                                                     # builds main.pdf and copies it to the site
 ```
 

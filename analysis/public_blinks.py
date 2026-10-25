@@ -125,6 +125,9 @@ def analyse_video(name: str, dataset: Path, features: Path, timing: Timing) -> d
             "n_detected": len(closures),
             "blinks_detected": len(m),
             "closed_ms_matched": [round(closures[i].duration_ms, 1) for i, _, _ in m],
+            # (annotated, measured) duration of each matched blink, and every detected duration (for sweeps).
+            "matched_pairs_ms": [[round(labels[j][1] - labels[j][0], 1), round(closures[i].duration_ms, 1)] for i, j, _ in m],
+            "closed_ms_all": [round(c.duration_ms, 1) for c in closures],
             "bands": {k: bands.count(k) for k in ("reject", "dot", "dash", "hold", "backspace")},
             "ftpm_no_reject": round(len(closures) / minutes, 3),
             "ftpm": round(len(typed) / minutes, 3),

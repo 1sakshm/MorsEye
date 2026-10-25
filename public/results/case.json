@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-24T23:46:20+00:00",
+ "generated_at": "2026-10-25T00:46:57+00:00",
  "timing": {
   "rejectMs": 200,
   "dotMaxMs": 600,
@@ -43,7 +43,9 @@
     "meets_halving_criterion": false,
     "wilcoxon_p": 0.0078125,
     "blink_recall": 0.799,
-    "frac_closed_below_reject": 0.1626
+    "frac_closed_below_reject": 0.1626,
+    "halving_reject_ms": 320,
+    "annotated_frac_below_halving": 0.7083333333333334
    },
    "D3": {
     "label": "Blendshape, fixed 0.5",
@@ -63,7 +65,9 @@
     "meets_halving_criterion": true,
     "wilcoxon_p": 0.0078125,
     "blink_recall": 0.8676,
-    "frac_closed_below_reject": 0.5989
+    "frac_closed_below_reject": 0.5989,
+    "halving_reject_ms": 200,
+    "annotated_frac_below_halving": 0.09068627450980392
    }
   },
   "videos": [
@@ -440,6 +444,36 @@
    "D5": {
     "wink-L": null,
     "wink-R": null
+   }
+  },
+  "dot_sweep": {
+   "D1": {
+    "n": 30,
+    "best_accuracy": 0.8666666666666667,
+    "best_from_ms": 960,
+    "best_to_ms": 1030,
+    "accuracy_at_default": 0.5
+   },
+   "D2": {
+    "n": 30,
+    "best_accuracy": 0.8666666666666667,
+    "best_from_ms": 960,
+    "best_to_ms": 970,
+    "accuracy_at_default": 0.5333333333333333
+   },
+   "D3": {
+    "n": 32,
+    "best_accuracy": 0.9375,
+    "best_from_ms": 960,
+    "best_to_ms": 970,
+    "accuracy_at_default": 0.59375
+   },
+   "D4": {
+    "n": 32,
+    "best_accuracy": 0.90625,
+    "best_from_ms": 960,
+    "best_to_ms": 970,
+    "accuracy_at_default": 0.5625
    }
   }
  }

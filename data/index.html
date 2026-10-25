@@ -22,17 +22,26 @@
           <p class="eyebrow">Data</p>
           <h1>A features-only dataset</h1>
           <p class="lede">
-            Per-frame eye features and hand-made labels of spontaneous and deliberate eye closures,
-            recorded with consumer webcams, so that anyone can test their own blink detectors. No
-            images, no video, no faces.
+            Per-frame eye features from one recorded session of cued short, long and winking eye
+            closures and natural blinks while reading, on a consumer laptop webcam. No images, no
+            video, no faces.
           </p>
           <div class="notice" role="note">
             <p>
-              <strong>Not released yet.</strong> The dataset will be published in
-              <a href="https://github.com/1sakshm/MorsEye/tree/main/data/public"><code>data/public/</code> on GitHub</a>
-              if the author decides to release the one recorded session, together with a full datasheet
+              <strong>Released 25 Oct 2026</strong> under CC BY 4.0, in
+              <a href="https://github.com/1sakshm/MorsEye/tree/main/data/public"><code>data/public/</code> on GitHub</a>, with a full datasheet
               (<a href="https://github.com/1sakshm/MorsEye/blob/main/data/DATASHEET.md"><code>data/DATASHEET.md</code></a>).
             </p>
+            <ul class="downloads">
+              <li>
+                <a href="https://raw.githubusercontent.com/1sakshm/MorsEye/main/data/public/P01_A_2026-10-24.jsonl" download>P01_A_2026-10-24.jsonl</a> (session
+                log, 2.9 MB)
+              </li>
+              <li>
+                <a href="https://raw.githubusercontent.com/1sakshm/MorsEye/main/data/public/P01_A_cue_types.csv" download>P01_A_cue_types.csv</a> (response type
+                for each cue)
+              </li>
+            </ul>
           </div>
         </div>
       </header>
@@ -62,29 +71,31 @@
               </table>
             </div>
 
-            <h3>Labels (one row per closure)</h3>
+            <h3>Response types (one row per cue)</h3>
             <p>
-              Made by hand by the experimenter in the labelling tool. Only closures confirmed by a
-              person count as ground truth.
+              The participant checked, in the labelling tool, which kind of closure was made in
+              response to each cue. Closure start and end times were <strong>not</strong> labelled,
+              so these are not detection ground truth.
             </p>
             <div class="table-scroll">
               <table>
-                <caption class="visually-hidden">Label columns</caption>
+                <caption class="visually-hidden">Response type columns</caption>
                 <thead>
                   <tr><th scope="col">Column</th><th scope="col">Meaning</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td><code>onset_ms</code>, <code>offset_ms</code></td><td>Start and end of the closure, on the frame clock</td></tr>
-                  <tr><td><code>type</code></td><td>spontaneous, deliberate-short, deliberate-long, wink-L or wink-R</td></tr>
-                  <tr><td><code>labeller</code>, <code>labelled_at</code></td><td>Who labelled it, and when</td></tr>
+                  <tr><td><code>cue_ms</code></td><td>When the cue appeared, on the frame clock</td></tr>
+                  <tr><td><code>cue</code>, <code>block</code></td><td>The cued closure (SHORT, LONG, WINK-L, WINK-R) and its block</td></tr>
+                  <tr><td><code>response_type</code></td><td>short, long, wink-L, wink-R, or none</td></tr>
+                  <tr><td><code>labeller</code>, <code>labelled_at</code></td><td>Who checked it, and when</td></tr>
                 </tbody>
               </table>
             </div>
 
             <h3>Session information</h3>
             <p>
-              Cue times and types, block start and end times, the participant ID (P01, P02, …), age
-              range, glasses (yes or no), lighting, camera model and the measured frame rate.
+              Cue times and types, block start and end times, the participant ID (P01), age range,
+              glasses, lighting, distance, camera model and the measured frame rate.
             </p>
 
             <h3>What is not in it</h3>
@@ -105,11 +116,11 @@
           <div>
             <dl class="kv">
               <dt>Purpose</dt>
-              <dd>Measure how well a consumer webcam separates deliberate from spontaneous blinks, and how much per-user calibration helps.</dd>
+              <dd>Measure how well a consumer webcam separates deliberate from spontaneous blinks.</dd>
               <dt>Who</dt>
               <dd>One able-bodied adult, the author, in one detection session (planned: 6–8 detection sessions and 5 typing sessions; data collection stopped after the first).</dd>
               <dt>How</dt>
-              <dd>A laptop webcam at about 50–70 cm in normal, bright and dim light; about 12 minutes per session in the app’s study mode, with everything recorded on the laptop.</dd>
+              <dd>A built-in laptop webcam at about 45 cm in front lighting, at 10–16.5 frames per second; about 10 minutes in the app’s study mode, with everything recorded on the laptop.</dd>
               <dt>Labelling</dt>
               <dd>The author checked the response type for each cue by hand; closure onsets and offsets were not labelled.</dd>
               <dt>Intended uses</dt>

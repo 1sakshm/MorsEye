@@ -102,7 +102,7 @@ numpy wheels):
 python -m venv .venv && .venv/Scripts/activate    # or source .venv/bin/activate
 pip install -r requirements.txt
 python -m analysis.public_blinks --dataset <unpacked eyeblink8/>   # Eyeblink8 (features in data/external/)
-python -m analysis.case_study --data data/raw     # the reported results: results.json, case.json, C1-C3, tables
+python -m analysis.case_study --data data/public  # the reported results: results.json, case.json, C1-C7, tables
 python -m analysis.run --synthetic                # the planned multi-session pipeline, on marked synthetic data
 pytest analysis/tests
 ```

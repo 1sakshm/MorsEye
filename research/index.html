@@ -300,6 +300,20 @@
               against <span data-case="D3belowReject">–</span>
               for D3. A reject window has to be chosen for the signal it is applied to.
             </p>
+            <img
+              class="chart-img"
+              src="/results/figures/C4_reject_sweep.png"
+              width="900"
+              height="270"
+              loading="lazy"
+              alt="False triggers per minute against reject window length from 0 to 600 ms. Left, Eyeblink8: D3 falls steeply between 100 and 250 ms while D1 falls slowly. Right, session 1 reading block: all detectors fall steeply between 90 and 210 ms."
+            />
+            <p>
+              Sweeping the window after the fact (exploratory): D3 halves its false triggers at
+              <span data-case="D3halving">–</span> ms, but D1 needs
+              <span data-case="D1halving">–</span> ms, a window longer than
+              <span data-case="D1belowHalving">–</span> of the annotated natural blinks.
+            </p>
           </figure>
 
           <figure class="chart">
@@ -325,6 +339,32 @@
               <span data-case="sShortDash">–</span> of <span data-case="sShortN">–</span> short
               responses would have been typed as dashes. The two kinds were separated, but around a
               much later boundary: timing needs calibrating per person, like the threshold.
+            </p>
+            <img
+              class="chart-img"
+              src="/results/figures/C6_trace.png"
+              width="900"
+              height="380"
+              loading="lazy"
+              alt="Eye aspect ratio and blink score over 16 seconds at the start of the cued block, with fixed and calibrated thresholds. Each cued short closure is shaded as a dash."
+            />
+            <img
+              class="chart-img"
+              src="/results/figures/C7_dot_sweep.png"
+              width="480"
+              height="280"
+              loading="lazy"
+              alt="Share of short and long responses classified correctly against the dot-dash boundary: about 50 to 60 percent at 600 ms, peaking near 90 percent around 960 ms."
+            />
+            <p>
+              Moving the dot–dash boundary (exploratory, on the same
+              <span data-case="sDotN">–</span> responses):
+              <span data-case="sDotDefault">–</span> correct at the default,
+              <span data-case="sDotBest">–</span> at <span data-case="sDotBestFrom">–</span>–<span
+                data-case="sDotBestTo"
+                >–</span
+              >
+              ms. The best value is optimistic, because it was picked on the data it is scored on.
             </p>
           </figure>
 

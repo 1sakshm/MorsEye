@@ -11,7 +11,7 @@ times, so the confirmatory Part A tests and Part B were not run. This module com
   every closure there counts as spontaneous), and, for each cue the author responded to, what each detector
   found in the cue window. Closure durations here are *detector-measured*, not labelled.
 
-    python -m analysis.case_study --data data/raw
+    python -m analysis.case_study --data data/public
 
 Writes analysis/out/results.json, public/results/case.json, paper/tables/case_*.tex and figures C1-C3.
 """
@@ -40,6 +40,9 @@ DETECTORS = (*BOTH_EYE, "D5")
 CUE_TO_TYPE = {"SHORT": "short", "LONG": "long", "WINK-L": "wink-L", "WINK-R": "wink-R"}
 BAND_TO_TYPE = {"dot": "short", "dash": "long"}
 OUTCOMES = ("none", "reject", "dot", "dash", "hold", "backspace")
+REJECT_SWEEP = list(range(0, 610, 10))  # ms; exploratory (chosen after seeing the data)
+DOT_SWEEP = list(range(300, 1410, 10))  # ms; exploratory
+TRACE_SPAN_MS = 16000
 
 
 # ---------------------------------------------------------------------------------------------
@@ -100,7 +103,25 @@ def public_summary(pb: dict[str, Any]) -> dict[str, Any]:
             "detected_closed_ms": s["detected_closed_ms"],
             "frac_closed_below_reject": s["frac_closed_below_reject"],
             "bands": s["bands"],
+            "bands_per_min": {k: n / pb["minutes"] for k, n in s["bands"].items()},
         }
+        # Exploratory: false triggers per minute (mean over videos) for each reject window length.
+        sweep = [
+            float(np.mean([sum(1 for x in v["detectors"][d]["closed_ms_all"] if x >= r) / v["minutes"] for v in videos]))
+            for r in REJECT_SWEEP
+        ]
+        out["detectors"][d]["sweep"] = {"reject_ms": REJECT_SWEEP, "ftpm": sweep}
+        half = next((r for r, y in zip(REJECT_SWEEP, sweep) if y <= 0.5 * sweep[0]), None)
+        out["detectors"][d]["halving_reject_ms"] = half
+        if half is not None:
+            out["detectors"][d]["annotated_frac_below_halving"] = float(np.mean(blink < half))
+        pairs = np.asarray([p for v in videos for p in v["detectors"][d]["matched_pairs_ms"]], float)
+        if pairs.size:
+            diff = pairs[:, 1] - pairs[:, 0]
+            out["detectors"][d]["pairs"] = pairs.tolist()
+            out["detectors"][d]["measured_minus_annotated_ms"] = _pct(diff.tolist())
+            out["detectors"][d]["matched_annotated_frac_below_reject"] = float(np.mean(pairs[:, 0] < reject_ms))
+            out["detectors"][d]["matched_measured_frac_below_reject"] = float(np.mean(pairs[:, 1] < reject_ms))
     return out
 
 
@@ -211,9 +232,70 @@ def session_summary(s: Session, cue_types: list[dict[str, Any]], timing: Timing)
         "other_eye_at_peak_median": float(np.median([o for _, o, _ in other_max])) if other_max else float("nan"),
     }
 
+    # Exploratory sweeps (chosen after seeing the data).
+    reading_sweep = {}
+    for d in BOTH_EYE:
+        cs = [c.duration_ms for c in closures[d] if sp and sp[0] <= c.start_ms < sp[1]]
+        reading_sweep[d] = [sum(1 for x in cs if x >= r) / sp_min for r in REJECT_SWEEP]
+    dot_sweep = {}
+    for d in BOTH_EYE:
+        sh, lo = durations[d]["short"], durations[d]["long"]
+        n = len(sh) + len(lo)
+        acc = [(sum(1 for x in sh if x < b) + sum(1 for x in lo if x >= b)) / n if n else float("nan") for b in DOT_SWEEP]
+        if not n:
+            dot_sweep[d] = {"dot_max_ms": DOT_SWEEP, "accuracy": acc, "n": 0, "best_accuracy": None, "best_from_ms": None, "best_to_ms": None, "accuracy_at_default": None}
+            continue
+        best = int(np.nanargmax(acc))
+        # The range of boundaries that reach the best accuracy.
+        best_lo = DOT_SWEEP[best]
+        best_hi = max(b for b, a in zip(DOT_SWEEP, acc) if a == acc[best])
+        dot_sweep[d] = {
+            "dot_max_ms": DOT_SWEEP,
+            "accuracy": acc,
+            "n": n,
+            "best_accuracy": acc[best],
+            "best_from_ms": best_lo,
+            "best_to_ms": best_hi,
+            "accuracy_at_default": acc[DOT_SWEEP.index(int(timing.dotMaxMs))] if int(timing.dotMaxMs) in DOT_SWEEP else float("nan"),
+        }
+
+    # An example stretch of signal: the start of the cued block.
+    dl = s.blocks.get("deliberate")
+    trace = None
+    if dl:
+        first = min((c["t_ms"] for c in s.cues_in("deliberate") if c.get("cue") in CUE_TO_TYPE), default=dl[0])
+        t0, t1 = first - 1000, first - 1000 + TRACE_SPAN_MS
+        m = s.frames.select(t0, t1)
+        resp = {round(x["cue"]["t_ms"], 1): x["response"] for x in responses}
+        trace = {
+            "t0": t0,
+            "t": (f.t[m] - t0).round(1).tolist(),
+            "face": f.face[m].tolist(),
+            "earMean": fa.signal("earMean")[m].round(4).tolist(),
+            "blendMax": fa.signal("blendMax")[m].round(4).tolist(),
+            "thr": {
+                "D1": 0.21,
+                "D2": fits["earMean"].thr if "earMean" in fits else None,
+                "D3": 0.5,
+                "D4": fits["blendMax"].thr if "blendMax" in fits else None,
+            },
+            "cues": [
+                {"t": c["t_ms"] - t0, "cue": c["cue"], "response": resp.get(round(c["t_ms"], 1))}
+                for c in s.cues
+                if c.get("cue") in CUE_TO_TYPE and t0 <= c["t_ms"] < t1
+            ],
+            "closures": {
+                d: [[c.start_ms - t0, c.end_ms - t0, band(c.duration_ms, timing)] for c in closures[d] if t0 <= c.start_ms < t1]
+                for d in ("D1", "D4")
+            },
+        }
+
     return {
         "status": "exploratory, one session, no confidence intervals",
         "winks": winks,
+        "reading_sweep": {"reject_ms": REJECT_SWEEP, "ftpm": reading_sweep},
+        "dot_sweep": dot_sweep,
+        "trace": trace,
         "unit": s.unit_id,
         "file": s.path.name,
         "setup": s.header.get("setup", {}),
@@ -227,7 +309,10 @@ def session_summary(s: Session, cue_types: list[dict[str, Any]], timing: Timing)
         "calibration": {
             "source": cd.source if cd else None,
             "n_closures": cd.n_closures if cd else 0,
-            "fits": {k: {"thr": v.thr, "ok": v.ok, "warning": v.warning} for k, v in fits.items()},
+            "fits": {
+                k: {"thr": v.thr, "h": v.h, "open_median": v.openMedian, "closed_median": v.closedMedian, "range": v.range, "ok": v.ok, "warning": v.warning}
+                for k, v in fits.items()
+            },
         },
         "responses": {"n_cues": len(responses), "n_match": n_match, "table": table},
         "reading": reading,
@@ -285,7 +370,7 @@ def run(data: Path, public: Path, timing: Timing) -> dict[str, Any]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="python -m analysis.case_study", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--data", default=str(ROOT / "data" / "raw"))
+    ap.add_argument("--data", default=str(ROOT / "data" / "public"))
     ap.add_argument("--public", default=str(ROOT / "analysis" / "out" / "public_blinks.json"))
     ap.add_argument("--out", default=str(ROOT / "analysis" / "out" / "results.json"))
     ap.add_argument("--site", default=str(ROOT / "public" / "results"))
