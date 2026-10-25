@@ -23,7 +23,8 @@
   --warn: #9a5b00;
 
   --font-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-head: 'Bricolage Grotesque', 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+  --font-head:
+    'Bricolage Grotesque Variable', 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 
   --step--1: 0.9375rem;

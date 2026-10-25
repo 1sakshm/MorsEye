@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
+import { renderMarkdown } from './src/site/markdown';
 
 const page = (p: string) => resolve(__dirname, p);
 
@@ -11,9 +12,14 @@ function partials(): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler: (html) =>
-        html.replace(/<!--#include (\w+)-->/g, (_, name: string) =>
-          readFileSync(page(`src/partials/${name}.html`), 'utf8'),
-        ),
+        html
+          .replace(/<!--#include (\w+)-->/g, (_, name: string) =>
+            readFileSync(page(`src/partials/${name}.html`), 'utf8'),
+          )
+          // <!--#markdown FILE.md--> renders a repository Markdown file at build time (no layout shift).
+          .replace(/<!--#markdown ([\w.-]+\.md)-->/g, (_, file: string) =>
+            renderMarkdown(readFileSync(page(file), 'utf8'), 2),
+          ),
     },
   };
 }

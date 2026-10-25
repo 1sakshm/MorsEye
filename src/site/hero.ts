@@ -325,6 +325,11 @@ export function mountHero(o: HeroOptions): { schedule: HeroSchedule; threshold: 
   function draw(): void {
     const t = tl.totalTime() * 1000;
     if (t >= nowMs || seeking) nowMs = t;
+    // While stillFrame() pre-fills the history, only record samples; the last seek draws once.
+    if (seeking) {
+      sample();
+      return;
+    }
     eye.set(lid.c);
     sample();
     drawTrace();
@@ -341,6 +346,9 @@ export function mountHero(o: HeroOptions): { schedule: HeroSchedule; threshold: 
     for (let g = end - TRACE_WINDOW; g <= end; g += 20) tl.totalTime(Math.max(0, g) / 1000);
     tl.totalTime(end / 1000);
     seeking = false;
+    eye.set(lid.c);
+    drawTrace();
+    drawTape();
   }
 
   // ---- controls

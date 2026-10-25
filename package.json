@@ -19,6 +19,9 @@
     "paper": "cd paper && latexmk && cd .. && node -e \"require('fs').copyFileSync('paper/main.pdf','public/paper/morseye-draft.pdf')\""
   },
   "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@mediapipe/tasks-vision": "0.10.21",
     "d3": "7.9.0",
     "gsap": "3.13.0"

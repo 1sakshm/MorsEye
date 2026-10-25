@@ -1,3 +1,10 @@
+// Self-hosted fonts (bundled by Vite): no third-party request before the first paint.
+import '@fontsource/atkinson-hyperlegible/latin-400.css';
+import '@fontsource/atkinson-hyperlegible/latin-400-italic.css';
+import '@fontsource/atkinson-hyperlegible/latin-700.css';
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-600.css';
 import '../styles/base.css';
 
 /**

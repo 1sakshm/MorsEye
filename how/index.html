@@ -2,6 +2,18 @@
 <html lang="en">
   <head>
     <!--#include head-->
+    <script>
+      // Choose the story layout before first paint (same query as src/pages/how.ts), so it does not shift.
+      if (matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)').matches)
+        document.documentElement.classList.add('story-animated');
+    </script>
+    <noscript
+      ><style>
+        .story-static {
+          display: none;
+        }
+      </style></noscript
+    >
     <title>How it works — MorsEye</title>
     <meta
       name="description"

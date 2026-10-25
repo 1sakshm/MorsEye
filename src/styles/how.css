@@ -90,9 +90,9 @@ html:not(.story-animated) .story-steps {
   border-radius: var(--radius);
   background: var(--surface);
   padding: 0.5rem;
-}
-.story-static:empty {
-  display: none;
+  /* Reserve the figure's space (STAGE is 800 x 600) so drawing it after load does not shift the text. */
+  box-sizing: content-box;
+  aspect-ratio: 4 / 3;
 }
 .story-animated .story-static {
   display: none;
