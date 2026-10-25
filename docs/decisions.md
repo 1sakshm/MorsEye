@@ -32,6 +32,14 @@ These were made while building the software, to fill gaps in the PRD. Review and
   can anchor the labeller, so a draft's type is changed whenever the closure actually made differs from the cue.
 - **Session 1 labels are types only** (25 Oct 2026, Saksham's choice). The labeller confirmed the cue drafts' types
   but not their times, and Export refuses drafts, so the labeller's saved state was read from the browser and
-  wrote `data/raw/P01_A_cue_types.csv` (one response type per cue; how it was built is in
+  written to `data/raw/P01_A_cue_types.csv` (one response type per cue; how it was built is in
   `P01_A_cue_types_meta.json`). The loader never treats that file as labels, and session 1 is skipped in the
   detection analysis; see the preregistration's Deviations.
+
+## Final timing (25 Oct 2026)
+
+The thresholds were never re-chosen from the data: the preregistered selection rule (section 8) needs labelled
+closure times, and no session has them. The app keeps its default timing (reject < 200 ms, dot < 600 ms, dash
+< 1400 ms, hold < 2000 ms, backspace ≥ 2000 ms; letter gap 1200 ms, word gap 3000 ms) in `src/segment/segmenter.ts`.
+The exploratory session 1 results suggest a dot–dash boundary near 960 ms for the author; it was not adopted,
+because it was found on the same data it would be judged on. The project was closed on 25 Oct 2026.
