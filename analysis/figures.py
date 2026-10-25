@@ -138,25 +138,25 @@ def _ci_err(ci) -> tuple[float, list[list[float]]]:
 
 
 def f1_pipeline(w: Writer) -> None:
-    fig, ax = plt.subplots(figsize=(WIDE, 1.3))
+    fig, ax = plt.subplots(figsize=(WIDE, 1.45))
     ax.set_axis_off()
     ax.set_xlim(0, 7)
     ax.set_ylim(-0.05, 1)
     steps = [
-        ("Webcam", "~30 fps,\nframe timestamps"),
-        ("Landmarks", "MediaPipe: 478\npoints, blendshapes"),
-        ("Features", "EAR (6 pts/eye),\neyeBlink scores"),
+        ("Webcam", "frames with\ntimestamps"),
+        ("Landmarks", "MediaPipe:\n478 points,\nblendshapes"),
+        ("Features", "EAR per eye,\nblink scores"),
         ("Detector", "threshold +\nhysteresis"),
-        ("Segmenter", "duration →\nreject/dot/dash/cmd"),
-        ("Decoder", "gaps → letters,\nwords, commands"),
+        ("Segmenter", "duration →\nreject, dot,\ndash, hold"),
+        ("Decoder", "gaps →\nletters, words,\ncommands"),
         ("Output", "text,\nspeech"),
     ]
     for i, (title, sub) in enumerate(steps):
         x = 0.06 + i * 0.99
         edge = C["signal"] if title in ("Detector", "Segmenter") else C["ink"]
         ax.add_patch(FancyBboxPatch((x, 0.18), 0.88, 0.72, boxstyle="round,pad=0.02,rounding_size=0.06", fc="white", ec=edge, lw=1.1))
-        ax.text(x + 0.44, 0.7, title, ha="center", va="center", fontsize=7, fontweight="bold")
-        ax.text(x + 0.44, 0.4, sub, ha="center", va="center", fontsize=5.4, color=C["muted"], linespacing=1.25)
+        ax.text(x + 0.44, 0.76, title, ha="center", va="center", fontsize=7, fontweight="bold")
+        ax.text(x + 0.44, 0.44, sub, ha="center", va="center", fontsize=5.2, color=C["muted"], linespacing=1.2)
         if i < len(steps) - 1:
             ax.add_patch(FancyArrowPatch((x + 0.9, 0.54), (x + 0.99, 0.54), arrowstyle="-|>", mutation_scale=6, color=C["muted"], lw=0.8))
     ax.text(3.5, -0.02, "everything runs in the browser; no camera frame leaves the device", ha="center", va="bottom", fontsize=6, color=C["muted"], style="italic")

@@ -144,12 +144,12 @@ def t_session(ses: dict[str, Any], labels: dict[str, str]) -> str:
 
 
 def t_calibration(ses: dict[str, Any]) -> str:
-    names = {"earMean": "EAR (mean of eyes)", "blendMax": "Blink score (max of eyes)", "blendL": "Blink score, left", "blendR": "Blink score, right"}
+    names = {"earMean": "EAR, mean", "blendMax": "Blink score, max", "blendL": "Blink score, left", "blendR": "Blink score, right"}
     fixed = {"earMean": "0.21", "blendMax": "0.5", "blendL": "0.5", "blendR": "0.5"}
     rows = []
     for k, v in ses["calibration"]["fits"].items():
         rows.append(" & ".join([names.get(k, k), _f(v["open_median"], 3), _f(v["closed_median"], 3), _f(v["thr"], 3), _f(v["h"], 3), fixed.get(k, "--")]) + r" \\")
-    head = r"Signal & Open median & Closed median & Calibrated & Hysteresis & Fixed \\"
+    head = r"Signal & Open & Closed & Calibrated & $h$ & Fixed \\"
     return "\\begin{tabular}{lrrrrr}\n\\toprule\n" + head + "\n\\midrule\n" + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}\n"
 
 
@@ -308,7 +308,8 @@ def c1_public(w: Writer, pub: dict[str, Any]) -> None:
         for i, key in enumerate(("ftpm_no_reject", "ftpm")):
             c = x[key]
             ax.errorbar([i + (0.08 if i else -0.08)], [c["mean"]], yerr=[[c["mean"] - c["lo"]], [c["hi"] - c["mean"]]], fmt="s", color=C["signal"], ms=4, capsize=2, lw=1.2)
-        ax.set_xticks([0, 1], ["no reject", f"reject <{w_reject(pub)} ms"])
+        ax.set_xticks([0, 1], ["none", f"{w_reject(pub)} ms"])
+        ax.set_xlabel("Reject window")
         ax.set_xlim(-0.35, 1.35)
         ax.set_title(f"{d} ({x['label']})", fontsize=7)
     axes[0].set_ylabel("False triggers per minute")
@@ -323,7 +324,7 @@ def w_reject(pub: dict[str, Any]) -> str:
 def c2_durations(w: Writer, res: dict[str, Any]) -> None:
     t = res["timing"]
     pub, ses = res["public"], res["session"]
-    fig, ax = plt.subplots(figsize=(WIDE * 0.62, 2.6))
+    fig, ax = plt.subplots(figsize=(WIDE, 2.2))
     bins = np.arange(0, 2001, 50)
     if pub:
         blink = np.concatenate([np.asarray(v, float) for v in _public_blinks(res)])
@@ -335,11 +336,11 @@ def c2_durations(w: Writer, res: dict[str, Any]) -> None:
                 ax.hist(v, bins=bins, density=True, histtype="step", lw=1.4, color=col, label=f"Session 1 {typ} responses (D4-measured, n = {v.size})")
     for k, name in (("rejectMs", "reject"), ("dotMaxMs", "dot | dash"), ("dashMaxMs", "dash | hold")):
         ax.axvline(t[k], color=C["ink"], lw=0.8, ls="--")
-        ax.text(t[k] + 15, ax.get_ylim()[1] * 0.92, name, fontsize=6.5, color=C["ink"])
+        ax.text(t[k], 1.02, name, fontsize=6.5, color=C["ink"], ha="center", va="bottom", transform=ax.get_xaxis_transform())
     ax.set_xlim(0, 2000)
     ax.set_xlabel("Closure duration (ms)")
     ax.set_ylabel("Density")
-    ax.legend(loc="lower left", frameon=False, bbox_to_anchor=(0.0, 1.02), ncol=1)
+    ax.legend(loc="upper left", frameon=False, fontsize=6.5, bbox_to_anchor=(1.01, 1.0))
     fig.tight_layout()
     w.save(fig, "C2_durations")
 
@@ -391,18 +392,20 @@ def c4_reject_sweep(w: Writer, res: dict[str, Any]) -> None:
 
 
 def c5_measured(w: Writer, pub: dict[str, Any], reject: float) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(WIDE * 0.75, 2.5), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(COL, 1.95), sharex=True, sharey=True)
     for ax, d in zip(axes, ("D1", "D3")):
         p = np.asarray(pub["detectors"][d]["pairs"], float)
         ax.scatter(p[:, 0], p[:, 1], s=5, color=C["trace"], alpha=0.45, lw=0)
         ax.plot([0, 1000], [0, 1000], color=C["ink"], lw=0.8)
         ax.axhline(reject, color=C["signal"], lw=0.8, ls="--")
-        ax.set_title(f"{d} ({pub['detectors'][d]['label']}), n = {len(p)}")
-        ax.set_xlabel("Annotated blink (ms)")
+        ax.set_title(f"{d}, n = {len(p)}", fontsize=7.5)
+        ax.set_xlabel("Annotated (ms)")
         ax.set_xlim(0, 1000)
         ax.set_ylim(0, 1000)
+        ax.set_xticks([0, 400, 800])
+        ax.set_yticks([0, 400, 800])
         ax.set_aspect("equal")
-    axes[0].set_ylabel("Measured closure (ms)")
+    axes[0].set_ylabel("Measured (ms)")
     fig.tight_layout()
     w.save(fig, "C5_measured_vs_annotated")
 
@@ -427,7 +430,7 @@ def c6_trace(w: Writer, ses: dict[str, Any], timing: dict[str, Any]) -> None:
     for a, b, bnd in tr["closures"]["D4"]:
         axes[1].axvspan(a / 1000, b / 1000, color=band_col.get(bnd, C["muted"]), alpha=0.25, lw=0)
     for c in tr["cues"]:
-        axes[0].text(c["t"] / 1000 + 0.08, axes[0].get_ylim()[1] * 0.97, f"{c['cue'].lower()}", fontsize=6.5, va="top", color=C["ink"])
+        axes[0].text(c["t"] / 1000, 1.03, c["cue"].lower(), fontsize=6.5, ha="center", va="bottom", color=C["ink"], transform=axes[0].get_xaxis_transform())
     axes[1].set_xlabel("Seconds (start of the cued block)")
     axes[0].set_xlim(0, t.max())
     fig.tight_layout()

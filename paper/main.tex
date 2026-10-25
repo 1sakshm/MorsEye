@@ -21,7 +21,7 @@
 \input{tables/case_numbers.tex}
 % [HUMAN] Set to false once you have reviewed and edited the draft (removes the notice under the title).
 \newif\ifunreviewed
-\unreviewedtrue
+\unreviewedfalse
 
 \settopmatter{printacmref=false}
 
@@ -197,12 +197,12 @@ describe these recordings only.
   \label{fig:public}
 \end{figure}
 
-\begin{table}[t]
+\begin{table*}[t]
   \caption{Eyeblink8 videos and false triggers per minute (without $\to$ with the reject window).}
   \label{tab:public}
   \small
-  \resizebox{\columnwidth}{!}{\input{tables/case_public.tex}}
-\end{table}
+  \input{tables/case_public.tex}
+\end{table*}
 
 \paragraph{Why the detectors differ.} The difference comes from how long each detector measures a blink to be
 (Fig.~\ref{fig:measured}). For blinks that both the annotation and the detector found, D3's closed period was a
@@ -258,7 +258,7 @@ by a wide margin, which slows typing.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.66\textwidth]{C2_durations}
+  \includegraphics[width=\textwidth]{C2_durations}
   \Description{Histogram of closure durations from 0 to 2000 ms. Eyeblink8 natural blinks cluster around 200 to 350 ms. Session 1 short responses, measured by D4, cluster around 600 to 900 ms, mostly to the right of the 600 ms dot-dash line. Long responses spread from about 700 to 1400 ms.}
   \caption{Closure durations against the default segmenter bands: annotated natural blinks of other people
   (Eyeblink8) and the author's short and long responses in session 1, as measured by D4 (not labelled).}
@@ -289,10 +289,10 @@ shows the first 16 seconds of the cued block with both pairs of thresholds.
 
 \begin{table}[t]
   \caption{Session 1: calibration from the cue windows of the calibration block (\CS{sCalib} closures). The
-  calibrated threshold lies halfway between the open and closed medians.}
+  calibrated threshold lies halfway between the open and closed medians; $h$ is the hysteresis.}
   \label{tab:calibration}
   \small
-  \resizebox{\columnwidth}{!}{\input{tables/case_calibration.tex}}
+  \input{tables/case_calibration.tex}
 \end{table}
 
 \begin{figure*}[t]
@@ -366,14 +366,14 @@ closed (median \CS{sWinkOtherPeak}, against \CS{sWinkPeak} for the winking eye).
 Either the author's winks partly closed the other eye, or the blendshape scores of the two eyes move together. One
 session cannot tell these apart, but a fixed limit on the other eye did not work here.
 
-\begin{table}[t]
+\begin{table*}[t]
   \caption{Session 1 by detector: false triggers per minute while reading (without $\to$ with the reject
   window); cue responses whose longest detected closure fell in the cued band; and median measured duration of
   short and long responses.}
   \label{tab:session}
   \small
-  \resizebox{\columnwidth}{!}{\input{tables/case_session.tex}}
-\end{table}
+  \input{tables/case_session.tex}
+\end{table*}
 
 %% ---------------------------------------------------------------------------------------------
 \section{Discussion}
