@@ -30,7 +30,7 @@ paper/*.synctex.gz
 # Cloudflare wrangler cache
 .wrangler/
 
-# The published copy of the paper is public/paper/morseye-draft.pdf (npm run paper)
+# The published copy of the paper is public/paper/morseye.pdf (npm run paper)
 paper/main.pdf
 
 # Features extracted from public blink videos (third-party licences; see docs/public-data.md)

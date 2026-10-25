@@ -34,7 +34,7 @@ typing study were not run (see the Deviations section). What remains (copied fro
   600 ms dot limit; the wink detector found none of the 31 winks, because the other eye's blink
   score rose too.
 
-The draft paper: [morseye.pages.dev/paper/morseye-draft.pdf](https://morseye.pages.dev/paper/morseye-draft.pdf) (source in `paper/`).
+The paper: [morseye.pages.dev/paper/morseye.pdf](https://morseye.pages.dev/paper/morseye.pdf) (source in `paper/`).
 
 ## How it works
 

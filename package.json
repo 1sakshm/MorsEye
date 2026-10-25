@@ -16,7 +16,7 @@
     "replay": "vite-node scripts/replay.ts",
     "predev": "node scripts/fetch-model.mjs",
     "prebuild": "node scripts/fetch-model.mjs",
-    "paper": "cd paper && latexmk && cd .. && node -e \"require('fs').copyFileSync('paper/main.pdf','public/paper/morseye-draft.pdf')\""
+    "paper": "cd paper && latexmk && cd .. && node -e \"require('fs').copyFileSync('paper/main.pdf','public/paper/morseye.pdf')\""
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
