@@ -3,7 +3,7 @@
 Type Morse code by closing your eyes, in the browser, and a study of how well a webcam can tell a deliberate eye
 closure from an ordinary blink.
 
-**Live:** https://morseye.pages.dev · **Paper:** in preparation (see [`paper/`](paper/)) ·
+**Live:** https://morseye.pages.dev · **Paper:** [technical report](https://morseye.pages.dev/paper/morseye.pdf), not peer-reviewed (source in [`paper/`](paper/)) ·
 **Dataset:** [`data/DATASHEET.md`](data/DATASHEET.md)
 
 <!-- [HUMAN] Add a GIF of the hero animation here (no faces), e.g. docs/hero.gif. -->
@@ -59,8 +59,8 @@ camera ─▶ FaceLandmarker ─▶ features ─────────▶ dete
 | ≥ 1200 ms | finish the letter |
 | ≥ 3000 ms | add a space (once) |
 
-These are the starting values from the PRD. The final values will be chosen from the Study A duration
-distributions and recorded in [`docs/decisions.md`](docs/decisions.md). Presets scale all of them (Slow ×1.5,
+These are the starting values from the PRD. They were meant to be tuned on the planned study's duration
+distributions; that study was not run, so they are still the defaults (see [`docs/decisions.md`](docs/decisions.md)). Presets scale all of them (Slow ×1.5,
 Fast ×0.7).
 
 The detectors compared in the study (all run offline on the same recordings, all with hysteresis and no
@@ -133,6 +133,12 @@ only; a lab reading task.
 - Majaranta & Räihä (2002), twenty years of eye typing.
 - MacKenzie & Soukoreff (2003), phrase sets; Soukoreff & MacKenzie (2003), text-entry metrics.
 - Hart & Staveland (1988), NASA-TLX.
+
+## AI use
+
+The software, analysis code, figures and the paper draft were written by an AI coding agent (Claude Code) from the
+author's plan and reviewed by the author; the session was recorded and its response types checked by the author.
+The paper has a short AI-use section; [`AI_USE.md`](AI_USE.md) has the full account.
 
 ## Citation and licence
 

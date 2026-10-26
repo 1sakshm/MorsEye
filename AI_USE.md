@@ -1,10 +1,10 @@
 # AI use
 
 MorsEye 2.0 was built with heavy help from an AI coding agent, Claude Code (model Claude Opus 5.5, by Anthropic).
-This file is the **only** place in the repository that records the AI's part: on 25 Oct 2026 Saksham Sharma asked for
-every other mention of AI to be removed from the code, documents, website and paper and gathered here. Commits do
-not carry AI co-author lines either. The agent drafted this file at Saksham's request; Saksham reviews it and keeps it
-current.
+This file is the full record of the AI's part. On 25 Oct 2026 Saksham Sharma asked for every other mention of AI to
+be gathered here; on 26 Oct 2026 Saksham asked for a short AI-use statement to go back into the paper (its "Use of AI
+Tools" section) and the README, so that a reader of either sees it without opening this file. Commits do not carry
+AI co-author lines. The agent drafted this file at Saksham's request; Saksham reviews it and keeps it current.
 
 ## Rules the work followed
 
@@ -12,7 +12,7 @@ These rules were in `PRD.md` §2 until 25 Oct 2026 and are kept here.
 
 **Changed by Saksham on 24 Oct 2026.** The original rule reserved the research questions, hypotheses, threshold
 choice and all paper prose for Saksham. From that date the AI agent could draft those too. Two things did not
-change: everything the agent drafts is disclosed accurately (now in this file only), and the data are collected and
+change: everything the agent drafts is disclosed accurately (in full in this file, and briefly in the paper and README), and the data are collected and
 labelled by a person.
 
 CaCTüS policy says AI tools "must not be used to generate ideas, develop concepts, or produce original intellectual
@@ -78,8 +78,8 @@ the paper say that these were computed before the plan was written, without sayi
   ethics and data, and conclusion, and added three BibTeX entries (Eyeblink8, Researcher's Night, MediaPipe). The
   related-work sentences come from the agent's general knowledge of those papers and must be checked against the
   papers themselves. On 25 Oct 2026, at Saksham's request, the paper's own "Use of AI Tools" section and its draft
-  notice were removed; this file is now the paper's AI-use statement. If the paper is submitted to a venue that
-  requires an AI-use statement in the paper, one has to be added back from this file.
+  notice were removed. On 26 Oct 2026, at Saksham's request, the agent wrote a new, shorter "Use of AI Tools" section
+  from this file, so the PDF carries its own disclosure again.
 - It added the exploratory sweeps (reject window, dot–dash boundary), the measured-versus-annotated comparison, the
   calibration table, the example trace and figures C1–C7, and rewrote the site's results text and the README
   results to match.
@@ -99,6 +99,8 @@ were removed at Saksham's request.
 - Read the paper draft, tried the app at `/try`, and decided to publish the session data, not to request the
   Researcher's Night dataset, and to keep all AI disclosure in this file (25 Oct 2026).
 - Read every paper the draft cites, tested `/try` with the NVDA screen reader, and reviewed this file (25 Oct 2026).
+- Decided to put a short AI-use statement back in the paper and README, and to describe MorsEye as a system plus a
+  public-data analysis rather than a completed study (26 Oct 2026).
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.
 
@@ -106,4 +108,5 @@ were removed at Saksham's request.
 
 No result in this project is written by hand. Every reported number, figure and table comes from
 `python -m analysis.public_blinks` and `python -m analysis.case_study`; the interactive charts of the planned
-multi-session analysis on `/research` are clearly marked synthetic test data.
+multi-session analysis on `/research` are clearly marked synthetic test data, and that pipeline's synthetic output
+is written to `analysis/out/summary.synthetic.json` so it cannot be mistaken for results.

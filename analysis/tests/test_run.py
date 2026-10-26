@@ -21,8 +21,9 @@ def test_run_synthetic_end_to_end(tmp_path):
     assert len(s["durations"]["participants"]) == 3
     assert s["text_entry"] is not None and len(s["text_entry"]["blocks"]) == 3
     assert set(s["downloads"]) >= {"durations", "detectors", "kshot", "fps", "text_entry"}
-    summary = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+    summary = json.loads((out / "summary.synthetic.json").read_text(encoding="utf-8"))
     assert summary["synthetic"] is True and summary["study_a"]["n_participants"] == 3
+    assert not (out / "summary.json").exists()  # synthetic numbers never take the real file's name
     assert "\\synthetictrue" in (paper / "tables" / "status.tex").read_text(encoding="utf-8")
 
 

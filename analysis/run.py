@@ -1,10 +1,10 @@
-"""Run the whole analysis: load -> Study A + B -> stats -> summary.json, site.json, figures, tables.
+"""Run the whole analysis: load -> Study A + B -> stats -> summary.json (summary.synthetic.json), site.json, figures, tables.
 
     python -m analysis.run --data data/public           real data
     python -m analysis.run --synthetic                   synthetic demo data (marked synthetic everywhere)
 
 Outputs:
-    analysis/out/summary.json        every number reported anywhere (the paper's source of truth)
+    analysis/out/summary.json        every number of the multi-session study (summary.synthetic.json on synthetic data)
     public/results/site.json + CSVs  what /research and the home page show
     paper/figures/F*.pdf|png         F1-F8 (PNG copies in public/results/figures/)
     paper/tables/*.tex               T1-T3, numbers.tex (\\ME{key} macros), status.tex
@@ -271,7 +271,8 @@ def main(argv: list[str] | None = None) -> int:
 
         out = Path(args.out)
         out.mkdir(parents=True, exist_ok=True)
-        (out / "summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+        summary_path = out / ("summary.synthetic.json" if synthetic else "summary.json")
+        summary_path.write_text(json.dumps(summary, indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
         from .tables import write_all
 
@@ -282,7 +283,7 @@ def main(argv: list[str] | None = None) -> int:
             names = make_all(a, b, timing, Path(args.paper) / "figures", Path(args.site) / "figures", synthetic)
             print(f"Figures: {', '.join(names)}")
         print_summary(summary)
-        print(f"\nWrote {out / 'summary.json'}, {site_path}, {Path(args.paper) / 'tables'}")
+        print(f"\nWrote {summary_path}, {site_path}, {Path(args.paper) / 'tables'}")
         return 0
     finally:
         if tmp and not args.keep_synthetic:
