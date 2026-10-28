@@ -29,6 +29,8 @@ interface Label {
   draft?: boolean;
   /** Started as a cue draft (reported in the export metadata). */
   from_cue?: boolean;
+  /** Made by holding H during playback: rough times from key presses, to be checked frame by frame. */
+  from_hold?: boolean;
 }
 
 const CUE_TYPE: Partial<Record<CueLine['cue'], LabelType>> = {
@@ -249,9 +251,9 @@ function setOffset(): void {
   const a = Math.min(pendingOnset, cursor);
   const b = Math.max(pendingOnset, cursor);
   if (b - a < 1) return;
-  // A selected draft that overlaps the new times takes them and becomes a confirmed event.
+  // A selected event that overlaps the new times takes them; a draft becomes a confirmed event.
   const d = labels[selected];
-  if (d?.draft && a <= d.offset_ms && b >= d.onset_ms) {
+  if (d && a <= d.offset_ms && b >= d.onset_ms) {
     d.onset_ms = round(a);
     d.offset_ms = round(b);
     d.draft = false;
@@ -259,7 +261,7 @@ function setOffset(): void {
     labels.sort((x, y) => x.onset_ms - y.onset_ms);
     selected = labels.indexOf(d);
     pendingOnset = null;
-    announcer.textContent = `draft confirmed as ${d.type}, ${Math.round(b - a)} ms`;
+    announcer.textContent = `times set: ${d.type ?? 'no type yet'}, ${Math.round(b - a)} ms`;
     changed();
     return;
   }
@@ -316,6 +318,50 @@ function importCues(): void {
 }
 $('import-cues').addEventListener('click', importCues);
 
+// ---------- Hold mode: hold H while the video plays to mark a closure roughly ----------
+
+let holdStart: number | null = null;
+
+function holdDown(): void {
+  if (!hasVideo() || video.paused || holdStart !== null) return;
+  holdStart = videoToT(video.currentTime);
+}
+
+function holdUp(): void {
+  if (holdStart === null) return;
+  const a = holdStart;
+  const b = videoToT(video.currentTime);
+  holdStart = null;
+  if (b - a < 20) return;
+  const l: Label = {
+    onset_ms: round(a),
+    offset_ms: round(b),
+    type: null,
+    labelled_at: new Date().toISOString(),
+    draft: true,
+    from_hold: true,
+  };
+  labels.push(l);
+  labels.sort((x, y) => x.onset_ms - y.onset_ms);
+  selected = labels.indexOf(l);
+  announcer.textContent = `rough event, ${Math.round(b - a)} ms. Press 1 to 5 for its type.`;
+  changed();
+}
+
+/** Enter: accept a rough (hold) event's times after checking them; cue drafts need [ and ]. */
+function confirmSelected(): void {
+  const l = labels[selected];
+  if (!l?.draft) return;
+  if (l.from_cue && !l.from_hold) {
+    announcer.textContent = 'A cue draft has cue times, not closure times: set them with [ and ].';
+    return;
+  }
+  l.draft = false;
+  l.labelled_at = new Date().toISOString();
+  announcer.textContent = 'times confirmed';
+  changed();
+}
+
 function nextDraft(): void {
   const i = labels.findIndex((l, j) => l.draft && j !== selected && l.onset_ms >= cursor - 400);
   const j = i >= 0 ? i : labels.findIndex((l) => l.draft);
@@ -328,7 +374,9 @@ function nextDraft(): void {
   view.span = 3000;
   seek(labels[j]!.onset_ms - 300);
   renderList();
-  announcer.textContent = `draft ${labels[j]!.type}: set its onset and offset with [ and ]`;
+  announcer.textContent = labels[j]!.from_hold
+    ? 'rough event: check its edges frame by frame, then [ and ] to correct or Enter to accept'
+    : `draft ${labels[j]!.type}: set its onset and offset with [ and ]`;
 }
 
 function jumpCandidate(dir: 1 | -1): void {
@@ -366,6 +414,9 @@ window.addEventListener('keydown', (e) => {
   else if (k === 'Delete') removeSelected();
   else if (k === 'n' || k === 'N') jumpCandidate(1);
   else if (k === 'd' || k === 'D') nextDraft();
+  else if (k === 'h' || k === 'H') {
+    if (!e.repeat) holdDown();
+  } else if (k === 'Enter') confirmSelected();
   else if (k === 'b' || k === 'B') jumpCandidate(-1);
   else if (k === '+' || k === '=') zoom(0.7);
   else if (k === '-' || k === '_') zoom(1 / 0.7);
@@ -377,6 +428,10 @@ window.addEventListener('keydown', (e) => {
     renderList();
   } else handled = false;
   if (handled) e.preventDefault();
+});
+
+window.addEventListener('keyup', (e) => {
+  if (e.key === 'h' || e.key === 'H') holdUp();
 });
 
 function zoom(f: number, around = cursor): void {
@@ -442,7 +497,7 @@ function draw(): void {
     }
     ctx.fillStyle = ink;
     ctx.fillText(
-      `${l.type ?? '? type'}${l.draft ? ' (draft)' : ''}`,
+      `${l.type ?? '? type'}${l.draft ? (l.from_hold ? ' (rough)' : ' (draft)') : ''}`,
       x(l.onset_ms) + 3,
       top + 2 * half - 4,
     );
@@ -582,7 +637,7 @@ function renderList(): void {
       (l, i) => `<tr${i === selected ? ' class="sel"' : ''} data-i="${i}">
       <td class="num">${i + 1}</td><td class="num">${Math.round(l.onset_ms - t0)}</td>
       <td class="num">${Math.round(l.offset_ms - t0)}</td><td class="num">${Math.round(l.offset_ms - l.onset_ms)}</td>
-      <td>${l.type ?? '<strong>needs type</strong>'}${l.draft ? ' <strong>(draft: set times)</strong>' : ''}</td></tr>`,
+      <td>${l.type ?? '<strong>needs type</strong>'}${l.draft ? (l.from_hold ? ' <strong>(rough: check times)</strong>' : ' <strong>(draft: set times)</strong>') : ''}</td></tr>`,
     )
     .join('');
   const counts = TYPES.map((t) => `${t}: ${labels.filter((l) => l.type === t).length}`).join(' · ');
@@ -617,7 +672,7 @@ $('export').addEventListener('click', () => {
   const drafts = labels.filter((l) => l.draft).length;
   if (drafts) {
     alertInline(
-      `${drafts} draft(s) still have cue times. Select each (D), set its onset and offset with [ and ], or delete it.`,
+      `${drafts} event(s) still need their times checked. Press D for each: set onset and offset with [ and ] (rough events: or Enter to accept), or delete it.`,
     );
     return;
   }
@@ -640,6 +695,7 @@ $('export').addEventListener('click', () => {
     labeller,
     n_events: labels.length,
     n_from_cue_drafts: labels.filter((l) => l.from_cue).length,
+    n_from_hold: labels.filter((l) => l.from_hold).length,
     labelling_seconds: Math.round(activeMs / 1000),
     exported_at: new Date().toISOString(),
   };

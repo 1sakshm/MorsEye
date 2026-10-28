@@ -85,6 +85,14 @@ the paper say that these were computed before the plan was written, without sayi
   results to match.
 - It deleted the old Vercel project at Saksham's request.
 
+**Reopening the study (28 Oct 2026)**
+
+- After Saksham chose to reopen data collection, it drafted the Deviations entry of 28 Oct (resumed collection,
+  stopping date moved to 12 Nov) and the status lines in `README.md` and `PRD.md`.
+- It added hold mode to the labelling tool (rough times from a key held during playback, each then checked and set
+  or accepted by the labeller) and wrote the session checklist `docs/sessions.md`. Both help Saksham label; neither
+  marks a closure by itself.
+
 The site's `/about` page showed this file as an "AI-use statement" until 25 Oct 2026; that section and its footer link
 were removed at Saksham's request.
 
@@ -101,6 +109,8 @@ were removed at Saksham's request.
 - Read every paper the draft cites, tested `/try` with the NVDA screen reader, and reviewed this file (25 Oct 2026).
 - Decided to put a short AI-use statement back in the paper and README, and to describe MorsEye as a system plus a
   public-data analysis rather than a completed study (26 Oct 2026).
+- Decided to reopen data collection for Part A until 12 Nov, to record and label the sessions personally, and to
+  write the results and discussion personally (28 Oct 2026).
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.
 

@@ -15,7 +15,7 @@ into Morse code: a short closure is a dot, a longer one a dash, and a very long 
 filtered out by a minimum-duration band, and a 20-second calibration fits the detector to your eyes. After setup it
 needs no keyboard or mouse: delete, pause and (optionally) space and speech are all eye gestures.
 
-**Status:** completed (25 Oct 2026); a research prototype. Data collection stopped after one detection session; the results
+**Status:** research prototype. Data collection stopped after one session on 25 Oct and **reopened on 28 Oct 2026** (detection sessions until 12 Nov). Until new sessions are labelled, the results
 below come from `analysis/out/results.json`. It has not been tested with people with motor impairments, and no clinical claim is made.
 
 ## Key results

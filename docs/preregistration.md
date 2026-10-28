@@ -227,3 +227,11 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
 - `2026-10-25` — Wording only, at the author's request: the "Drafted by" line in the header and the name of who
   had looked at Eyeblink8 in section 2 were moved out of this document. No research question, hypothesis, rule or
   analysis changed. The text as committed is in commit 046207f.
+- `2026-10-28` — **Data collection resumes** (the author's decision), reversing the stop of 25 Oct. Part A runs
+  again under the rules above, with one change to the stopping rule in section 4: detection sessions stop at 8
+  included sessions or at the end of **12 Nov 2026** (was 4 Nov), whichever comes first; at least 6 are needed.
+  Session 1 stays excluded unless the author re-labels it with closure onsets and offsets, in which case it is
+  included under the same rules as every other session (it was recorded after this document was committed).
+  Labelling may also use the labelling tool's hold mode (rough times from a key held during slowed playback, each
+  then checked frame by frame and set or accepted by the author; counted as `n_from_hold` in the export metadata).
+  Part B and H5 are decided after Part A, depending on the time left. H3b stays untested (25 Oct entry).

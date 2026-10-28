@@ -6,7 +6,7 @@
 | **Repo** | `D:\Cactus\MorsEye` (clone of https://github.com/1sakshm/MorsEye) |
 | **Live site** | https://morseye.pages.dev |
 | **Written** | 24 Oct 2026 |
-| **Status** | **Completed, 25 Oct 2026** (see §12 for what was delivered) |
+| **Status** | **Data collection reopened, 28 Oct 2026**: Part A runs to 12 Nov (preregistration, Deviations). §12 records the state on 25 Oct. |
 | **Hard date** | **Fri 13 Nov 2026.** Study A results, the site and a paper draft must exist so the CaCTüS CV and statements can cite real numbers (CaCTüS deadline: 16 Nov 2026). |
 | **Soft date** | 31 Dec 2026: paper ready for an arXiv/workshop submission. Interview prep in January. |
 
