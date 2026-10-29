@@ -1,5 +1,7 @@
 # MorsEye: what to do, step by step (28 Oct – 12 Nov 2026)
 
+> **Not in use.** Data collection stopped on 29 Oct 2026 (preregistration, Deviations). This page is kept as a record of the plan.
+
 Goal: **at least 6, ideally 8, labelled sessions** of you (P01) by the end of **12 Nov**, then the preregistered
 analysis, then you write the results and discussion. Rules: `docs/preregistration.md`. Short version of this page:
 `docs/sessions.md`.

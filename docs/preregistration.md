@@ -235,3 +235,11 @@ Dated entries only, after the commit above. Example: `2026-11-02 — session 5 e
   Labelling may also use the labelling tool's hold mode (rough times from a key held during slowed playback, each
   then checked frame by frame and set or accepted by the author; counted as `n_from_hold` in the export metadata).
   Part B and H5 are decided after Part A, depending on the time left. H3b stays untested (25 Oct entry).
+- `2026-10-29` — **Data collection stops again** (the author's decision), reversing the entry of 28 Oct. One
+  recording was made on 29 Oct. Its setup screen was filled in as participant `P02`, session 1 (meant as `P01`
+  session 2), with the setup fields left blank. The loader refused it under section 4: **8.1% of frames missing**
+  (limit 5%; median interval 58.6 ms, about 17 fps, with intervals alternating between about 30 and 60 ms because
+  frame processing could not keep up with the 30 fps camera). It was not labelled. The log is kept, unanalysed, in
+  `data/raw/excluded/`. Part A therefore has **no included session**: H1, H2 and H3a are not tested, Part B and H5
+  are not run, and H3b stays untested. MorsEye is reported as a system plus the public-data and single-session
+  analyses already described (entries of 25 Oct).

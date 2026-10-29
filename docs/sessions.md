@@ -1,5 +1,7 @@
 # Recording and labelling sessions (Part A, 28 Oct – 12 Nov 2026)
 
+> **Not in use.** Data collection stopped on 29 Oct 2026 (preregistration, Deviations). This page is kept as a record of the plan.
+
 The rules are in `docs/preregistration.md` (sections 3, 4 and 6, and the Deviations entry of 28 Oct). This page is
 the practical checklist.
 

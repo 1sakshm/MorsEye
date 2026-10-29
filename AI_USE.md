@@ -92,6 +92,9 @@ the paper say that these were computed before the plan was written, without sayi
 - It added hold mode to the labelling tool (rough times from a key held during playback, each then checked and set
   or accepted by the labeller) and wrote the session checklist `docs/sessions.md`. Both help Saksham label; neither
   marks a closure by itself.
+- On 29 Oct it checked the one recording made that day against the exclusion rules (refused: 8.1% of frames
+  missing), filed it as excluded, and, after Saksham chose to stop again, drafted the Deviations entry of 29 Oct
+  and the status lines in `README.md`, `PRD.md`, `STEPS.md` and `docs/sessions.md`.
 
 The site's `/about` page showed this file as an "AI-use statement" until 25 Oct 2026; that section and its footer link
 were removed at Saksham's request.
@@ -111,6 +114,8 @@ were removed at Saksham's request.
   public-data analysis rather than a completed study (26 Oct 2026).
 - Decided to reopen data collection for Part A until 12 Nov, to record and label the sessions personally, and to
   write the results and discussion personally (28 Oct 2026).
+- Recorded one session on 29 Oct 2026, which failed the missing-frames check, and then decided to stop data
+  collection again and present MorsEye as a system plus the public-data analysis (29 Oct 2026).
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.
 
