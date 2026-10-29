@@ -134,12 +134,6 @@ only; a lab reading task.
 - MacKenzie & Soukoreff (2003), phrase sets; Soukoreff & MacKenzie (2003), text-entry metrics.
 - Hart & Staveland (1988), NASA-TLX.
 
-## AI use
-
-The software, analysis code, figures and the paper draft were written by an AI coding agent (Claude Code) from the
-author's plan and reviewed by the author; the session was recorded and its response types checked by the author.
-The paper has a short AI-use section; [`AI_USE.md`](AI_USE.md) has the full account.
-
 ## Citation and licence
 
 Cite with [`CITATION.cff`](CITATION.cff). Code: MIT ([`LICENSE`](LICENSE)). Data: CC BY 4.0.

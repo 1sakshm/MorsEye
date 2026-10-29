@@ -3,7 +3,8 @@
 MorsEye 2.0 was built with heavy help from an AI coding agent, Claude Code (model Claude Opus 5.5, by Anthropic).
 This file is the full record of the AI's part. On 25 Oct 2026 Saksham Sharma asked for every other mention of AI to
 be gathered here; on 26 Oct 2026 Saksham asked for a short AI-use statement to go back into the paper (its "Use of AI
-Tools" section) and the README, so that a reader of either sees it without opening this file. Commits do not carry
+Tools" section) and the README, so that a reader of either sees it without opening this file; on 29 Oct 2026 Saksham
+asked for both to be removed again, so this file is once more the only place AI use is described. Commits do not carry
 AI co-author lines. The agent drafted this file at Saksham's request; Saksham reviews it and keeps it current.
 
 ## Rules the work followed
@@ -95,6 +96,18 @@ the paper say that these were computed before the plan was written, without sayi
 - On 29 Oct it checked the one recording made that day against the exclusion rules (refused: 8.1% of frames
   missing), filed it as excluded, and, after Saksham chose to stop again, drafted the Deviations entry of 29 Oct
   and the status lines in `README.md`, `PRD.md`, `STEPS.md` and `docs/sessions.md`.
+- On 29 Oct, at Saksham's request, it removed the README's "AI use" section and the paper's "Use of AI Tools"
+  section, which had read:
+
+  > An AI coding agent (Claude Code, by Anthropic) wrote MorsEye's software, analysis code, figures and tables from
+  > the author's project plan. It also drafted the wording and analysis decisions of the preregistration and every
+  > section of this paper. The author reviewed and approved the preregistration before the session, and read and
+  > edited the paper. The agent computed the Eyeblink8 blink lengths before the preregistration was written, which
+  > is why that analysis is not blind. The author recorded the session and checked every response type; no
+  > automatic label is used as ground truth.
+
+  It also deleted an unfinished exploratory comparison of human and synthetic blink data, begun on 28 Oct in another
+  session and never committed.
 
 The site's `/about` page showed this file as an "AI-use statement" until 25 Oct 2026; that section and its footer link
 were removed at Saksham's request.
@@ -116,6 +129,8 @@ were removed at Saksham's request.
   write the results and discussion personally (28 Oct 2026).
 - Recorded one session on 29 Oct 2026, which failed the missing-frames check, and then decided to stop data
   collection again and present MorsEye as a system plus the public-data analysis (29 Oct 2026).
+- Asked for the AI-use statements in the paper and README to be removed, keeping the full record in this file
+  only, and for the unfinished synthetic-data comparison to be deleted (29 Oct 2026).
 - No automatic labels are used as ground truth; the only human judgements in the data (session 1's response types)
   are Saksham's.
 
