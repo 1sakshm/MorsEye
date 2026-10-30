@@ -36,6 +36,14 @@ typing study were not run (see the Deviations section). What remains (copied fro
 
 The paper: [morseye.pages.dev/paper/morseye.pdf](https://morseye.pages.dev/paper/morseye.pdf) (source in `paper/`).
 
+### Independent reproduction
+
+I recomputed the Eyeblink8 result for the blendshape detector (D3) from the raw videos and annotations, without
+using any code from this repository: [`replica/eyeblink8_reproduction.ipynb`](replica/eyeblink8_reproduction.ipynb).
+It gives 10.5 → 4.2 false triggers per minute (paper: 10.5 → 4.1), and shows that the exact figure depends on the
+detector's hysteresis, which the original analysis did not state. Walkthrough of the notebook, recorded by me:
+[youtu.be/eqWzGw2Q4Q0](https://youtu.be/eqWzGw2Q4Q0).
+
 ## How it works
 
 ```
