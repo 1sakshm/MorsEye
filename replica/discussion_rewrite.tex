@@ -1,0 +1,26 @@
+\section{Discussion}
+
+\paragraph{What the window can do.}
+A reject window is cheap: it needs no model of the user, only a duration. On the public videos it did real work
+with the blendshape detector, removing about three in five false triggers (10.5 to 4.1 per minute).
+
+\paragraph{What it cannot do.}
+The window sees the \emph{measured} duration of a closure, not the true one, so its effect belongs to the detector
+it is paired with. The same 200\,ms window barely changed the EAR detector's rate (11.8 to 10.2), because that
+detector measured the same blinks as longer. The result is also sensitive to details that are easy to overlook:
+in an independent recomputation, narrowing the blendshape detector's hysteresis from 0.1 to 0.05 changed the
+rate with the window from 4.2 to 3.3 per minute. A window therefore cannot be taken from published blink
+durations; it has to be set for the signal, threshold and hysteresis in use. Even at its best it leaves about
+four false triggers a minute, one every 15\,s, which is too many for typing on its own. It also sets a floor that
+every deliberate closure must clear, and it relies on the camera resolving durations near that floor; at 10\,fps
+a single frame is half the window. Finally, the public check covers four people in eight videos and was not
+blind, so it describes these recordings, not blinks in general.
+
+\paragraph{Why one session is not evidence.}
+The session results are leads, not findings. They come from one session of one person, who also built the
+system, knew the hypotheses and checked the responses. Closure durations were measured by the detectors, not
+labelled, and the camera ran at 10--16\,fps instead of 30. The 960\,ms dot--dash boundary was chosen on the same
+responses it was scored on, and none of the preregistered tests could be run. The session suggests what to test
+next: whether deliberate short closures run longer than the default dot limit for most people, whether a
+per-user timing calibration fixes this, and whether webcam blendshapes can separate a wink from a blink. It does
+not answer any of these.

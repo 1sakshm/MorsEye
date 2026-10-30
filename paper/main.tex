@@ -363,22 +363,30 @@ session cannot tell these apart, but a fixed limit on the other eye did not work
 %% ---------------------------------------------------------------------------------------------
 \section{Discussion}
 
-A duration reject window is an attractive defence against spontaneous blinks because it needs no model of the
-user. The public videos show that its effect depends on the signal it is applied to. The blendshape detector
-measured natural blinks as short enough that most fell inside a \CS{rejectMs}\,ms window. The fixed EAR threshold
-measured the same blinks as longer, so the same window removed few. A reject window therefore has to be chosen for
-the signal and threshold in use, not carried over from published blink durations alone.
+\paragraph{What the window can do.}
+A reject window is cheap: it needs no model of the user, only a duration. On the public videos it did real work
+with the blendshape detector, removing about three in five false triggers (10.5 to 4.1 per minute).
 
-The single session points to the other half of the problem: deliberate closures have to be reliably longer than the
-window, and the dot--dash boundary has to fit the person. The author's cued short closures, measured from the
-camera, mostly exceeded the default dot limit. With the defaults, most dots would have been typed as dashes; a
-boundary near \CS{s-D4-dotBestFrom}\,ms would have separated most of them. A
-per-user timing calibration, analogous to the threshold calibration, is the natural next step, and the planned
-study would have tested one.
+\paragraph{What it cannot do.}
+The window sees the \emph{measured} duration of a closure, not the true one, so its effect belongs to the detector
+it is paired with. The same 200\,ms window barely changed the EAR detector's rate (11.8 to 10.2), because that
+detector measured the same blinks as longer. The result is also sensitive to details that are easy to overlook:
+in an independent recomputation, narrowing the blendshape detector's hysteresis from 0.1 to 0.05 changed the
+rate with the window from 4.2 to 3.3 per minute. A window therefore cannot be taken from published blink
+durations; it has to be set for the signal, threshold and hysteresis in use. Even at its best it leaves about
+four false triggers a minute, one every 15\,s, which is too many for typing on its own. It also sets a floor that
+every deliberate closure must clear, and it relies on the camera resolving durations near that floor; at 10\,fps
+a single frame is half the window. Finally, the public check covers four people in eight videos and was not
+blind, so it describes these recordings, not blinks in general.
 
-Frame rate matters for both. At 10\,fps a frame lasts 100\,ms, half the reject window, so durations near the
-window's edge cannot be measured reliably. The camera in this session dropped to about 10\,fps for long stretches, apparently through its automatic
-exposure; a deployed system would need to detect and report this.
+\paragraph{Why one session is not evidence.}
+The session results are leads, not findings. They come from one session of one person, who also built the
+system, knew the hypotheses and checked the responses. Closure durations were measured by the detectors, not
+labelled, and the camera ran at 10--16\,fps instead of 30. The 960\,ms dot--dash boundary was chosen on the same
+responses it was scored on, and none of the preregistered tests could be run. The session suggests what to test
+next: whether deliberate short closures run longer than the default dot limit for most people, whether a
+per-user timing calibration fixes this, and whether webcam blendshapes can separate a wink from a blink. It does
+not answer any of these.
 
 \section{Limitations}
 
